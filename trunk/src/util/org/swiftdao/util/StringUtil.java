@@ -107,16 +107,6 @@ public class StringUtil {
 		}
 		return ret;
 	}
-
-	/**
-	 * 转换含有参数的URL的参数。
-	 * 
-	 * @param urlParam
-	 * @return
-	 */
-	// public static String escapeUrlParamInURL(String urlParam){
-	// return org.apache.commons.lang.StringUtils.replace(urlParam, "&", "%26");
-	// }
 	
 	/**
 	 * 转换用户输入的HTML和Javascript代码
@@ -144,6 +134,12 @@ public class StringUtil {
 		return true;
 	}
 
+	/**
+	 * 是否是降序或者升序
+	 * @param str
+	 * @param ascOrDesc
+	 * @return
+	 */
 	public static boolean isAscDesc(String str, int ascOrDesc) {
 		// console.log("check: " + str + " for " + ascOrDesc);
 		char last = (char) ((int) str.charAt(0) - ascOrDesc);
