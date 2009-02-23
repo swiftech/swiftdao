@@ -4,7 +4,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.metadata.ClassMetadata;
 
 /**
- * @author Sun Xiaochen
+ * @author Wang Yuxing
  * @since 2008-1-30
  */
 public class HibernateUtils {
@@ -22,7 +22,6 @@ public class HibernateUtils {
         String[] retArray = new String[attrs.length + 1];
         retArray[0] = idName;
         System.arraycopy(attrs, 0, retArray, 1, attrs.length);
-
         return retArray;
     }
 }
