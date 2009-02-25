@@ -5,7 +5,7 @@ import javax.persistence.*;
 /**
  * 统一定义id的entity基类
  *
- * @author sun.xc
+ * @author Wang Yuxing
  */
 @MappedSuperclass
 public class BaseKeyedEntity implements KeyedPojo<Long> {
