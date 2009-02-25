@@ -11,11 +11,10 @@ import javax.persistence.*;
 public class BaseKeyedEntity implements KeyedPojo<Long> {
 
 	/**
-	 * 主键ID - N_ID
+	 * 主键ID
 	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "SEQ_GEN")
-	@Column(name = "N_ID")
 	protected Long id;
 
 	public Long getId() {
