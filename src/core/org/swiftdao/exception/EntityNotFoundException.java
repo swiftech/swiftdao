@@ -1,4 +1,4 @@
-package org.swiftdao;
+package org.swiftdao.exception;
 
 import org.springframework.dao.DataAccessException;
 

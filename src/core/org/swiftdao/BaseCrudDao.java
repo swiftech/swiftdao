@@ -10,9 +10,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-
 /**
- * 所有DAO接口的基础接口，提供了常用增删改查(CRUD)功能。<BR>
+ * 提供了常用增删改查(CRUD)功能的DAO基础接口。<BR>
  * 实体状态说明：
  * 
  * <pre>
@@ -24,11 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Wang Yuxing
  * @version 1.0
  */
-@Transactional(isolation=Isolation.DEFAULT, propagation = Propagation.REQUIRED)
-public interface BaseCrudDao<E extends Pojo> extends BaseSpExecutableDao {
+@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
+public interface BaseCrudDao<E extends Pojo> extends BaseExecutableDao {
 
 	/**
-	 * 新建实体。
+	 * 持久化一个实体。
 	 * 
 	 * @param entity 处于临时状态的实体。
 	 * @throws DataAccessException
@@ -36,9 +35,9 @@ public interface BaseCrudDao<E extends Pojo> extends BaseSpExecutableDao {
 	void create(E entity) throws DataAccessException;
 
 	/**
-	 * 新建多个实体。
+	 * 持久化多个实体。
 	 * 
-	 * @param entities 包含实体的集合，如等。
+	 * @param entities 处于临时状态的实体的集合。
 	 * @throws DataAccessException
 	 */
 	void create(Collection<E> entities) throws DataAccessException;
@@ -54,13 +53,13 @@ public interface BaseCrudDao<E extends Pojo> extends BaseSpExecutableDao {
 	/**
 	 * 更新多个实体。
 	 * 
-	 * @param entities 处于持久化状态的实体。
+	 * @param entities 处于持久化状态的实体的集合。
 	 * @throws DataAccessException
 	 */
 	void update(Collection<E> entities) throws DataAccessException;
 
 	/**
-	 * 新建或者更新实体。
+	 * 持久化或者更新实体。
 	 * 
 	 * @param entity 处于临时或者持久化状态的实体。
 	 * @throws DataAccessException
@@ -68,15 +67,15 @@ public interface BaseCrudDao<E extends Pojo> extends BaseSpExecutableDao {
 	void createOrUpdate(E entity) throws DataAccessException;
 
 	/**
-	 * 新建或者更新多个实体。
+	 * 持久化或者更新多个实体。
 	 * 
-	 * @param entities 处于临时或者持久化状态的实体。
+	 * @param entities 处于临时或者持久化状态的实体的集合。
 	 * @throws DataAccessException
 	 */
 	void createOrUpdate(Collection<E> entities) throws DataAccessException;
 
 	/**
-	 * 保存处于游离状态的实体，更新后实体对象仍然处于游离状态。
+	 * 更新处于游离状态的实体，更新后实体对象仍然处于游离状态。
 	 * 
 	 * @param entity 处于游离状态的实体。
 	 * @throws DataAccessException
@@ -86,13 +85,13 @@ public interface BaseCrudDao<E extends Pojo> extends BaseSpExecutableDao {
 	/**
 	 * 保存处于游离状态的多个实体，更新后实体对象仍然处于游离状态。
 	 * 
-	 * @param entities 处于游离状态的实体。
+	 * @param entities 处于游离状态的实体的集合。
 	 * @throws DataAccessException
 	 */
 	void merge(Collection<E> entities) throws DataAccessException;
 
 	/**
-	 * 删除DB中的实体。
+	 * 删除一个持久化的实体。
 	 * 
 	 * @param entity 处于持久化状态的实体。
 	 * @throws DataAccessException
@@ -100,43 +99,43 @@ public interface BaseCrudDao<E extends Pojo> extends BaseSpExecutableDao {
 	void delete(E entity) throws DataAccessException;
 
 	/**
-	 * 删除多个实体。
+	 * 删除多个持久化的实体。
 	 * 
-	 * @param entities 处于持久化状态的实体。
+	 * @param entities 处于持久化状态的实体的集合。
 	 * @throws DataAccessException
 	 */
 	void delete(Collection<E> entities) throws DataAccessException;
 
 	/**
-	 * 按照指定的类型，属性名和属性值，按照唯一约束查询得到实体对象。
+	 * 按照唯一的（Unique）属性名和属性值，查询得到一个实体对象。
 	 * 
-	 * @param paramName 实体唯一键属性名
+	 * @param paramName 实体唯一属性名
 	 * @param value 属性值
-	 * @return
+	 * @return 持久化实体
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	E findByUniqueParam(String uniqueParamName, String value) throws DataAccessException;
 
 	/**
-	 * 按照指定的属性值查找若干实体对象。
+	 * 按照指定的属性值查询多个实体对象。
 	 * 
 	 * @param paramName 实体属性名。
 	 * @param value 对应实体属性名的属性值。
-	 * @return
+	 * @return 持久化实体集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParam(String paramName, Object value) throws DataAccessException;
 
 	/**
-	 * 按照指定属性值查找若干实例，并按照分页条件分页，返回指定页的实体列表。
+	 * 按照指定属性值查找多个实例，并按照分页条件分页，返回指定页的实体集合。
 	 * 
-	 * @param paramName 作为查询条件的属性。
+	 * @param paramName 作为查询条件的属性名。
 	 * @param value 查询条件属性值。
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
-	 * @return
+	 * @return 持久化实体集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
@@ -144,60 +143,72 @@ public interface BaseCrudDao<E extends Pojo> extends BaseSpExecutableDao {
 			throws DataAccessException;
 
 	/**
-	 * 按照指定属性值查找若干实例，并按照分页条件分页，返回指定页的实体列表。
+	 * 按照指定属性值、排序条件和分页条件进行查找指定页的多个实例。
 	 * 
-	 * @param paramName 作为查询条件的属性。
+	 * @param paramName 作为查询条件的属性名。
 	 * @param value 查询条件属性值。
-	 * @param pageSize 每页大小。
-	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @param orderParam 排序的属性名，null为没有排序条件
 	 * @param isDescending 是否是降序排序，当orderParam可用是才有效。
-	 * @return
+	 * @param pageSize 每页大小。
+	 * @param pageNumber 查询的页码，0表示第一页。
+	 * @return 指定页的持久化实体集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
-	List<E> findByParamPagination(String paramName, Object value, int pageSize, int pageNumber, String orderParam,
-			boolean isDescending) throws DataAccessException;
+	List<E> findByParamPagination(String paramName, Object value, String orderParam,
+			boolean isDescending, int pageSize, int pageNumber) throws DataAccessException;
 
 	/**
-	 * 按照指定的属性值映射查找若干实体对象。
+	 * 按照指定的属性值映射查找多个实体对象。
 	 * 
 	 * @param paramMap 实体类属性名和属性值的映射。
-	 * @return
+	 * @return 持久化实体集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParams(Map<String, Object> paramMap) throws DataAccessException;
 
 	/**
-	 * 按照指定的条件表达式查询
-	 * @param extraCondition 包含形如:param的条件表达式
+	 * 按照指定的条件表达式查找多个实体对象。
+	 * <pre>
+	 * Map params = new HashMap();
+	 * params.put("name", "Jack");
+	 * params.put("age", "16");
+	 * List result = findByParams("userName = :name and userAge = :age", params);
+	 * </prc>
+	 * @param extraCondition 包含形如":param"的条件表达式
 	 * @param extraParams 条件表达式中的参数值
-	 * @return
+	 * @return 持久化实体集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParams(String extraCondition, Map<String, Object> extraParams) throws DataAccessException;
-	
+
 	/**
-	 * 按照指定的属性值映射查找若干实体对象。
-	 * 
+	 * 按照指定的属性值映射查找多个实体对象。
+	 * <pre>
+	 * Map params1 = new HashMap();
+	 * params1.put("name", "Jack");
+	 * Map params2 = new HashMap();
+	 * params.put("age1", "16");
+	 * params.put("age2", "18");
+	 * List result = findByParams(params1, " and (userAge = :age1 or userAge = :age2)", params);
+	 * </prc>
 	 * @param paramMap 实体类属性名和属性值的映射。
 	 * @param extraCondition 额外的查询条件，跟在paramMap的后面，类似“ OR XX = :xx”的形式，没有则为null。
 	 * @param extraParams 配合extraCondition使用，用于保存extraCondition中的变量。
-	 * @return
+	 * @return 持久化实体集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParams(Map<String, Object> paramMap, String extraCondition, Map<String, Object> extraParams) throws DataAccessException;
 
-	
 	/**
-	 * 按照指定属性值映射查找若干实例，并按照分页条件分页，返回指定页的实体列表。
+	 * 按照指定属性值映射、分页条件查找多个实例。
 	 * @param paramMap 查询条件，
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
-	 * @return
+	 * @return 指定页的持久化实体集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
@@ -205,12 +216,12 @@ public interface BaseCrudDao<E extends Pojo> extends BaseSpExecutableDao {
 			throws DataAccessException;
 
 	/**
-	 * 按照指定属性值映射查找若干实例，并按照分页条件分页，返回指定页的实体列表。
+	 * 按照指定属性值映射查找多个实例，并按照分页条件分页，返回指定页的实体列表。
 	 * @param condition 查询条件，类似“ WHERE AA = :aa OR XX = :xx”的形式，没有则为null。
-	 * @param params 配合extraCondition使用，用于保存extraCondition中的变量。
+	 * @param params 配合condition使用，用于保存condition中的变量值。
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
-	 * @return
+	 * @return 指定页的持久化实体集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
@@ -218,14 +229,14 @@ public interface BaseCrudDao<E extends Pojo> extends BaseSpExecutableDao {
 			throws DataAccessException;
 
 	/**
-	 * 按照指定属性值映射查找若干实例，并按照分页条件分页，返回指定页的实体列表。
+	 * 按照指定属性值映射查找多个实例，并按照分页条件分页，返回指定页的实体列表。
 	 * 
 	 * @param paramMap 查询条件，如果需要更灵活的条件，使用extraCondition。
 	 * @param extraCondition 额外的查询条件，跟在paramMap的后面，类似“ OR XX = :xx”的形式，没有则为null。
 	 * @param extraParams 配合extraCondition使用，用于保存extraCondition中的变量。
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
-	 * @return
+	 * @return 指定页的持久化实体集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
@@ -233,109 +244,110 @@ public interface BaseCrudDao<E extends Pojo> extends BaseSpExecutableDao {
 			Map<String, Object> extraParams, int pageSize, int pageNumber) throws DataAccessException;
 
 	/**
-	 * 按照指定参数值映射查找若干实例，并按照分页条件分页，返回指定页的实体列表。
-	 * 
+	 * 按照指定属性值映射、排序条件和分页条件进行查找指定页的多个实例。
 	 * @param paramMap 查询条件。
-	 * @param pageSize 每页大小。
-	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @param orderParam 排序的属性名，null为没有排序条件
 	 * @param isDescending 是否是降序排序，当orderParam可用是才有效。
-	 * @return
+	 * @param pageSize 每页大小。
+	 * @param pageNumber 查询的页码，0表示第一页。
+	 * @return  指定页的持久化实体集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
-	List<E> findByParamsPagination(Map<String, Object> paramMap, int pageSize, int pageNumber, String orderParam,
-			boolean isDescending) throws DataAccessException;
-	
+	List<E> findByParamsPagination(Map<String, Object> paramMap, String orderParam, boolean isDescending,
+			int pageSize, int pageNumber) throws DataAccessException;
+
 	/**
-	 * 按照指定参数值映射和额外的查询条件查找若干实例，并按照分页条件分页，返回指定页的实体列表。
-	 * @param paramMap 查询条件，跟在paramMap的后面，类似“ OR XX = :xx”的形式，没有则为null。
-	 * @param extraCondition 额外查询条件。
+	 * 按照指定参数值映射和额外的查询条件、排序条件和分页条件查找多个实例。
+	 * @param paramMap 查询条件。
+	 * @param extraCondition 额外查询条件，跟在paramMap的后面，类似“ OR XX = :xx”的形式，没有则为null。
 	 * @param extraParams 配合extraCondition使用，用于保存extraCondition中的变量。
-	 * @param pageSize 每页大小。
-	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @param orderParam 排序的属性名，null为没有排序条件
 	 * @param isDescending 是否是降序排序，当orderParam可用是才有效。
-	 * @return
+	 * @param pageSize 每页大小。
+	 * @param pageNumber 查询的页码，0表示第一页。
+	 * @return 指定页的持久化实体集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParamsPagination(Map<String, Object> paramMap, String extraCondition,
-			Map<String, Object> extraParams, int pageSize, int pageNumber, String orderParam, boolean isDescending)
-			throws DataAccessException;
+			Map<String, Object> extraParams, String orderParam, boolean isDescending,
+			int pageSize, int pageNumber) throws DataAccessException;
+
 	/**
-	 * 按照默认实体类型查询得到所有数据实体。
-	 * 
-	 * @return
+	 * 按照泛型的实体类型查询得到所有持久化实体。
+	 * 如果实体类被设置为缓存的，则该方法首先从缓存中获取。
+	 * @return 所有持久化实体的集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	List<E> findAll() throws DataAccessException;
-	
+
 	/**
-	 * 按照指定实体类型查询得到所有数据实体。
+	 * 按照指定实体类型查询得到所有持久化实体。
 	 * 如果实体类被设置为缓存的，则该方法首先从缓存中获取。
 	 * 
-	 * @return
+	 * @return 所有持久化实体的集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	List<E> findAll(Class clazz) throws DataAccessException;
-	
+
 	/**
-	 * 改方法忽略实体类的缓存配置，直接从DB中获取数据。
-	 * @return
+	 * 忽略实体类的缓存配置，直接查询所有持久化实体。
+	 * 
+	 * @return 所有持久化实体的集合
 	 * @throws DataAccessException
 	 */
 	List<E> findAllOverCache(Class clazz) throws DataAccessException;
 
-
 	/**
-	 * 查询所有的实体对象，返回指定页码的实体集合。
+	 * 在所有的持久化实体中查询指定页的实体集合。
 	 * 
-	 * @param pageSize
-	 * @param PageNumber
-	 * @return
+	 * @param pageSize 每页大小
+	 * @param PageNumber 查询的页码，0表示第一页。
+	 * @return 指定页的持久化实体集合
+	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	List<E> findAllByPagination(int pageSize, int pageNumber) throws DataAccessException;
 
 	/**
-	 * 查询所有的实体对象并按指定的排序方式分页，返回指定页码的实体集合。
+	 * 在所有的持久化实体中按照排序方式查询指定页的实体集合。
 	 * 
-	 * @param pageSize 每页大小。
-	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @param orderParam 排序的属性名，null为没有排序条件
 	 * @param isDescending 是否是降序排序，当orderParam可用是才有效。
-	 * @return
+	 * @param pageSize 每页大小。
+	 * @param pageNumber 查询的页码，0表示第一页。
+	 * @return 指定页的持久化实体集合
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
-	List<E> findAllByPagination(int pageSize, int pageNumber, String orderParam, boolean isDescending)
+	List<E> findAllByPagination(String orderParam, boolean isDescending, int pageSize, int pageNumber)
 			throws DataAccessException;
 
 	/**
-	 * 统计所有实体对象的数量。
+	 * 统计所有持久化实体对象的数量。
 	 * 
-	 * @return
+	 * @return 所有持久化实体对象的数量
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	long countAll() throws DataAccessException;
 
 	/**
-	 * 按条件统计实体对象的数量。
+	 * 按条件统计持久化实体对象的数量。
 	 * 
 	 * @param paramName
 	 * @param value
-	 * @return
+	 * @return 持久化实体的数量
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	long countByParam(String paramName, Object value) throws DataAccessException;
 
 	/**
-	 * 按多个条件统计实体对象的数量。
+	 * 按多个条件统计持久化实体对象的数量。
 	 * 
 	 * @param paramMap
 	 * @return
@@ -343,7 +355,7 @@ public interface BaseCrudDao<E extends Pojo> extends BaseSpExecutableDao {
 	 */
 	@Transactional(readOnly = true)
 	long countByParams(Map<String, Object> paramMap) throws DataAccessException;
-	
+
 	/**
 	 * 按多个条件统计实体对象的数量。
 	 * @param paramMap

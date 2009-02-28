@@ -12,7 +12,7 @@ import org.springframework.dao.DataAccessException;
  * @author Wang Yuxing
  * 
  */
-public interface BaseSpExecutableDao extends BaseDao {
+public interface BaseExecutableDao extends BaseDao {
 
 	/**
 	 * 执行无参数和返回值的存储过程。

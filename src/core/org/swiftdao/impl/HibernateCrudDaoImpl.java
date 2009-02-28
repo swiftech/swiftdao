@@ -39,7 +39,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrBuilder;
-import org.swiftdao.InvalidParameterException;
+import org.swiftdao.exception.InvalidParameterException;
 
 /**
  * 基于Hibernate的Crud DAO基础实现，所有使用Hibernate并支持Crud操作的DAO都继承该类。<BR>
@@ -234,18 +234,19 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 		return entities;
 	}
 
-	public List<E> findByParamPagination(String paramName, Object value, int pageSize, int pageNumber,
-			String orderParam, boolean isDescending) throws DataAccessException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put(paramName, value);
-		return findByParamsPagination(paramMap, pageSize, pageNumber, orderParam, isDescending);
-	}
-
-	public List<E> findByParamPagination(String paramName, Object value, int pageSize, int pageNumber)
-			throws DataAccessException {
+	public List<E> findByParamPagination(String paramName, Object value, 
+			int pageSize, int pageNumber) throws DataAccessException {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put(paramName, value);
 		return findByParamsPagination(paramMap, null, null, pageSize, pageNumber);
+	}
+
+	public List<E> findByParamPagination(String paramName, Object value,
+			String orderParam, boolean isDescending,
+			int pageSize, int pageNumber) throws DataAccessException {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put(paramName, value);
+		return findByParamsPagination(paramMap, orderParam, isDescending, pageSize, pageNumber);
 	}
 
 	public List<E> findByParams(Map<String, Object> paramMap) {
@@ -257,8 +258,8 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<E> findByParams(Map<String, Object> paramMap, String extraCondition, Map<String, Object> extraParams)
-			throws DataAccessException {
+	public List<E> findByParams(Map<String, Object> paramMap, 
+			String extraCondition, Map<String, Object> extraParams) throws DataAccessException {
 		if ((paramMap == null || paramMap.size() == 0) && (extraCondition == null || extraParams == null || extraParams.size() == 0)) {
 			return this.findAll();
 		}
@@ -311,19 +312,20 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 		return entities;
 	}
 
-	public List<E> findByParamsPagination(Map<String, Object> paramMap, int pageSize, int pageNumber)
-			throws DataAccessException {
+	public List<E> findByParamsPagination(Map<String, Object> paramMap, 
+			int pageSize, int pageNumber) throws DataAccessException {
 		return this.findByParamsPagination(paramMap, null, null, pageSize, pageNumber);
 	}
 
-	public List<E> findByParamsPagination(String condition, Map<String, Object> params, int pageSize, int pageNumber)
-			throws DataAccessException {
+	public List<E> findByParamsPagination(String condition, Map<String, Object> params, 
+			int pageSize, int pageNumber) throws DataAccessException {
 		return this.findByParamsPagination(null, condition, params, pageSize, pageNumber);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<E> findByParamsPagination(Map<String, Object> paramMap, String extraCondition,
-			Map<String, Object> extraParams, int pageSize, int pageNumber) throws DataAccessException {
+	public List<E> findByParamsPagination(Map<String, Object> paramMap, 
+			String extraCondition, Map<String, Object> extraParams,
+			int pageSize, int pageNumber) throws DataAccessException {
 		StringBuilder hqlSb = new StringBuilder(" FROM ");
 		hqlSb.append(this.getPojoClass().getSimpleName());// 实体名称
 		if (paramMap != null && paramMap.size() > 0) {
@@ -365,15 +367,17 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 		return q.list();
 	}
 
-	public List<E> findByParamsPagination(Map<String, Object> paramMap, int pageSize, int pageNumber,
-			String orderParam, boolean isDescending) throws DataAccessException {
-		return this.findByParamsPagination(paramMap, null, null, pageSize, pageNumber, orderParam, isDescending);
+	public List<E> findByParamsPagination(Map<String, Object> paramMap,
+			String orderParam, boolean isDescending,
+			int pageSize, int pageNumber) throws DataAccessException {
+		return this.findByParamsPagination(paramMap, null, null, orderParam, isDescending, pageSize, pageNumber);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<E> findByParamsPagination(Map<String, Object> paramMap, String extraCondition,
-			Map<String, Object> extraParams, int pageSize, int pageNumber, String orderParam, boolean isDescending)
-			throws DataAccessException {
+	public List<E> findByParamsPagination(Map<String, Object> paramMap,
+			String extraCondition, Map<String, Object> extraParams,
+			String orderParam, boolean isDescending,
+			int pageSize, int pageNumber) throws DataAccessException {
 		String[] attributeNames = HibernateUtils.getEntityAttributes(this.getSessionFactory(), this.getPojoClass());
 		StringBuilder hqlSb = new StringBuilder(" SELECT ");
 		StringUtil.mergeString(attributeNames, ",", hqlSb);
@@ -422,6 +426,7 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 		}
 		List<E> pagedList = new ArrayList<E>();
 		ScrollableResults entities = q.scroll();
+		// 按照分页条件取一页的实体返回
 		if (entities.first() == true) {
 			entities.scroll(pageSize * pageNumber);
 			for (int i = 0; i < pageSize; i++, entities.scroll(1)) {
@@ -454,9 +459,9 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<E> findAllByPagination(int pageSize, int pageNumber, String orderParam, boolean isDescending)
-			throws DataAccessException {
-		return this.findByParamsPagination(null, pageSize, pageNumber, orderParam, isDescending);
+	public List<E> findAllByPagination(String orderParam, boolean isDescending, 
+			int pageSize, int pageNumber) throws DataAccessException {
+		return this.findByParamsPagination(null, orderParam, isDescending, pageSize, pageNumber);
 	}
 
 	public long countAll() throws DataAccessException {
@@ -474,8 +479,8 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 	}
 
 	@SuppressWarnings("unchecked")
-	public long countByParams(Map<String, Object> paramMap, String extraCondition, Map<String, Object> extraParams)
-			throws DataAccessException {
+	public long countByParams(Map<String, Object> paramMap, 
+			String extraCondition, Map<String, Object> extraParams) throws DataAccessException {
 		String hql = "SELECT COUNT(*) FROM ";
 		Iterator<Long> it = null;
 		if ((paramMap == null || paramMap.size() == 0) && extraCondition == null && (extraParams == null || extraParams.size() == 0)) {
@@ -822,5 +827,32 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 			throw new DataRetrievalFailureException("取序列号失败", e);
 		}
 		throw new DataRetrievalFailureException("取序列号失败");
+	}
+
+
+	//TODO
+	public void clearInCache() throws DataAccessException {
+		this.getSessionFactory().evict(pojoClass);
+		this.getSessionFactory().evictQueries();
+	}
+
+	//TODO
+	public void showEntriesInCache(String regionName) throws DataAccessException {
+		Map cacheEntries = null;
+		try {
+			cacheEntries = this.getSessionFactory().getStatistics().getSecondLevelCacheStatistics(regionName).getEntries();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (cacheEntries == null || cacheEntries.size() == 0) {
+			return;
+		}
+		Iterator it = cacheEntries.keySet().iterator();
+		for (; it.hasNext();) {
+			Object key = it.next();
+			Object entity = cacheEntries.get(key);
+			System.out.println(entity);
+		}
+
 	}
 }

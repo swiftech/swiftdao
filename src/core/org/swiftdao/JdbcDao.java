@@ -10,7 +10,7 @@ import org.springframework.dao.DataAccessException;
  * @author Wang Yuxing
  * @version 1.0
  */
-public interface JdbcDao extends BaseSpExecutableDao{
+public interface JdbcDao extends BaseExecutableDao{
 	
 	/**
 	 * 查找单一主键的对象。
