@@ -15,7 +15,6 @@ import org.springframework.util.ReflectionUtils;
  * 使用java反射机制操作对象
  * 
  * @author Wang Yuxing
- * @since 2008-1-30
  */
 public class BeanUtils {
 	protected static final Logger logger = LogManager.getLogger(BeanUtils.class);

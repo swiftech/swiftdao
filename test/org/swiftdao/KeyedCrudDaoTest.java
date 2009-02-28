@@ -82,8 +82,8 @@ public class KeyedCrudDaoTest {
 		System.out.println("find");
 		long id = 0L;
 		MockDao instance = new MockDaoImpl();
-		SingleKeyEntity expResult = null;
-		SingleKeyEntity result = instance.find(id);
+		MockSingleKeyEntity expResult = null;
+		MockSingleKeyEntity result = instance.find(id);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -97,8 +97,8 @@ public class KeyedCrudDaoTest {
 		System.out.println("find");
 		Serializable id = null;
 		MockDao instance = new MockDaoImpl();
-		SingleKeyEntity expResult = null;
-		SingleKeyEntity result = instance.find(id);
+		MockSingleKeyEntity expResult = null;
+		MockSingleKeyEntity result = instance.find(id);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -113,8 +113,8 @@ public class KeyedCrudDaoTest {
 		String[] keyNames = null;
 		Object[] keyValues = null;
 		MockDao instance = new MockDaoImpl();
-		SingleKeyEntity expResult = null;
-		SingleKeyEntity result = instance.find(keyNames, keyValues);
+		MockSingleKeyEntity expResult = null;
+		MockSingleKeyEntity result = instance.find(keyNames, keyValues);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -128,8 +128,8 @@ public class KeyedCrudDaoTest {
 		System.out.println("findAndLock");
 		long id = 0L;
 		MockDao instance = new MockDaoImpl();
-		SingleKeyEntity expResult = null;
-		SingleKeyEntity result = instance.findAndLock(id);
+		MockSingleKeyEntity expResult = null;
+		MockSingleKeyEntity result = instance.findAndLock(id);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -143,8 +143,8 @@ public class KeyedCrudDaoTest {
 		System.out.println("findAndLock");
 		Serializable id = null;
 		MockDao instance = new MockDaoImpl();
-		SingleKeyEntity expResult = null;
-		SingleKeyEntity result = instance.findAndLock(id);
+		MockSingleKeyEntity expResult = null;
+		MockSingleKeyEntity result = instance.findAndLock(id);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");

@@ -15,26 +15,26 @@ import javax.persistence.Table;
  */
 @Entity()
 @Table(name = "UT_SINGLE_KEY_TABLE")
-public class SingleKeyEntity implements KeyedPojo<Long> {
+public class MockSingleKeyEntity implements KeyedPojo<Long> {
 
-	private static final long serialVersionUID = 1L;
+	protected static final long serialVersionUID = 1L;
 	@Id()
 	@Column(name = "UT_ID")
 	protected Long id;
 	@Column(name = "UT_KEY", length = 32, nullable = false)
-	private String key;
+	protected String key;
 	@Column(name = "UT_S_VALUE", length = 64, nullable = true)
-	private String strValue;
+	protected String strValue;
 	@Column(name = "UT_I_VALUE", nullable = true)
-	private int intValue;
+	protected int intValue;
 	@Column(name = "UT_D_VALUE", nullable = true)
-	private Calendar creationTime;
+	protected Calendar creationTime;
 
-	public SingleKeyEntity() {
+	public MockSingleKeyEntity() {
 		super();
 	}
 
-	public SingleKeyEntity(String key) {
+	public MockSingleKeyEntity(String key) {
 		super();
 		this.key = key;
 	}

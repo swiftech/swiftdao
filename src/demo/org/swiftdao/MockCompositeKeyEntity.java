@@ -13,20 +13,20 @@ import javax.persistence.Table;
  */
 @Entity()
 @Table(name = "DEMO_MULTI_KEY")
-public class MultiKeyEntity implements KeyedPojo<MultiKey> {
+public class MockCompositeKeyEntity implements KeyedPojo<MockCompositeKey> {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	private MultiKey id;
+	private MockCompositeKey id;
 	@Column(name = "NDEGREE", nullable = false)
 	private int degree = 0;
 	@Column(name = "NINDIVIDULE_DEGREE", nullable = false)
 	private int individualDegree = 0;
 
-	public MultiKeyEntity() {
+	public MockCompositeKeyEntity() {
 	}
 
-	public MultiKeyEntity(MultiKey id, int degree, int individualDegree) {
+	public MockCompositeKeyEntity(MockCompositeKey id, int degree, int individualDegree) {
 		super();
 		this.id = id;
 		this.degree = degree;
@@ -49,11 +49,11 @@ public class MultiKeyEntity implements KeyedPojo<MultiKey> {
 		this.individualDegree = individualDegree;
 	}
 
-	public MultiKey getId() {
+	public MockCompositeKey getId() {
 		return id;
 	}
 
-	public void setId(MultiKey id) {
+	public void setId(MockCompositeKey id) {
 		this.id = id;
 	}
 }

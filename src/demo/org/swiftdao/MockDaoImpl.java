@@ -6,10 +6,6 @@ import org.swiftdao.impl.HibernateKeyedCrudDaoImpl;
  * 
  * @author Wang Yuxing
  */
-public class MockDaoImpl extends HibernateKeyedCrudDaoImpl<SingleKeyEntity> implements MockDao {
+public class MockDaoImpl extends HibernateKeyedCrudDaoImpl<MockSingleKeyEntity> implements MockDao {
 
-//	@Override
-//	protected Class<? extends Pojo> getPojoClass() {
-//		return SingleKeyEntity.class;
-//	}
 }

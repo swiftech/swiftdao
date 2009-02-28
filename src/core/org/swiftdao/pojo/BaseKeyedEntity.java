@@ -3,7 +3,7 @@ package org.swiftdao.pojo;
 import javax.persistence.*;
 
 /**
- * 统一定义id的entity基类
+ * 具有类型为Long的主键的实体类基础类。
  *
  * @author Wang Yuxing
  */

@@ -12,7 +12,7 @@ import javax.persistence.Embeddable;
  * 
  */
 @Embeddable
-public class MultiKey implements Serializable {
+public class MockCompositeKey implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -22,11 +22,11 @@ public class MultiKey implements Serializable {
 	@Column(name = "DTIME_PERIOD", nullable = false)
 	private Date timePeriod;
 
-	public MultiKey() {
+	public MockCompositeKey() {
 
 	}
 
-	public MultiKey(int pageId, Date timePeriod) {
+	public MockCompositeKey(int pageId, Date timePeriod) {
 		super();
 		this.pageId = pageId;
 		this.timePeriod = timePeriod;
@@ -50,7 +50,7 @@ public class MultiKey implements Serializable {
 
 	@Override
 	public boolean equals(Object obj) {
-		MultiKey target = (MultiKey) obj;
+		MockCompositeKey target = (MockCompositeKey) obj;
 		return this.pageId == target.getPageId() && this.timePeriod.equals(target.getTimePeriod());
 	}
 
