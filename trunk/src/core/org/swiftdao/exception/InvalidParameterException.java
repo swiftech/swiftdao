@@ -1,4 +1,4 @@
-package org.swiftdao;
+package org.swiftdao.exception;
 
 import java.sql.SQLWarning;
 

@@ -15,31 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface KeyedCrudDao<E extends KeyedPojo> extends BaseCrudDao<E> {
 
 	/**
-	 * 删除实体主键id标识的实体。
-	 * 
-	 * @param id
-	 * @throws DataAccessException
-	 */
-	void delete(long id) throws DataAccessException;
-
-	/**
-	 * 通过复合主键类的实例来删除实体对象。
-	 *
-	 * @param key
-	 * @throws DataAccessException
-	 */
-	void delete(Serializable key) throws DataAccessException;
-
-	/**
-	 * 通过给定复合主键的各个属性值来删除实体对象。
-	 *
-	 * @param keyNames 主键各个字段名
-	 * @param keyValues 主键各个字段值
-	 * @throws DataAccessException
-	 */
-	void delete(String[] keyNames, Object[] keyValues) throws DataAccessException;
-
-	/**
 	 * 按照实体类型和实体唯一标识查询实体。
 	 * 
 	 * @param key
@@ -122,4 +97,30 @@ public interface KeyedCrudDao<E extends KeyedPojo> extends BaseCrudDao<E> {
 	// * @return
 	// */
 	// E find(Class<E> type, Long id)throws DataAccessException;
+
+	/**
+	 * 删除实体主键id标识的实体。
+	 *
+	 * @param id
+	 * @throws DataAccessException
+	 */
+	void delete(long id) throws DataAccessException;
+
+	/**
+	 * 通过复合主键类的实例来删除实体对象。
+	 *
+	 * @param key
+	 * @throws DataAccessException
+	 */
+	void delete(Serializable key) throws DataAccessException;
+
+	/**
+	 * 通过给定复合主键的各个属性值来删除实体对象。
+	 *
+	 * @param keyNames 主键各个字段名
+	 * @param keyValues 主键各个字段值
+	 * @throws DataAccessException
+	 */
+	void delete(String[] keyNames, Object[] keyValues) throws DataAccessException;
+
 }

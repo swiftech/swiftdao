@@ -26,7 +26,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
 
 import org.swiftdao.JdbcDao;
-import org.swiftdao.InvalidParameterException;
+import org.swiftdao.exception.InvalidParameterException;
 
 /**
  * 基于JDBC的DAO基础实现，提供了一些用于JDBC操作的常用方法。<BR>
