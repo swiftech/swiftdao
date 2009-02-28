@@ -1,6 +1,6 @@
 package infrastructure;
 
-import org.swiftdao.TestJdbcDao;
+import org.swiftdao.MockJdbcDao;
 import java.util.Map;
 import java.util.TreeMap;
 import org.junit.runner.RunWith;
@@ -20,7 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 		"classpath:spring/ac-ut.xml"})
 public class BaseJdbcDaoUnitTest extends BaseDaoUnitTest {
 
-	TestJdbcDao jdbcDao = null;
+	MockJdbcDao jdbcDao = null;
 
 	public BaseJdbcDaoUnitTest() {
 //		jdbcDao = (TestJdbcDao) ac.getBean("jdbcDao");

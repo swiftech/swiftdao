@@ -6,9 +6,9 @@ import org.swiftdao.impl.JdbcDaoImpl;
  * @author Wang Yuxing
  *
  */
-public class TestJdbcDaoImpl extends JdbcDaoImpl  implements TestJdbcDao {
+public class MockJdbcDaoImpl extends JdbcDaoImpl  implements MockJdbcDao {
 
-	public TestJdbcDaoImpl() {
+	public MockJdbcDaoImpl() {
 
 	}
 

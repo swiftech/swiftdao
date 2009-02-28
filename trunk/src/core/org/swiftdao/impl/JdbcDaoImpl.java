@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.dao.DataAccessException;
@@ -132,13 +133,13 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 
 	public Map<String, Object> executeWithResult(Connection conn, String spName, Map<String, Object> parameters,
 			Map<String, Integer> outParams, String cursorName) throws DataAccessException {
-		if (spName == null) {
+		if (StringUtils.isEmpty(spName)) {
 			throw new InvalidParameterException("Invalid stored procedure name");
 		}
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("Call SP: " + spName);
-			logger.debug("executeWithResult(...) - parameters=" + parameters); //$NON-NLS-1$
+			logger.debug("with parameters: " + parameters);
 		}
 
 		CallableStatement cmt = null;
@@ -147,7 +148,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 			conn = this.getConnection();
 		}
 		int pCount = ((parameters == null) ? 0 : parameters.size()) + ((outParams == null) ? 0 : outParams.size());
-		StringBuilder sb = new StringBuilder(40);
+		StringBuilder sb = new StringBuilder(50);
 
 		sb.append("{ call ").append(spName).append("(");
 		for (int i = 0; i < pCount; i++) {
@@ -182,14 +183,6 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 				logger.error(e.getMessage() + e.getStackTrace());
 				return null;
 			}
-			int resultCode = cmt.getInt("piResult");
-			if (resultCode != 1) {
-				ret.put("piResult", resultCode);
-				if (outParams.get("psErrDesc") != null) {
-					ret.put("psErrDesc", cmt.getString("psErrDesc"));
-				}
-				return ret;
-			}
 			if (outParams != null && outParams.size() > 0) {
 				Set<String> keys = outParams.keySet();
 				for (String key : keys) {
@@ -204,13 +197,13 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 					}
 				}
 			}
-			// Handler the cusor to a map.
+			// cusor to a map.
 			if (cursorName != null) {
 				ResultSet rs;
 				try {
 					rs = (ResultSet) cmt.getObject(cursorName);
 				} catch (SQLException e) {
-					logger.warn("存储过程没有游标可以打开");
+					logger.info("存储过程没有可以打开的游标");
 					return ret;
 				}
 				if (rs != null) {
@@ -306,8 +299,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 
 	@SuppressWarnings("unchecked")
 	public List executeWithResultset(String spName, Map<String, Object> parameters) throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Not implemented yet");
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package infrastructure;
 
-import org.swiftdao.SingleKeyEntity;
+import org.swiftdao.MockSingleKeyEntity;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -36,10 +36,10 @@ public abstract class BaseDaoUnitTest extends BaseUnitTest {
 		}
 	}
 
-	protected List<SingleKeyEntity> createKeyedTestPojo(int count) {
-		List<SingleKeyEntity> list = new ArrayList<SingleKeyEntity>();
+	protected List<MockSingleKeyEntity> createKeyedTestPojo(int count) {
+		List<MockSingleKeyEntity> list = new ArrayList<MockSingleKeyEntity>();
 		for (int i = 0; i < count; i++) {
-			SingleKeyEntity pojo = new SingleKeyEntity(Calendar.getInstance().getTimeInMillis() + "" + i);
+			MockSingleKeyEntity pojo = new MockSingleKeyEntity(Calendar.getInstance().getTimeInMillis() + "" + i);
 			pojo.setStrValue("" + i % 2);
 			pojo.setIntValue(i % 2);
 			pojo.setCreationTime(Calendar.getInstance());
