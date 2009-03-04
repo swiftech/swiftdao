@@ -806,10 +806,10 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 		return ret;
 	}
 
-	public void commit() throws DataAccessException {
-		this.getSession().getTransaction().begin();
-		System.out.print("->>>>" + this.getSession().getTransaction().isActive());
-	}
+//	public void commit() throws DataAccessException {
+//		this.getSession().getTransaction().begin();
+//		System.out.print("->>>>" + this.getSession().getTransaction().isActive());
+//	}
 
 	@SuppressWarnings("deprecation")
 	@Override

@@ -347,28 +347,28 @@ public interface BaseCrudDao<E extends Pojo> extends BaseExecutableDao {
 	long countByParam(String paramName, Object value) throws DataAccessException;
 
 	/**
-	 * 按多个条件统计持久化实体对象的数量。
+	 * 按给定的限制条件统计持久化实体对象的数量。
 	 * 
-	 * @param paramMap
-	 * @return
+	 * @param paramMap 查询条件参数
+	 * @return 符合条件的持久化实体的数量
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	long countByParams(Map<String, Object> paramMap) throws DataAccessException;
 
 	/**
-	 * 按多个条件统计实体对象的数量。
-	 * @param paramMap
-	 * @param extraCondition
-	 * @param extraParams
-	 * @return
+	 * 按给定的限制条件统计实体对象的数量。
+	 * @param paramMap 查询条件参数
+	 * @param extraCondition 额外查询条件，跟在paramMap的后面，类似“ OR XX = :xx”的形式，没有则为null。
+	 * @param extraParams 配合extraCondition使用，用于保存extraCondition中的变量。
+	 * @return 符合条件的持久化实体的数量
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
 	long countByParams(Map<String, Object> paramMap, String extraCondition, Map<String, Object> extraParams) throws DataAccessException;
 
 	/**
-	 * 获得指定Sequence的值
+	 * 获得指定Sequence的值(仅用于Oracle)
 	 * @param seqName
 	 * @return
 	 * @throws DataAccessException
