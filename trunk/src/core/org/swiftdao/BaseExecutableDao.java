@@ -73,9 +73,4 @@ public interface BaseExecutableDao extends BaseDao {
 	 */
 	List executeWithResultset(String spName, Map<String, Object> parameters) throws DataAccessException;
 
-	/**
-	 * 编程式事务提交
-	 * @throws DataAccessException
-	 */
-	void commit() throws DataAccessException;
 }
