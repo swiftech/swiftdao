@@ -301,9 +301,4 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	public List executeWithResultset(String spName, Map<String, Object> parameters) throws DataAccessException {
 		throw new RuntimeException("Not implemented yet");
 	}
-
-	@Override
-	public void commit() throws DataAccessException {
-		throw new RuntimeException("Not implemented yet");
-	}
 }
