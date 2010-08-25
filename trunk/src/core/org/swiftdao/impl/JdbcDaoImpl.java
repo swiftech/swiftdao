@@ -1,5 +1,6 @@
 package org.swiftdao.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -82,11 +83,10 @@ import org.swiftdao.exception.InvalidParameterException;
 public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDao {
 
 	protected Logger logger = null;
-
-	private static final int ORACLE_TYPE_CURSOR =  -10;
-
+	protected static final String DEFAULT_DB_ENCODING = "ISO-8859-1";
+	protected static final String DEFAULT_UI_ENCODING = "GBK";
+	private static final int ORACLE_TYPE_CURSOR = -10;
 //	protected static DataSource dataSource = null;
-
 	protected SimpleJdbcCall simpleJdbcCall;
 
 	public JdbcDaoImpl() {
@@ -112,7 +112,6 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 					ps.setObject(j + 1, row.get(j));
 				}
 			}
-
 		});
 		return counts;
 	}
@@ -144,7 +143,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 
 		CallableStatement cmt = null;
 		ResultSet set = null;
-		if(conn == null){
+		if (conn == null) {
 			conn = this.getConnection();
 		}
 		int pCount = ((parameters == null) ? 0 : parameters.size()) + ((outParams == null) ? 0 : outParams.size());
@@ -152,8 +151,9 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 
 		sb.append("{ call ").append(spName).append("(");
 		for (int i = 0; i < pCount; i++) {
-			if (i != 0)
+			if (i != 0) {
 				sb.append(",");
+			}
 			sb.append("?");
 		}
 		sb.append(") }");
@@ -221,9 +221,9 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 			}
 		} catch (Throwable e) {
 			throw new DataRetrievalFailureException("ERROR", e);
-		} finally{
+		} finally {
 			try {
-				if(cmt != null){
+				if (cmt != null) {
 					cmt.close();
 				}
 			} catch (SQLException e) {
@@ -243,8 +243,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 		}
 		Map<String, Object> ret = new TreeMap<String, Object>();
 		if (simpleJdbcCall == null || !spName.equals(simpleJdbcCall.getProcedureName())) {
-			simpleJdbcCall = new SimpleJdbcCall(this.getDataSource()).withProcedureName(spName)
-					.withoutProcedureColumnMetaDataAccess();
+			simpleJdbcCall = new SimpleJdbcCall(this.getDataSource()).withProcedureName(spName).withoutProcedureColumnMetaDataAccess();
 		}
 
 		MapSqlParameterSource in = null;
@@ -270,6 +269,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 
 		Map<String, Object> listByCursor = null;
 		simpleJdbcCall.returningResultSet("prCursor", new ParameterizedRowMapper<Map<String, Object>>() {
+
 			public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {
 				logger.debug("Map Rows: " + rs.getFetchSize());
 				Map<String, Object> list = new HashMap<String, Object>();
@@ -300,5 +300,51 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	@SuppressWarnings("unchecked")
 	public List executeWithResultset(String spName, Map<String, Object> parameters) throws DataAccessException {
 		throw new RuntimeException("Not implemented yet");
+	}
+
+	/**
+	 *
+	 * Tools for converting encoding of text from db.
+	 * @param src
+	 * @param targetEncoding
+	 * @return
+	 */
+	protected String convertFromDB(String src, String targetEncoding) {
+		String result = null;
+		try {
+			result = new String(src.getBytes(DEFAULT_DB_ENCODING), targetEncoding);
+		} catch (UnsupportedEncodingException ex) {
+			throw new RuntimeException("Convert string from db error!");
+		}
+		return result;
+	}
+
+	/**
+	 * Tools for converting encoding of text from db.
+	 * @param src
+	 * @return
+	 */
+	protected String convertFromDB(String src) {
+		String result = null;
+		try {
+			result = new String(src.getBytes(DEFAULT_DB_ENCODING), DEFAULT_UI_ENCODING);
+		} catch (UnsupportedEncodingException ex) {
+			throw new RuntimeException("Convert string from db error!");
+		}
+		return result;
+	}
+
+	/**
+	 * Tools for converting encoding of text to db.
+	 * @param src
+	 */
+	protected String convertToDB(String src) {
+		String result = null;
+		try {
+			result = new String(src.getBytes(DEFAULT_UI_ENCODING), DEFAULT_DB_ENCODING);
+		} catch (UnsupportedEncodingException ex) {
+			throw new RuntimeException("Convert string to db error!");
+		}
+		return result;
 	}
 }
