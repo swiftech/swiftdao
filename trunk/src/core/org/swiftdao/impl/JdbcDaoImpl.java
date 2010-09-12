@@ -310,6 +310,9 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	 * @return
 	 */
 	protected String convertFromDB(String src, String targetEncoding) {
+		if(StringUtils.isEmpty(src)) {
+			return StringUtils.EMPTY;
+		}
 		String result = null;
 		try {
 			result = new String(src.getBytes(DEFAULT_DB_ENCODING), targetEncoding);
@@ -325,6 +328,9 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	 * @return
 	 */
 	protected String convertFromDB(String src) {
+		if(StringUtils.isEmpty(src)) {
+			return StringUtils.EMPTY;
+		}
 		String result = null;
 		try {
 			result = new String(src.getBytes(DEFAULT_DB_ENCODING), DEFAULT_UI_ENCODING);
@@ -339,6 +345,9 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	 * @param src
 	 */
 	protected String convertToDB(String src) {
+		if(StringUtils.isEmpty(src)) {
+			return StringUtils.EMPTY;
+		}
 		String result = null;
 		try {
 			result = new String(src.getBytes(DEFAULT_UI_ENCODING), DEFAULT_DB_ENCODING);
