@@ -17,9 +17,9 @@
 	<!-- Pooled Data Source for MySql -->
 	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
 		<property name="driver" value="com.mysql.jdbc.Driver"/>
-		<property name="driverUrl" value="jdbc:mysql://localhost/gdao"/>
-		<property name="user" value="swift"/>
-		<property name="password" value="dao"/>
+		<property name="driverUrl" value="jdbc:mysql://swiftdao.org/swiftdao"/>
+		<property name="user" value="swiftdao"/>
+		<property name="password" value="${datasource.password}"/>
 		<property name="alias" value="ut"/>
 		<property name="maximumConnectionCount" value="80"/>
 		<property name="minimumConnectionCount" value="20"/>
