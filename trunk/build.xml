@@ -1,0 +1,57 @@
+<project name="SwiftDao" default="after_deploy" basedir=".">
+
+	<!-- 引入标准build文件和属性文件 -->
+	<property file="build.properties"/>
+	<property file="../../citools/build.properties" />
+	<import file="../../citools/build.xml"/>
+
+	<!-- 检查？ -->
+	<available file="../../citools/build.xml" property="canbuild"/>
+	<available file="../../citools/build.properties" property="canbuild"/>
+
+
+	<!-- 覆盖默认的 for Jar -->
+	<fileset id="compiled_classes" dir="${dir.bin.java}">
+		<include name="**/*.class"/>
+		<include name="**/*.txt"/>
+	</fileset>
+
+	<!--  -->
+	<target name="compile">
+		<echo message="Can I build? ${canbuild}"/>
+		
+		<antcall target="doCompile" inheritAll="yes">
+			<param name="dir_src" value="${dir.src}/util"/>
+		</antcall>
+		
+		<antcall target="doCompile" inheritAll="yes">
+			<param name="dir_src" value="${dir.src}/core"/>
+		</antcall>
+		
+		<antcall target="doCompile" inheritAll="yes">
+			<param name="dir_src" value="${dir.src}/demo"/>
+		</antcall>
+	</target>
+	
+	<target name="unit_test">
+		<copy todir="${dir.bin.java}" >
+			<fileset dir="${dir.src}/demo">
+				<include name="**/*.xml"/>
+				<include name="**/*.properties"/>
+			</fileset>
+		</copy>
+		<antcall target="doUnitTest">
+			<param name="dir_src" value="${dir.src.test}"/>
+		</antcall>
+		<antcall target="genUnitTestReport"/>
+	</target>
+	
+	<target name="before_deploy" depends="after_review">
+		<antcall target="doJavadoc" inheritAll="yes">
+			<param name="dir_src" value="${dir.src}/core"/>
+			<param name="include_packages" value="org.swiftdao.*"/>
+		</antcall>	
+	</target>
+
+
+</project>
