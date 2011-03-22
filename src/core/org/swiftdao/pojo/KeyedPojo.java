@@ -5,6 +5,7 @@ import java.io.Serializable;
 /**
  * 这个接口是所有有主键实体类要实现的接口，包括单一主键和复合主键。
  * 不设主键的实体类直接实现<code>Pojo</code>接口。
+ * @param <T>
  * @author Wang Yuxing
  *
  */

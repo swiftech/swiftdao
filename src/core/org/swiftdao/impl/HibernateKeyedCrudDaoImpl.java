@@ -15,12 +15,13 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 
 /**
- * <code>KeyedCrudDao</code>的基础实现。
+ * {@link KeyedCrudDao}的Hibernate实现。
  * 
+ * @param <E>
  * @author Wang Yuxing
  * @version 1.0
  */
-public abstract class HibernateKeyedCrudDaoImpl<E extends KeyedPojo> extends HibernateCrudDaoImpl<E> implements
+public class HibernateKeyedCrudDaoImpl<E extends KeyedPojo> extends HibernateCrudDaoImpl<E> implements
 		KeyedCrudDao<E> {
 
 	@SuppressWarnings("unchecked")
@@ -38,8 +39,8 @@ public abstract class HibernateKeyedCrudDaoImpl<E extends KeyedPojo> extends Hib
 			try {
 				entity = (E) super.getSession().load(this.getPojoClass(), id);
 			} catch (Exception e) {
-				if (logger.isDebugEnabled()) {
-					logger.debug(e.getMessage() + e.getStackTrace());
+				if (log.isDebugEnabled()) {
+					log.debug(e.getMessage() + e.getStackTrace());
 				}
 				return null;
 			}
@@ -62,7 +63,7 @@ public abstract class HibernateKeyedCrudDaoImpl<E extends KeyedPojo> extends Hib
 			dc.add(Restrictions.eq(keyNames[i], keyValues[i]));
 		}
 		List<E> list = this.getHibernateTemplate().findByCriteria(dc);
-		if (list == null || list.size() == 0) {
+		if (list == null || list.isEmpty()) {
 			throw new DataRetrievalFailureException("没有找到满足复合主键条件的实体");
 		}
 		return list.get(0); // 应该只有一个实体对象。
@@ -100,8 +101,8 @@ public abstract class HibernateKeyedCrudDaoImpl<E extends KeyedPojo> extends Hib
 			try {
 				entity = (KeyedPojo) super.getSession().load(clazz, id);
 			} catch (Exception e) {
-				if (logger.isDebugEnabled()) {
-					logger.debug(e.getMessage() + e.getStackTrace());
+				if (log.isDebugEnabled()) {
+					log.debug(e.getMessage() + e.getStackTrace());
 				}
 				return null;
 			}

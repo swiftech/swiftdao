@@ -82,7 +82,7 @@ import org.swiftdao.exception.InvalidParameterException;
  */
 public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDao {
 
-	protected Logger logger = null;
+	protected Logger log = null;
 	protected static final String DEFAULT_DB_ENCODING = "ISO-8859-1";
 	protected static final String DEFAULT_UI_ENCODING = "GBK";
 	private static final int ORACLE_TYPE_CURSOR = -10;
@@ -90,7 +90,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	protected SimpleJdbcCall simpleJdbcCall;
 
 	public JdbcDaoImpl() {
-		logger = LogManager.getLogger(this.getClass().getName());
+		log = LogManager.getLogger(this.getClass().getName());
 	}
 
 	public int[] batchUpdate(String sql, final List<List<Object>> parameters) throws DataAccessException {
@@ -136,9 +136,9 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 			throw new InvalidParameterException("Invalid stored procedure name");
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Call SP: " + spName);
-			logger.debug("with parameters: " + parameters);
+		if (log.isDebugEnabled()) {
+			log.debug("Call SP: " + spName);
+			log.debug("with parameters: " + parameters);
 		}
 
 		CallableStatement cmt = null;
@@ -173,26 +173,26 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 				Set<String> keys = outParams.keySet();
 				for (String key : keys) {
 					Integer value = outParams.get(key);
-					// logger.debug("Register Out Parameter: " + key + " " + value);
+					// log.debug("Register Out Parameter: " + key + " " + value);
 					cmt.registerOutParameter(key, value.intValue());
 				}
 			}
 			try {
 				cmt.execute();
 			} catch (RuntimeException e) {
-				logger.error(e.getMessage() + e.getStackTrace());
+				log.error(e.getMessage() + e.getStackTrace());
 				return null;
 			}
 			if (outParams != null && outParams.size() > 0) {
 				Set<String> keys = outParams.keySet();
 				for (String key : keys) {
-					// logger.debug("Out param key:" + key);
+					// log.debug("Out param key:" + key);
 					if (key.equals(cursorName)) {
 						continue;
 					}
 					Object value = cmt.getObject(key);
 					if (value != null) {
-						// logger.debug("Type of value: " + value.getClass());
+						// log.debug("Type of value: " + value.getClass());
 						ret.put(key, value);
 					}
 				}
@@ -203,7 +203,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 				try {
 					rs = (ResultSet) cmt.getObject(cursorName);
 				} catch (SQLException e) {
-					logger.info("存储过程没有可以打开的游标");
+					log.info("存储过程没有可以打开的游标");
 					return ret;
 				}
 				if (rs != null) {
@@ -252,7 +252,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 			in = new MapSqlParameterSource();
 			for (String key : keys) {
 				Object value = parameters.get(key);
-				logger.debug("Register In Parameter: " + key + " " + JdbcHelper.translateType(value));
+				log.debug("Register In Parameter: " + key + " " + JdbcHelper.translateType(value));
 				// simpleJdbcCall.declareParameters(new SqlParameter(key, JdbcHelper.translateType(value)));
 				in.addValue(key, value);
 			}
@@ -262,7 +262,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 			Set<String> keys = outParams.keySet();
 			for (String key : keys) {
 				Integer value = outParams.get(key);
-				logger.debug("Register Out Parameter: " + key + " " + value);
+				log.debug("Register Out Parameter: " + key + " " + value);
 				simpleJdbcCall.declareParameters(new SqlOutParameter(key, value.intValue()));
 			}
 		}
@@ -271,7 +271,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 		simpleJdbcCall.returningResultSet("prCursor", new ParameterizedRowMapper<Map<String, Object>>() {
 
 			public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {
-				logger.debug("Map Rows: " + rs.getFetchSize());
+				log.debug("Map Rows: " + rs.getFetchSize());
 				Map<String, Object> list = new HashMap<String, Object>();
 				while (rs.next()) {
 					int n = rs.getMetaData().getColumnCount();

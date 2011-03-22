@@ -10,7 +10,7 @@ import org.springframework.dao.DataAccessException;
  * @author Wang Yuxing
  * @version 1.0
  */
-public interface JdbcDao extends BaseExecutableDao{
+public interface JdbcDao extends ExecutableDao{
 	
 	/**
 	 * 查找单一主键的对象。
@@ -22,7 +22,6 @@ public interface JdbcDao extends BaseExecutableDao{
 
 	/**
 	 * 批量执行插入或者更新操作。
-	 * @return
 	 * @param sql 批量更新语句，变量值用”?“表示，如”UPDATE SET NAME=? WHERE ID = ?“。
 	 * @param parameters
 	 * @return

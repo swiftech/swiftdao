@@ -12,7 +12,7 @@ import org.springframework.dao.DataAccessException;
  * @author Wang Yuxing
  * 
  */
-public interface BaseExecutableDao extends BaseDao {
+public interface ExecutableDao extends Dao {
 
 	/**
 	 * 执行无参数和返回值的存储过程。
@@ -27,6 +27,7 @@ public interface BaseExecutableDao extends BaseDao {
 	 * 
 	 * @param spName 存储过程名。
 	 * @param parameters 存储过程参数。
+	 * @throws DataAccessException
 	 */
 	void execute(String spName, Map<String, Object> parameters) throws DataAccessException;
 
@@ -35,7 +36,7 @@ public interface BaseExecutableDao extends BaseDao {
 	 * @param spName
 	 * @param parameters
 	 * @param outParams
-	 * @param cusorName
+	 * @param cursorName
 	 * @return
 	 * @throws DataAccessException
 	 */
@@ -44,10 +45,11 @@ public interface BaseExecutableDao extends BaseDao {
 
 	/**
 	 * 
+	 * @param conn
 	 * @param spName
 	 * @param parameters
 	 * @param outParams
-	 * @param cusorName
+	 * @param cursorName
 	 * @return
 	 * @throws DataAccessException
 	 */

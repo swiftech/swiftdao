@@ -10,9 +10,9 @@ import org.hibernate.metadata.ClassMetadata;
 public class HibernateUtils {
 
     /**
-     * 取得所有的属性名
+     * 取得所有实体的属性名
      * @param sf SessionFactory
-     * @param clazz 对象类
+     * @param clazz 实体对象类
      * @return 属性名数组
      */
     public static String[] getEntityAttributes(SessionFactory sf, Class<?> clazz) {

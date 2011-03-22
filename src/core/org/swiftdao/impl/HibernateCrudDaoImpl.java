@@ -28,7 +28,7 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-import org.swiftdao.BaseCrudDao;
+import org.swiftdao.CrudDao;
 import org.swiftdao.util.BeanUtils;
 import org.swiftdao.util.HibernateUtils;
 import org.swiftdao.util.StringUtil;
@@ -89,13 +89,13 @@ import org.swiftdao.exception.InvalidParameterException;
  *         UncategorizedSQLException
  * </pre>
  * 
+ * @param <E>
  * @author Wang Yuxing
  * @version 1.0
- * @param <E>
  */
-public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport implements BaseCrudDao<E> {
+public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport implements CrudDao<E> {
 
-	protected final Logger logger = LogManager.getLogger(HibernateCrudDaoImpl.class);
+	protected final Logger log = LogManager.getLogger(HibernateCrudDaoImpl.class);
 	protected int spExecutionResult = 1;
 	protected Class pojoClass;
 
@@ -186,7 +186,7 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 
 	public E findByUniqueParam(String uniqueParamName, String value) throws DataAccessException {
 		List<E> result = this.findByParam(uniqueParamName, value);
-		if (result == null || result.size() == 0) {
+		if (result == null || result.isEmpty()) {
 			return null;
 		}
 		return result.get(0);
@@ -260,34 +260,34 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 	@SuppressWarnings("unchecked")
 	public List<E> findByParams(Map<String, Object> paramMap, 
 			String extraCondition, Map<String, Object> extraParams) throws DataAccessException {
-		if ((paramMap == null || paramMap.size() == 0) && (extraCondition == null || extraParams == null || extraParams.size() == 0)) {
+		if ((paramMap == null || paramMap.isEmpty()) && (extraCondition == null || extraParams == null || extraParams.isEmpty())) {
 			return this.findAll();
 		}
-		StringBuilder hqlSb = new StringBuilder("FROM ");
-		hqlSb.append(this.getPojoClass().getSimpleName());
-		hqlSb.append(" WHERE ");
+		StringBuilder hqlBuf = new StringBuilder("FROM ");
+		hqlBuf.append(this.getPojoClass().getSimpleName());
+		hqlBuf.append(" WHERE ");
 		if (paramMap != null && paramMap.size() > 0) {
 			Iterator<String> mapKeys = paramMap.keySet().iterator();
 			for (int i = 0; mapKeys.hasNext(); i++) {
 				if (i != 0) {
-					hqlSb.append(" AND ");
+					hqlBuf.append(" AND ");
 				}
 				String paramName = mapKeys.next();
-				hqlSb.append(paramName + " =:" + paramName);
+				hqlBuf.append(paramName).append(" =:").append(paramName);
 			}
 		}
 		if (extraCondition != null && extraCondition.length() > 0) {
-			hqlSb.append(" ").append(extraCondition);
+			hqlBuf.append(" ").append(extraCondition);
 		}
 
-		String hql = hqlSb.toString();
-		if (logger.isDebugEnabled()) {
-			logger.debug("Query by : " + hql);
+		String hql = hqlBuf.toString();
+		if (log.isDebugEnabled()) {
+			log.debug("Query by : " + hql);
 		}
 		// 设置参数名与参数值
 		int paramsSize = ((paramMap == null) ? 0 : paramMap.size()) + ((extraParams == null) ? 0 : extraParams.size());
-		if (logger.isDebugEnabled()) {
-			logger.debug("Query by : " + hql + " with " + paramsSize + " parameters");
+		if (log.isDebugEnabled()) {
+			log.debug("Query by : " + hql + " with " + paramsSize + " parameters");
 		}
 		String[] queryParamNames = new String[paramsSize];
 		Object[] queryParams = new Object[paramsSize];
@@ -446,7 +446,7 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 						BeanUtils.forceSetProperty(e, attributeNames[j], row[j]);
 					}
 				} catch (NoSuchFieldException e1) {
-					logger.info("set attributes error", e1);
+					log.info("set attributes error", e1);
 				}
 				pagedList.add(e);
 			}
@@ -483,29 +483,31 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 			String extraCondition, Map<String, Object> extraParams) throws DataAccessException {
 		String hql = "SELECT COUNT(*) FROM ";
 		Iterator<Long> it = null;
-		if ((paramMap == null || paramMap.size() == 0) && extraCondition == null && (extraParams == null || extraParams.size() == 0)) {
+		if ((paramMap == null || paramMap.isEmpty()) 
+				&& extraCondition == null
+				&& (extraParams == null || extraParams.isEmpty())) {
 			hql = hql + this.getPojoClass().getSimpleName();
 			it = this.getSession().createQuery(hql).list().iterator();
 		} else {
-			StringBuilder hqlSb = new StringBuilder(hql);
-			hqlSb.append(this.getPojoClass().getSimpleName());
-			hqlSb.append(" WHERE ");
+			StringBuilder hqlBuf = new StringBuilder(hql);
+			hqlBuf.append(this.getPojoClass().getSimpleName());
+			hqlBuf.append(" WHERE ");
 			Iterator<String> mapKeys = null;
 			if (paramMap != null && paramMap.size() > 0) {
 				mapKeys = paramMap.keySet().iterator();
 				for (int i = 0; mapKeys.hasNext(); i++) {
 					if (i != 0) {
-						hqlSb.append(" AND ");
+						hqlBuf.append(" AND ");
 					}
 					String paramName = mapKeys.next();
-					hqlSb.append(paramName + " =:" + paramName);
+					hqlBuf.append(paramName).append(" =:").append(paramName);
 				}
 			}
 			if (extraCondition != null && extraCondition.length() > 0) {
-				hqlSb.append(" ").append(extraCondition);
+				hqlBuf.append(" ").append(extraCondition);
 			}
-			hql = hqlSb.toString();
-			logger.debug("Query by : " + hql);
+			hql = hqlBuf.toString();
+			log.debug("Query by : " + hql);
 			// 设置参数名与参数值
 			String[] queryParamNames = null;
 			Object[] queryParams = null;
@@ -531,8 +533,8 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 				}
 			}
 			// for (int j = 0; j < paramsSize; j++) {
-			// logger.debug(" " + queryParamNames[j]);
-			// logger.debug(" " + queryParams[j]);
+			// log.debug(" " + queryParamNames[j]);
+			// log.debug(" " + queryParams[j]);
 			// }
 			it = this.getHibernateTemplate().findByNamedParam(hql, queryParamNames, queryParams).iterator();
 		// } else {
@@ -552,10 +554,10 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 	 * @throws DataAccessException
 	 */
 	public void truncateTable(String tableName) throws DataAccessException {
-		logger.debug("Truncate table " + tableName);
+		log.debug("Truncate table " + tableName);
 		String sql = "TRUNCATE TABLE " + tableName;
 		int result = this.executeUpdateSqlStatement(sql);
-		logger.debug(" with " + result + " records.");
+		log.debug(" with " + result + " records.");
 	}
 
 	/*
@@ -701,9 +703,9 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 			throw new InvalidParameterException("Invalid stored procedure name");
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Call SP: " + spName);
-			logger.debug("executeWithResult(...) - parameters=" + parameters); //$NON-NLS-1$
+		if (log.isDebugEnabled()) {
+			log.debug("Call SP: " + spName);
+			log.debug("executeWithResult(...) - parameters=" + parameters); //$NON-NLS-1$
 		}
 
 		CallableStatement cmt = null;
@@ -721,7 +723,7 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 		buf.append(") }");
 
 		String sql = buf.toString();
-		logger.debug("执行：" + sql);
+		log.debug("执行：" + sql);
 		Map<String, Object> ret = new TreeMap<String, Object>();
 		try {
 			cmt = conn.prepareCall(sql);
@@ -738,14 +740,14 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 				Set<String> keys = outParams.keySet();
 				for (String key : keys) {
 					Integer value = outParams.get(key);
-					// logger.debug("Register Out Parameter: " + key + " " + value);
+					// log.debug("Register Out Parameter: " + key + " " + value);
 					cmt.registerOutParameter(key, value.intValue());
 				}
 			}
 			try {
 				cmt.execute();
 			} catch (RuntimeException e) {
-				logger.error(e.getMessage() + e.getStackTrace());
+				log.error(e.getMessage() + e.getStackTrace());
 				return null;
 			}
 			int resultCode = cmt.getInt("piResult");
@@ -759,13 +761,13 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 			if (outParams != null && outParams.size() > 0) {
 				Set<String> keys = outParams.keySet();
 				for (String key : keys) {
-					// logger.debug("Out param key:" + key);
+					// log.debug("Out param key:" + key);
 					if (key.equals(cursorName)) {
 						continue;
 					}
 					Object value = cmt.getObject(key);
 					if (value != null) {
-						// logger.debug("Type of value: " + value.getClass());
+						// log.debug("Type of value: " + value.getClass());
 						ret.put(key, value);
 					}
 				}
@@ -776,7 +778,7 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 				try {
 					rs = (ResultSet) cmt.getObject(cursorName);
 				} catch (SQLException e) {
-					logger.warn("存储过程没有游标可以打开");
+					log.warn("存储过程没有游标可以打开");
 					return ret;
 				}
 				if (rs != null) {
@@ -844,7 +846,7 @@ public abstract class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoS
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (cacheEntries == null || cacheEntries.size() == 0) {
+		if (cacheEntries == null || cacheEntries.isEmpty()) {
 			return;
 		}
 		Iterator it = cacheEntries.keySet().iterator();
