@@ -11,10 +11,10 @@ import javax.persistence.*;
  *   @GenericGenerator(name="SEQ_GEN", strategy = "increment")
  * </pre>
  *
- * @author Wang Yuxing
+ * @author Yuxing Wang
  */
 @MappedSuperclass
-public class BaseKeyedEntity implements KeyedPojo<Long> {
+public class BaseKeyedPojo implements KeyedPojo<Long> {
 
 	/**
 	 * 主键ID

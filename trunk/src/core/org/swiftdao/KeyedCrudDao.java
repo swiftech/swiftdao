@@ -6,18 +6,19 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * 具有主键实体的基础DAO接口，提供了常用的通过单一主键进行的操作。
+ * 具有默认为Long类型的主键实体的基础DAO接口，提供了常用的通过单一主键进行的操作。
  * 
+ * @param <E>
  * @author Wang Yuxing
  * @version 1.0
  */
 @Transactional
-public interface KeyedCrudDao<E extends KeyedPojo> extends BaseCrudDao<E> {
+public interface KeyedCrudDao<E extends KeyedPojo> extends CrudDao<E> {
 
 	/**
 	 * 按照实体类型和实体唯一标识查询实体。
 	 * 
-	 * @param key
+	 * @param id
 	 * @return
 	 * @throws DataAccessException
 	 */

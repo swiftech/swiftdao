@@ -19,20 +19,20 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring/ac-ut-ds-encrypt.xml",
-		"classpath:spring/ac-ut-ds.xml",
+@ContextConfiguration(locations = {
+		"classpath:conf/ac-ut-ds.xml",
 		"classpath:spring/ac-ut-dao.xml"})
 public abstract class BaseDaoUnitTest extends BaseUnitTest {
 
 	protected List<String> springConfigLocations = new ArrayList<String>();
-	protected static ApplicationContext ac = null;
+	protected static ApplicationContext appContext = null;
 
 	public BaseDaoUnitTest() {
 		logger = LogManager.getLogger(this.getClass());
 //		this.initConfigLocations();
-		String[] ss = springConfigLocations.toArray(new String[springConfigLocations.size()]);
-		if (ac == null) {
-			ac = new ClassPathXmlApplicationContext(ss);
+		String[] configPaths = springConfigLocations.toArray(new String[springConfigLocations.size()]);
+		if (appContext == null) {
+			appContext = new ClassPathXmlApplicationContext(configPaths);
 		}
 	}
 

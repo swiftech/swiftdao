@@ -6,6 +6,6 @@ package org.swiftdao;
  * @author Wang Yuxing
  * @version 1.0
  */
-public interface BaseDao {
+public interface Dao {
 
 }

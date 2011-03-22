@@ -20,11 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
  *     游离状态：已经被持久化，但是没有与当前Session关联的实体对象，且有相同标识的对象与当前Session关联。
  * </pre>
  * 
+ * @param <E>
  * @author Wang Yuxing
  * @version 1.0
  */
 @Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
-public interface BaseCrudDao<E extends Pojo> extends BaseExecutableDao {
+public interface CrudDao<E extends Pojo> extends ExecutableDao {
 
 	/**
 	 * 持久化一个实体。
@@ -109,7 +110,7 @@ public interface BaseCrudDao<E extends Pojo> extends BaseExecutableDao {
 	/**
 	 * 按照唯一的（Unique）属性名和属性值，查询得到一个实体对象。
 	 * 
-	 * @param paramName 实体唯一属性名
+	 * @param uniqueParamName 实体唯一属性名
 	 * @param value 属性值
 	 * @return 持久化实体
 	 * @throws DataAccessException
@@ -287,6 +288,7 @@ public interface BaseCrudDao<E extends Pojo> extends BaseExecutableDao {
 	 * 按照指定实体类型查询得到所有持久化实体。
 	 * 如果实体类被设置为缓存的，则该方法首先从缓存中获取。
 	 * 
+	 * @param clazz
 	 * @return 所有持久化实体的集合
 	 * @throws DataAccessException
 	 */
@@ -296,6 +298,7 @@ public interface BaseCrudDao<E extends Pojo> extends BaseExecutableDao {
 	/**
 	 * 忽略实体类的缓存配置，直接查询所有持久化实体。
 	 * 
+	 * @param clazz
 	 * @return 所有持久化实体的集合
 	 * @throws DataAccessException
 	 */
@@ -305,7 +308,7 @@ public interface BaseCrudDao<E extends Pojo> extends BaseExecutableDao {
 	 * 在所有的持久化实体中查询指定页的实体集合。
 	 * 
 	 * @param pageSize 每页大小
-	 * @param PageNumber 查询的页码，0表示第一页。
+	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @return 指定页的持久化实体集合
 	 * @throws DataAccessException
 	 */
