@@ -278,7 +278,7 @@ public interface CrudDao<E extends Pojo> extends ExecutableDao {
 	/**
 	 * 按照泛型的实体类型查询得到所有持久化实体。
 	 * 如果实体类被设置为缓存的，则该方法首先从缓存中获取。
-	 * @return 所有持久化实体的集合
+	 * @return 所有持久化实体的集合(TBD consider to be collection in the future)
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
