@@ -33,7 +33,8 @@ import org.swiftdao.KeyedCrudDao;
 import org.swiftdao.pojo.KeyedPojo;
 
 /**
- * Dummy keyed crud DAO implementation, used for unit test.
+ * Dummy keyed CRUD DAO implementation, used for unit test.
+ * To get better test functionality and performance, use HSQL DB instead.
  * TODO not implemented all methods for now.
  * @param <E>
  * @author Yuxing Wang
