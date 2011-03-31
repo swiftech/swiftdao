@@ -11,4 +11,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(isolation=Isolation.DEFAULT, propagation = Propagation.REQUIRED)
 public interface MockDao extends KeyedCrudDao<MockSingleKeyEntity>{
 
+	// For test, no new method is required
 }

@@ -15,7 +15,7 @@
 	</bean>
 	 -->
 
-	<!-- Pooled Data Source for MySql -->
+	<!-- Pooled Data Source for MySql
 	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
 		<property name="driver" value="com.mysql.jdbc.Driver"/>
 		<property name="driverUrl" value="jdbc:mysql://swiftdao.org/swiftdao"/>
@@ -27,7 +27,8 @@
 		<property name="jmx" value="true"/>
 		<property name="statistics" value="1m,15m,1d"/>
 	</bean>
-	 
+	 -->
+
 	<!-- Hibernate Session Factory -->
 	<bean id="mySessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>

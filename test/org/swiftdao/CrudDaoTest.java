@@ -1,6 +1,11 @@
 package org.swiftdao;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import infrastructure.BaseDaoUnitTest;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -8,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -15,7 +21,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -37,6 +42,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 
 	@Before
 	public void setUp() {
+		// 
 	}
 
 	@After

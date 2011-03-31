@@ -1,15 +1,23 @@
-<!-- Deprecated -->
-
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
 
+	<!-- Replace parameter in config with values in datasource.properties -->
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<value>classpath:conf/datasource.properties</value>
 		</property>
 	</bean>
-
-	<!-- Pooled Data Source for HSQLDB -->
+	
+	<!-- In-Memory data source for test -->
+	<bean id="dataSource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+          <property name="driverClassName" value="${datasource.driver}" />
+        <property name="url" value="${datasource.url}" />
+        <property name="username" value="${datasource.username}" />
+        <property name="password" value="${datasource.password}" />
+    </bean>
+    
+	<!-- Pooled Data Source for HSQLDB
 	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
 		<property name="driver" value="${datasource.driver}"/>
 		<property name="driverUrl" value="${datasource.url}"/>
@@ -21,25 +29,24 @@
 		<property name="jmx" value="true"/>
 		<property name="statistics" value="1m,15m,1d"/>
 	</bean>
-	
-	 
-	<!-- Hibernate Session Factory -->
-	<bean id="mySessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-		<property name="dataSource" ref="dataSource"/>
+	 -->
+
+    <bean id="sessionFactory"
+    class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hbm2ddl.auto">create</prop>
+                <prop key="hibernate.generate_statistics">true</prop>
+            </props>
+        </property>
 		<property name="packagesToScan">
 			<list>
 				<value>org.swiftdao.*</value>
 			</list>
 		</property>
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hbm2ddl.auto">create</prop>
-				<prop key="hibernate.generate_statistics">false</prop>
-			</props>
-		</property>
-	</bean>
-
+    </bean>
 	
 </beans>
