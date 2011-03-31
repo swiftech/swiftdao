@@ -3,9 +3,10 @@ package org.swiftdao;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.swiftdao.exception.SwiftDaoException;
 
 /**
- * 所有基于JDBC的Dao接口的基础接口。
+ * 所有基于JDBC的DAO接口的基础接口。
  * 
  * @author Wang Yuxing
  * @version 1.0
@@ -27,6 +28,6 @@ public interface JdbcDao extends ExecutableDao{
 	 * @return
 	 * @throws DataAccessException
 	 */
-	int[] batchUpdate(String sql, List<List<Object>> parameters) throws DataAccessException;
+	int[] batchUpdate(String sql, List<List<Object>> parameters) throws SwiftDaoException;
 
 }

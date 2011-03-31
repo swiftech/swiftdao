@@ -1,6 +1,5 @@
 package infrastructure;
 
-import org.swiftdao.MockSingleKeyEntity;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -11,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.swiftdao.MockSingleKeyEntity;
 
 /**
  * 所有测试DAO的单元测试类。
@@ -20,8 +20,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-		"classpath:conf/ac-ut-ds.xml",
-		"classpath:spring/ac-ut-dao.xml"})
+		"classpath:conf/hsqldb_ds.xml",
+		"classpath:spring/mock_dao.xml"})
 public abstract class BaseDaoUnitTest extends BaseUnitTest {
 
 	protected List<String> springConfigLocations = new ArrayList<String>();

@@ -17,7 +17,6 @@ import java.util.TreeMap;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -26,55 +25,17 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
-
 import org.swiftdao.JdbcDao;
-import org.swiftdao.exception.InvalidParameterException;
+import org.swiftdao.exception.SwiftDaoException;
 
 /**
  * 基于JDBC的DAO基础实现，提供了一些用于JDBC操作的常用方法。<BR>
- * 所有方法都必须声明为抛出Spring统一的DataAccessException异常，以便于做统一的异常处理。<BR>
+ * 所有方法都必须声明为抛出Spring统一的SwiftDaoException异常，以便于做统一的异常处理。<BR>
  * 可用的异常类如下：
  * 
  * <pre>
- * DataAccessException
- *    CleanupFailureDataAccessException
- *    ConcurrencyFailureException
- *         OptimisticLockingFailureException
- *              ObjectOptimisticLockingFailureException
- *                   HibernateOptimisticLockingFailureException
- *         PessimisticLockingFailureException
- *              CannotAcquireLockException
- *              CannotSerializeTransactionException
- *              DeadlockLoserDataAccessException
- *    DataAccessResourceFailureException
- *         CannotCreateRecordException
- *         CannotGetCciConnectionException
- *         CannotGetJdbcConnectionException
- *    DataIntegrityViolationException
- *    DataRetrievalFailureException
- *         IncorrectResultSetColumnCountException
- *         IncorrectResultSizeDataAccessException
- *              EmptyResultDataAccessException
- *         LobRetrievalFailureException
- *         ObjectRetrievalFailureException
- *              HibernateObjectRetrievalFailureException
- *    DataSourceLookupFailureException
- *    InvalidDataAccessApiUsageException
- *    InvalidDataAccessResourceUsageException
- *         BadSqlGrammarException
- *         CciOperationNotSupportedException
- *         HibernateQueryException
- *         IncorrectUpdateSemanticsDataAccessException
- *              JdbcUpdateAffectedIncorrectNumberOfRowsException
- *         InvalidResultSetAccessException
- *         RecordTypeNotSupportedException
- *         TypeMismatchDataAccessException
- *    PermissionDeniedDataAccessException
- *    UncategorizedDataAccessException
- *         HibernateJdbcException
- *         HibernateSystemException
- *         SQLWarningException
- *         UncategorizedSQLException
+ * SwiftDaoException
+ *    EntityNotFoundException
  * </pre>
  * 
  * @author Wang Yuxing
@@ -85,6 +46,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	protected Logger log = null;
 	protected static final String DEFAULT_DB_ENCODING = "ISO-8859-1";
 	protected static final String DEFAULT_UI_ENCODING = "GBK";
+	// Especially for oracle data type: CURSOR
 	private static final int ORACLE_TYPE_CURSOR = -10;
 //	protected static DataSource dataSource = null;
 	protected SimpleJdbcCall simpleJdbcCall;
@@ -93,12 +55,12 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 		log = LogManager.getLogger(this.getClass().getName());
 	}
 
-	public int[] batchUpdate(String sql, final List<List<Object>> parameters) throws DataAccessException {
+	public int[] batchUpdate(String sql, final List<List<Object>> parameters) throws SwiftDaoException {
 		if (sql == null) {
 			throw new BadSqlGrammarException("Batch Update", sql, null);
 		}
 		if (parameters == null || parameters.size() <= 0) {
-			throw new InvalidParameterException("Invalid parameters for batch update");
+			throw new IllegalArgumentException("Invalid parameters for batch update");
 		}
 		int[] counts = this.getJdbcTemplate().batchUpdate(sql, new BatchPreparedStatementSetter() {
 
@@ -116,24 +78,24 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 		return counts;
 	}
 
-	public void execute(String spName) throws DataAccessException {
+	public void execute(String spName) throws SwiftDaoException {
 		// this.execute(spName, null);
 		this.getSimpleJdbcTemplate().update("call " + spName + "()");
 	}
 
-	public void execute(String spName, Map<String, Object> parameters) throws DataAccessException {
+	public void execute(String spName, Map<String, Object> parameters) throws SwiftDaoException {
 		this.executeWithResult(spName, parameters, null);
 	}
 
 	public Map<String, Object> executeWithResult(String spName, Map<String, Object> parameters,
-			Map<String, Integer> outParams, String cursorName) throws DataAccessException {
+			Map<String, Integer> outParams, String cursorName) throws SwiftDaoException {
 		return executeWithResult(null, spName, parameters, outParams, cursorName);
 	}
 
 	public Map<String, Object> executeWithResult(Connection conn, String spName, Map<String, Object> parameters,
-			Map<String, Integer> outParams, String cursorName) throws DataAccessException {
+			Map<String, Integer> outParams, String cursorName) throws SwiftDaoException {
 		if (StringUtils.isEmpty(spName)) {
-			throw new InvalidParameterException("Invalid stored procedure name");
+			throw new IllegalArgumentException("Invalid stored procedure name");
 		}
 
 		if (log.isDebugEnabled()) {
@@ -237,9 +199,9 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	public Map<String, Object> executeWithResult(
 			String spName,
 			Map<String, Object> parameters,
-			Map<String, Integer> outParams) throws DataAccessException {
+			Map<String, Integer> outParams) throws SwiftDaoException {
 		if (spName == null) {
-			throw new InvalidParameterException("Invalid stored procedure name");
+			throw new IllegalArgumentException("Invalid stored procedure name");
 		}
 		Map<String, Object> ret = new TreeMap<String, Object>();
 		if (simpleJdbcCall == null || !spName.equals(simpleJdbcCall.getProcedureName())) {
@@ -293,12 +255,12 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	}
 
 	@SuppressWarnings("unchecked")
-	public List executeWithResultset(String spName) throws DataAccessException {
+	public List executeWithResultset(String spName) throws SwiftDaoException {
 		return executeWithResultset(spName, null);
 	}
 
 	@SuppressWarnings("unchecked")
-	public List executeWithResultset(String spName, Map<String, Object> parameters) throws DataAccessException {
+	public List executeWithResultset(String spName, Map<String, Object> parameters) throws SwiftDaoException {
 		throw new RuntimeException("Not implemented yet");
 	}
 

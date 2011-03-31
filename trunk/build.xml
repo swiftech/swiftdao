@@ -1,5 +1,7 @@
 <project name="SwiftDao" default="after_deploy" basedir=".">
-
+	<!-- using environment settings -->
+	<property environment="env"/>
+	
 	<!-- 引入标准build文件和属性文件 -->
 	<property file="build.properties"/>
 	<property file="../../citools/build.properties" />
@@ -16,6 +18,10 @@
 		<include name="**/*.txt"/>
 	</fileset>
 
+	<!-- For cleanning -->
+	<target name="before_compile" depends="after_clean">
+	</target>
+	
 	<!--  -->
 	<target name="compile">
 		<echo message="Can I build? ${canbuild}"/>

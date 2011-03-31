@@ -1,10 +1,11 @@
 package org.swiftdao;
 
-import org.swiftdao.pojo.KeyedPojo;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.swiftdao.pojo.KeyedPojo;
 
 /**
  * 
@@ -16,10 +17,13 @@ import javax.persistence.Table;
 public class MockCompositeKeyEntity implements KeyedPojo<MockCompositeKey> {
 
 	private static final long serialVersionUID = 1L;
+	
 	@Id
 	private MockCompositeKey id;
+	
 	@Column(name = "NDEGREE", nullable = false)
 	private int degree = 0;
+	
 	@Column(name = "NINDIVIDULE_DEGREE", nullable = false)
 	private int individualDegree = 0;
 

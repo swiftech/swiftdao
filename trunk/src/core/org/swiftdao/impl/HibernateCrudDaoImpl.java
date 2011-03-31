@@ -1,6 +1,8 @@
 package org.swiftdao.impl;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ParameterMetaData;
@@ -13,7 +15,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.text.StrBuilder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -21,72 +27,27 @@ import org.hibernate.Query;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.annotations.Cache;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-
 import org.swiftdao.CrudDao;
+import org.swiftdao.exception.SwiftDaoException;
+import org.swiftdao.pojo.Pojo;
 import org.swiftdao.util.BeanUtils;
 import org.swiftdao.util.HibernateUtils;
 import org.swiftdao.util.StringUtil;
-import org.swiftdao.pojo.Pojo;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Set;
-import java.util.TreeMap;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.text.StrBuilder;
-import org.swiftdao.exception.InvalidParameterException;
 
 /**
- * 基于Hibernate的Crud DAO基础实现，所有使用Hibernate并支持Crud操作的DAO都继承该类。<BR>
- * 所有方法都必须声明为抛出Spring统一的DataAccessException异常，以便于做统一的异常处理。<BR>
+ * 基于Hibernate的CRUD DAO基础实现，所有使用Hibernate并支持CRUD操作的DAO都继承该类。<BR>
+ * 所有方法都必须声明为抛出统一的SwiftDaoException异常，以便于做统一的异常处理。<BR>
  * 可用的异常类如下：
  * 
  * <pre>
- * DataAccessException
- *    CleanupFailureDataAccessException
- *    ConcurrencyFailureException
- *         OptimisticLockingFailureException
- *              ObjectOptimisticLockingFailureException
- *                   HibernateOptimisticLockingFailureException
- *         PessimisticLockingFailureException
- *              CannotAcquireLockException
- *              CannotSerializeTransactionException
- *              DeadlockLoserDataAccessException
- *    DataAccessResourceFailureException
- *         CannotCreateRecordException
- *         CannotGetCciConnectionException
- *         CannotGetJdbcConnectionException
- *    DataIntegrityViolationException
- *    DataRetrievalFailureException
- *         IncorrectResultSetColumnCountException
- *         IncorrectResultSizeDataAccessException
- *              EmptyResultDataAccessException
- *         LobRetrievalFailureException
- *         ObjectRetrievalFailureException
- *              HibernateObjectRetrievalFailureException
- *    DataSourceLookupFailureException
- *    InvalidDataAccessApiUsageException
- *    InvalidDataAccessResourceUsageException
- *         BadSqlGrammarException
- *         CciOperationNotSupportedException
- *         HibernateQueryException
- *         IncorrectUpdateSemanticsDataAccessException
- *              JdbcUpdateAffectedIncorrectNumberOfRowsException
- *         InvalidResultSetAccessException
- *         InvalidResultSetAccessException
- *         RecordTypeNotSupportedException
- *         TypeMismatchDataAccessException
- *    PermissionDeniedDataAccessException
- *    UncategorizedDataAccessException
- *         HibernateJdbcException
- *         HibernateSystemException
- *         SQLWarningException
- *         UncategorizedSQLException
+ * SwiftDaoException
+ *    EntityNotFoundException
+ *
  * </pre>
  * 
  * @param <E>
@@ -97,7 +58,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 
 	protected final Logger log = LogManager.getLogger(HibernateCrudDaoImpl.class);
 	protected int spExecutionResult = 1;
-	protected Class pojoClass;
+	protected Class<? extends Pojo> pojoClass;
 
 	public HibernateCrudDaoImpl() {
 		Type type = getClass().getGenericSuperclass();
@@ -116,11 +77,11 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		return pojoClass;
 	}
 
-	public void create(E entity) throws DataAccessException {
+	public void create(E entity) throws SwiftDaoException {
 		super.getHibernateTemplate().save(entity);
 	}
 
-	public void create(Collection<E> entities) throws DataAccessException {
+	public void create(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
 			Iterator<E> it = entities.iterator();
 			for (E e = null; it.hasNext();) {
@@ -130,11 +91,11 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		}
 	}
 
-	public void delete(E entity) throws DataAccessException {
+	public void delete(E entity) throws SwiftDaoException {
 		super.getHibernateTemplate().delete(entity);
 	}
 
-	public void delete(Collection<E> entities) throws DataAccessException {
+	public void delete(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
 			Iterator<E> it = entities.iterator();
 			for (E e = null; it.hasNext();) {
@@ -144,11 +105,11 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		}
 	}
 
-	public void update(E entity) throws DataAccessException {
+	public void update(E entity) throws SwiftDaoException {
 		super.getHibernateTemplate().update(entity);
 	}
 
-	public void update(Collection<E> entities) throws DataAccessException {
+	public void update(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
 			Iterator<E> it = entities.iterator();
 			for (E e = null; it.hasNext();) {
@@ -158,11 +119,11 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		}
 	}
 
-	public void createOrUpdate(E entity) throws DataAccessException {
+	public void createOrUpdate(E entity) throws SwiftDaoException {
 		super.getHibernateTemplate().saveOrUpdate(entity);
 	}
 
-	public void createOrUpdate(Collection<E> entities) throws DataAccessException {
+	public void createOrUpdate(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
 			Iterator<E> it = entities.iterator();
 			for (E e = null; it.hasNext();) {
@@ -172,11 +133,11 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		}
 	}
 
-	public void merge(E entity) throws DataAccessException {
+	public void merge(E entity) throws SwiftDaoException {
 		super.getHibernateTemplate().merge(entity);
 	}
 
-	public void merge(Collection<E> entities) throws DataAccessException {
+	public void merge(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
 			Iterator<E> it = entities.iterator();
 			for (E e = null; it.hasNext();) {
@@ -186,7 +147,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		}
 	}
 
-	public E findByUniqueParam(String uniqueParamName, String value) throws DataAccessException {
+	public E findByUniqueParam(String uniqueParamName, String value) throws SwiftDaoException {
 		List<E> result = this.findByParam(uniqueParamName, value);
 		if (result == null || result.isEmpty()) {
 			return null;
@@ -195,12 +156,12 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<E> findAll() throws DataAccessException {
+	public List<E> findAll() throws SwiftDaoException {
 		return this.findAll(this.getPojoClass());
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<E> findAll(final Class clazz) throws DataAccessException {
+	public List<E> findAll(final Class clazz) throws SwiftDaoException {
 		List<E> entities = new ArrayList<E>();
 		entities = (List<E>) super.getHibernateTemplate().execute(new HibernateCallback() {
 
@@ -221,12 +182,12 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 	}
 
 	@Override
-	public List<E> findAllOverCache(final Class clazz) throws DataAccessException {
+	public List<E> findAllOverCache(final Class clazz) throws SwiftDaoException {
 		return this.getSession().createCriteria(clazz).list();
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<E> findByParam(String paramName, Object value) throws DataAccessException {
+	public List<E> findByParam(String paramName, Object value) throws SwiftDaoException {
 		if (StringUtils.isEmpty(paramName) || value == null) {
 			return null;
 		}
@@ -238,7 +199,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 	}
 
 	public List<E> findByParamPagination(String paramName, Object value, 
-			int pageSize, int pageNumber) throws DataAccessException {
+			int pageSize, int pageNumber) throws SwiftDaoException {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put(paramName, value);
 		return findByParamsPagination(paramMap, null, null, pageSize, pageNumber);
@@ -246,7 +207,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 
 	public List<E> findByParamPagination(String paramName, Object value,
 			String orderParam, boolean isDescending,
-			int pageSize, int pageNumber) throws DataAccessException {
+			int pageSize, int pageNumber) throws SwiftDaoException {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put(paramName, value);
 		return findByParamsPagination(paramMap, orderParam, isDescending, pageSize, pageNumber);
@@ -256,13 +217,13 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		return findByParams(paramMap, null, null);
 	}
 
-	public List<E> findByParams(String extraCondition, Map<String, Object> extraParams) throws DataAccessException {
+	public List<E> findByParams(String extraCondition, Map<String, Object> extraParams) throws SwiftDaoException {
 		return this.findByParams(null, extraCondition, extraParams);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<E> findByParams(Map<String, Object> paramMap, 
-			String extraCondition, Map<String, Object> extraParams) throws DataAccessException {
+			String extraCondition, Map<String, Object> extraParams) throws SwiftDaoException {
 		if ((paramMap == null || paramMap.isEmpty()) && (extraCondition == null || extraParams == null || extraParams.isEmpty())) {
 			return this.findAll();
 		}
@@ -316,19 +277,19 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 	}
 
 	public List<E> findByParamsPagination(Map<String, Object> paramMap, 
-			int pageSize, int pageNumber) throws DataAccessException {
+			int pageSize, int pageNumber) throws SwiftDaoException {
 		return this.findByParamsPagination(paramMap, null, null, pageSize, pageNumber);
 	}
 
 	public List<E> findByParamsPagination(String condition, Map<String, Object> params, 
-			int pageSize, int pageNumber) throws DataAccessException {
+			int pageSize, int pageNumber) throws SwiftDaoException {
 		return this.findByParamsPagination(null, condition, params, pageSize, pageNumber);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<E> findByParamsPagination(Map<String, Object> paramMap, 
 			String extraCondition, Map<String, Object> extraParams,
-			int pageSize, int pageNumber) throws DataAccessException {
+			int pageSize, int pageNumber) throws SwiftDaoException {
 		StringBuilder hqlSb = new StringBuilder(" FROM ");
 		hqlSb.append(this.getPojoClass().getSimpleName());// 实体名称
 		if (paramMap != null && paramMap.size() > 0) {
@@ -372,7 +333,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 
 	public List<E> findByParamsPagination(Map<String, Object> paramMap,
 			String orderParam, boolean isDescending,
-			int pageSize, int pageNumber) throws DataAccessException {
+			int pageSize, int pageNumber) throws SwiftDaoException {
 		return this.findByParamsPagination(paramMap, null, null, orderParam, isDescending, pageSize, pageNumber);
 	}
 
@@ -380,7 +341,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 	public List<E> findByParamsPagination(Map<String, Object> paramMap,
 			String extraCondition, Map<String, Object> extraParams,
 			String orderParam, boolean isDescending,
-			int pageSize, int pageNumber) throws DataAccessException {
+			int pageSize, int pageNumber) throws SwiftDaoException {
 		String[] attributeNames = HibernateUtils.getEntityAttributes(this.getSessionFactory(), this.getPojoClass());
 		StringBuilder hqlSb = new StringBuilder(" SELECT ");
 		StringUtil.mergeString(attributeNames, ",", hqlSb);
@@ -457,33 +418,33 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		return pagedList;
 	}
 
-	public List<E> findAllByPagination(int pageSize, int PageNumber) throws DataAccessException {
+	public List<E> findAllByPagination(int pageSize, int PageNumber) throws SwiftDaoException {
 		return findByParamPagination("", "", pageSize, PageNumber);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<E> findAllByPagination(String orderParam, boolean isDescending, 
-			int pageSize, int pageNumber) throws DataAccessException {
+			int pageSize, int pageNumber) throws SwiftDaoException {
 		return this.findByParamsPagination(null, orderParam, isDescending, pageSize, pageNumber);
 	}
 
-	public long countAll() throws DataAccessException {
+	public long countAll() throws SwiftDaoException {
 		return this.countByParams(null);
 	}
 
-	public long countByParam(String paramName, Object value) throws DataAccessException {
+	public long countByParam(String paramName, Object value) throws SwiftDaoException {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put(paramName, value);
 		return this.countByParams(params);
 	}
 
-	public long countByParams(Map<String, Object> paramMap) throws DataAccessException {
+	public long countByParams(Map<String, Object> paramMap) throws SwiftDaoException {
 		return this.countByParams(paramMap, null, null);
 	}
 
 	@SuppressWarnings("unchecked")
 	public long countByParams(Map<String, Object> paramMap, 
-			String extraCondition, Map<String, Object> extraParams) throws DataAccessException {
+			String extraCondition, Map<String, Object> extraParams) throws SwiftDaoException {
 		String hql = "SELECT COUNT(*) FROM ";
 		Iterator<Long> it = null;
 		if ((paramMap == null || paramMap.isEmpty()) 
@@ -554,9 +515,9 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 	 * TODO
 	 * 
 	 * @param tableName
-	 * @throws DataAccessException
+	 * @throws SwiftDaoException
 	 */
-	public void truncateTable(String tableName) throws DataAccessException {
+	public void truncateTable(String tableName) throws SwiftDaoException {
 		log.debug("Truncate table " + tableName);
 		String sql = "TRUNCATE TABLE " + tableName;
 		int result = this.executeUpdateSqlStatement(sql);
@@ -622,7 +583,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		return sb.toString();
 	}
 
-	public void execute(String spName, Map<String, Object> parameters) throws DataAccessException {
+	public void execute(String spName, Map<String, Object> parameters) throws SwiftDaoException {
 		String sql = concatSpSql(spName, parameters);
 		try {
 			CallableStatement cstmt = this.getSession().connection().prepareCall(sql);
@@ -632,7 +593,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		}
 	}
 
-	public void execute(String spName) throws DataAccessException {
+	public void execute(String spName) throws SwiftDaoException {
 		String sql = "{call " + spName + " ()}";
 		try {
 			CallableStatement cstmt = this.getSession().connection().prepareCall(sql);
@@ -642,21 +603,21 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		}
 	}
 
-	public Map<String, Object> executeWithResult(String spName) throws DataAccessException {
+	public Map<String, Object> executeWithResult(String spName) throws SwiftDaoException {
 		return executeWithResult(spName, null);
 	}
 
-	public List executeWithResultset(String spName, Map<String, Object> parameters) throws DataAccessException {
+	public List executeWithResultset(String spName, Map<String, Object> parameters) throws SwiftDaoException {
 		throw new RuntimeException("Not implemented yet");
 	}
 
-	public List executeWithResultset(String spName) throws DataAccessException {
+	public List executeWithResultset(String spName) throws SwiftDaoException {
 		throw new RuntimeException("Not implemented yet");
 	}
 
 	// TODO Do not invoke until Oracle fix the problem.
 	public Map<String, Object> executeWithResult(String spName, Map<String, Object> parameters)
-			throws DataAccessException {
+			throws SwiftDaoException {
 		String sql = concatSpSql(spName, parameters);
 		Map<String, Object> ret = new HashMap<String, Object>();
 		try {
@@ -695,15 +656,15 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 	}
 
 	public Map<String, Object> executeWithResult(Connection conn, String spName, Map<String, Object> parameters,
-			Map<String, Integer> outParams, String cusorName) throws DataAccessException {
+			Map<String, Integer> outParams, String cusorName) throws SwiftDaoException {
 		throw new RuntimeException("Not Implemented Yet");
 	}
 
 	//TODO 需要从JdbcDaoImpl移植过来
 	public Map<String, Object> executeWithResult(String spName, Map<String, Object> parameters,
-			Map<String, Integer> outParams, String cursorName) throws DataAccessException {
+			Map<String, Integer> outParams, String cursorName) throws SwiftDaoException {
 		if (spName == null) {
-			throw new InvalidParameterException("Invalid stored procedure name");
+			throw new IllegalArgumentException("Invalid stored procedure name");
 		}
 
 		if (log.isDebugEnabled()) {
@@ -811,14 +772,14 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		return ret;
 	}
 
-//	public void commit() throws DataAccessException {
+//	public void commit() throws SwiftDaoException {
 //		this.getSession().getTransaction().begin();
 //		System.out.print("->>>>" + this.getSession().getTransaction().isActive());
 //	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public long getSequence(String seqName) throws DataAccessException {
+	public long getSequence(String seqName) throws SwiftDaoException {
 		StringBuilder buf = new StringBuilder();
 		buf.append("select ").append(seqName).append(".nextval from dual");
 		Connection con = this.getSession().connection();
@@ -836,13 +797,13 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 
 
 	//TODO
-	public void clearInCache() throws DataAccessException {
+	public void clearInCache() throws SwiftDaoException {
 		this.getSessionFactory().evict(pojoClass);
 		this.getSessionFactory().evictQueries();
 	}
 
 	//TODO
-	public void showEntriesInCache(String regionName) throws DataAccessException {
+	public void showEntriesInCache(String regionName) throws SwiftDaoException {
 		Map cacheEntries = null;
 		try {
 			cacheEntries = this.getSessionFactory().getStatistics().getSecondLevelCacheStatistics(regionName).getEntries();
