@@ -103,6 +103,9 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		Type type = getClass().getGenericSuperclass();
 		if (type instanceof ParameterizedType) {
 			pojoClass = (Class<E>) ((ParameterizedType) type).getActualTypeArguments()[0];
+		} else {
+			//throw new IllegalStateException("Not parameterized pojo type");
+			System.out.println("&&&&&&" + type);
 		}
 	}
 
@@ -111,7 +114,6 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 	 */
 	protected Class<? extends Pojo> getPojoClass() {
 		return pojoClass;
-	//return (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
 	public void create(E entity) throws DataAccessException {
@@ -229,7 +231,8 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 			return null;
 		}
 		StrBuilder buf = new StrBuilder();
-		buf.append("FROM ").append(this.getPojoClass().getSimpleName()).append(" WHERE ").append(paramName).append(" = :condition");
+		buf.append("FROM ").append(this.getPojoClass().getSimpleName());
+		buf.append(" WHERE ").append(paramName).append(" = :condition");
 		List<E> entities = this.getHibernateTemplate().findByNamedParam(buf.toString(), "condition", value);
 		return entities;
 	}
