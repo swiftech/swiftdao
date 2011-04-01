@@ -1,4 +1,4 @@
-package org.swiftdao;
+package org.swiftdao.demo;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

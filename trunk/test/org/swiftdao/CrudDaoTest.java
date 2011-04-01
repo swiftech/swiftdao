@@ -15,12 +15,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.hibernate.cfg.AnnotationConfiguration;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.swiftdao.demo.MockDao;
+import org.swiftdao.demo.MockSingleKeyEntity;
 
 /**
  *
@@ -51,7 +54,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 
 	protected MockSingleKeyEntity createDefaultEntity(Long id) {
 		MockSingleKeyEntity entity = new MockSingleKeyEntity();
-		id = Calendar.getInstance().getTimeInMillis();
+		id = generateLongEntityID();
 		System.out.println("ID 1: " + id);
 		entity.setId(id);
 		entity.setKey("key");

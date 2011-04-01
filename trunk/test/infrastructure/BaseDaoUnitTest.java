@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.swiftdao.MockSingleKeyEntity;
+import org.swiftdao.demo.MockSingleKeyEntity;
 
 /**
  * 所有测试DAO的单元测试类。
@@ -46,5 +46,9 @@ public abstract class BaseDaoUnitTest extends BaseUnitTest {
 			list.add(pojo);
 		}
 		return list;
+	}
+	
+	protected long generateLongEntityID() {
+		 return Calendar.getInstance().getTimeInMillis();
 	}
 }
