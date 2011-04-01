@@ -42,7 +42,7 @@
 				<!-- MySQLDialect Oracle10gDialect -->
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hbm2ddl.auto">create</prop>
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
 				<prop key="hibernate.generate_statistics">false</prop>
 			</props>
 		</property>

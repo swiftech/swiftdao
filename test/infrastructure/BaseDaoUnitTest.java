@@ -20,7 +20,7 @@ import org.swiftdao.demo.MockSingleKeyEntity;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-		"classpath:conf/hsqldb_ds.xml",
+		"classpath:spring/hsqldb_ds.xml",
 		"classpath:spring/mock_dao.xml"})
 public abstract class BaseDaoUnitTest extends BaseUnitTest {
 
@@ -48,6 +48,10 @@ public abstract class BaseDaoUnitTest extends BaseUnitTest {
 		return list;
 	}
 	
+	/**
+	 * Generate entity ID 
+	 * @return
+	 */
 	protected long generateLongEntityID() {
 		 return Calendar.getInstance().getTimeInMillis();
 	}
