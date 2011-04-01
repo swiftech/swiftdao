@@ -77,6 +77,11 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		return pojoClass;
 	}
 
+	public boolean checkDatabaseAvailable() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+
 	public void create(E entity) throws SwiftDaoException {
 		super.getHibernateTemplate().save(entity);
 	}

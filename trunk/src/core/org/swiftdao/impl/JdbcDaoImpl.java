@@ -9,10 +9,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import javax.sql.DataSource;
+import org.apache.commons.collections.CollectionUtils;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.LogManager;
@@ -53,6 +56,21 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 
 	public JdbcDaoImpl() {
 		log = LogManager.getLogger(this.getClass().getName());
+	}
+
+	public boolean checkDatabaseAvailable() {
+		DataSource ds = this.getDataSource();
+		String checkSql;
+		checkSql = "select * from system_tables";
+		List result = this.getSimpleJdbcTemplate().queryForList(checkSql);
+		if (CollectionUtils.isEmpty(result)) {
+			return false;
+		}
+		for (Iterator it = result.iterator(); it.hasNext();) {
+			Object object = (Object) it.next();
+			System.out.println(object);
+		}
+		return true;
 	}
 
 	public int[] batchUpdate(String sql, final List<List<Object>> parameters) throws SwiftDaoException {
@@ -272,7 +290,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	 * @return
 	 */
 	protected String convertFromDB(String src, String targetEncoding) {
-		if(StringUtils.isEmpty(src)) {
+		if (StringUtils.isEmpty(src)) {
 			return StringUtils.EMPTY;
 		}
 		String result = null;
@@ -290,7 +308,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	 * @return
 	 */
 	protected String convertFromDB(String src) {
-		if(StringUtils.isEmpty(src)) {
+		if (StringUtils.isEmpty(src)) {
 			return StringUtils.EMPTY;
 		}
 		String result = null;
@@ -307,7 +325,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	 * @param src
 	 */
 	protected String convertToDB(String src) {
-		if(StringUtils.isEmpty(src)) {
+		if (StringUtils.isEmpty(src)) {
 			return StringUtils.EMPTY;
 		}
 		String result = null;

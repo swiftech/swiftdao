@@ -1,22 +1,3 @@
-/*
- * Copyright (C) 2011 The ExtremeTalk Project. All rights reserved.
- * Original Author: Yuxing Wang(awsksupport@gmail.com)
- * 
- * This file is part of ExtremeTalk.
- * 
- * ExtremeTalk is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * ExtremeTalk is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with ExtremeTalk.  If not, see <http://www.gnu.org/licenses/>.
- */
 package org.swiftdao.impl.dummy;
 
 import java.io.Serializable;
@@ -43,6 +24,10 @@ import org.swiftdao.pojo.KeyedPojo;
 public class DummyKeyedCrudDaoImpl<E extends KeyedPojo> implements KeyedCrudDao<E> {
 
 	protected Map<Object, E> table = new MultiValueMap();
+
+	public boolean checkDatabaseAvailable() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
 	public E find(long id) throws DataAccessException {
 		return table.get(Long.valueOf(id));

@@ -15,7 +15,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.hibernate.cfg.AnnotationConfiguration;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
