@@ -11,7 +11,7 @@
 	<!-- In-Memory data source for test -->
 	<bean id="dataSource"
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-          <property name="driverClassName" value="${datasource.driver}" />
+		<property name="driverClassName" value="${datasource.driver}" />
         <property name="url" value="${datasource.url}" />
         <property name="username" value="${datasource.username}" />
         <property name="password" value="${datasource.password}" />
@@ -44,7 +44,7 @@
         </property>
 		<property name="packagesToScan">
 			<list>
-				<value>org.swiftdao.*</value>
+				<value>org.swiftdao.demo</value>
 			</list>
 		</property>
     </bean>

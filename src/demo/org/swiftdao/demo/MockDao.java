@@ -1,8 +1,9 @@
-package org.swiftdao;
+package org.swiftdao.demo;
 
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.swiftdao.KeyedCrudDao;
 
 /**
  * 用于测试的模拟DAO接口

@@ -1,6 +1,7 @@
 package infrastructure;
 
-import org.swiftdao.MockJdbcDao;
+import org.swiftdao.demo.MockJdbcDao;
+
 import java.util.Map;
 import java.util.TreeMap;
 import org.junit.runner.RunWith;

@@ -1,4 +1,6 @@
-package org.swiftdao;
+package org.swiftdao.demo;
+
+import org.swiftdao.JdbcDao;
 
 /**
  * @author Wang Yuxing

@@ -1,5 +1,8 @@
 package org.swiftdao;
 
+import org.swiftdao.demo.MockDao;
+import org.swiftdao.demo.MockDaoImpl;
+import org.swiftdao.demo.MockSingleKeyEntity;
 import org.swiftdao.pojo.KeyedPojo;
 import java.io.Serializable;
 import org.junit.After;

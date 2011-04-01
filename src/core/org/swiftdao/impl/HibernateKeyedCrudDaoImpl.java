@@ -31,8 +31,8 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPojo> extends HibernateCru
 
 	@SuppressWarnings("unchecked")
 	public E find(Serializable id) throws SwiftDaoException {
-		Annotation a = getPojoClass().getAnnotation(Cache.class);
-		if (a == null) {
+		Annotation cacheConfiged = getPojoClass().getAnnotation(Cache.class);
+		if (cacheConfiged == null) {
 			return (E) super.getHibernateTemplate().get(this.getPojoClass(), id);
 		} else {
 			E entity = null;
@@ -86,20 +86,20 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPojo> extends HibernateCru
 //	}
 
 	@SuppressWarnings("unchecked")
-	public KeyedPojo find(Class clazz, long id) throws SwiftDaoException {
+	public E find(Class clazz, long id) throws SwiftDaoException {
 		return find(clazz, new Long(id));
 	}
 
 	@SuppressWarnings("unchecked")
-	public KeyedPojo find(Class clazz, Serializable id) throws SwiftDaoException {
+	public E find(Class clazz, Serializable id) throws SwiftDaoException {
 		// 2008-09-15
 		Annotation a = clazz.getAnnotation(Cache.class);
 		if (a == null) {
-			return (KeyedPojo) super.getHibernateTemplate().get(clazz, id);
+			return (E) super.getHibernateTemplate().get(clazz, id);
 		} else {
-			KeyedPojo entity = null;
+			E entity = null;
 			try {
-				entity = (KeyedPojo) super.getSession().load(clazz, id);
+				entity = (E) super.getSession().load(clazz, id);
 			} catch (Exception e) {
 				if (log.isDebugEnabled()) {
 					log.debug(e.getMessage() + e.getStackTrace());
