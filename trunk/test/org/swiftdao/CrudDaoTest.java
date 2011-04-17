@@ -25,7 +25,7 @@ import org.swiftdao.demo.MockDao;
 import org.swiftdao.demo.MockSingleKeyEntity;
 
 /**
- *
+ * Test CRUD functionality with HSQLDB.
  * @author Wang Yuxing
  */
 public class CrudDaoTest extends BaseDaoUnitTest {
@@ -71,27 +71,27 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 	@Test
 	public void testCreate_Collection() {
 		System.out.println("testCreate_Collection");
-		Collection<MockSingleKeyEntity> entities = new ArrayList();
+		Collection<MockSingleKeyEntity> newEntities = new ArrayList<MockSingleKeyEntity>();
 		MockSingleKeyEntity entity1 = new MockSingleKeyEntity();
 		longId1 = Calendar.getInstance().getTimeInMillis();
 		System.out.println("ID 1: " + longId1);
 		entity1.setId(longId1);
 		entity1.setKey("key");
 		entity1.setStrValue("value");
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException ex) {
-			Logger.getLogger(CrudDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-		}
+//		try {
+//			Thread.sleep(100);
+//		} catch (InterruptedException ex) {
+//			Logger.getLogger(CrudDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+//		}
 		MockSingleKeyEntity entity2 = new MockSingleKeyEntity();
 		longId2 = Calendar.getInstance().getTimeInMillis();
 		System.out.println("ID 2: " + longId2);
 		entity2.setId(longId2);
 		entity2.setKey("key");
 		entity2.setStrValue("value");
-		entities.add(entity1);
-		entities.add(entity2);
-		dao.create(entities);
+		newEntities.add(entity1);
+		newEntities.add(entity2);
+		dao.create(newEntities);
 	}
 
 	/**

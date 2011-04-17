@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import org.apache.log4j.LogManager;
 import org.junit.runner.RunWith;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -26,7 +26,7 @@ public abstract class BaseDaoUnitTest extends BaseUnitTest {
 	protected static ApplicationContext appContext = null;
 
 	public BaseDaoUnitTest() {
-		logger = LogManager.getLogger(this.getClass());
+		logger = LoggerFactory.getLogger(this.getClass());
 		// this.initConfigLocations();
 		String[] configPaths = springConfigLocations.toArray(new String[springConfigLocations.size()]);
 		if (appContext == null) {

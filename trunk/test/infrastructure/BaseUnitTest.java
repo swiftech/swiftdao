@@ -1,7 +1,7 @@
 package infrastructure;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 单元测试基础类。
@@ -15,7 +15,7 @@ public class BaseUnitTest {
 	protected Logger logger = null;
 
 	public BaseUnitTest() {
-		logger = LogManager.getLogger(this.getClass());
+		logger = LoggerFactory.getLogger(this.getClass());
 	}
 
 	/**
