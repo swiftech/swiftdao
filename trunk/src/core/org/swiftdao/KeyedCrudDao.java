@@ -1,9 +1,10 @@
 package org.swiftdao;
 
-import org.swiftdao.pojo.KeyedPojo;
 import java.io.Serializable;
+
 import org.springframework.dao.DataAccessException;
 import org.springframework.transaction.annotation.Transactional;
+import org.swiftdao.entity.KeyedPersistable;
 
 /**
  * 具有默认为Long类型的主键实体的基础DAO接口，提供了常用的通过单一主键进行的操作。
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @version 1.0
  */
 @Transactional
-public interface KeyedCrudDao<E extends KeyedPojo> extends CrudDao<E> {
+public interface KeyedCrudDao<E extends KeyedPersistable> extends CrudDao<E> {
 
 	/**
 	 * 按照实体类型和实体唯一标识查询实体。
@@ -65,24 +66,24 @@ public interface KeyedCrudDao<E extends KeyedPojo> extends CrudDao<E> {
 	E findAndLock(Serializable id) throws DataAccessException;
 
 	/**
-	 * 按照给定的实体类型和唯一标识查询实体。通用的查询方法，适用于所有的继承SingleKeyPojo的实体类。
+	 * 按照给定的实体类型和唯一标识查询实体。通用的查询方法，适用于所有的实现KeyedPersistable接口的实体类。
 	 * @param clazz
 	 * @param id
 	 * @return
 	 * @throws DataAccessException
 	 */
 	@Transactional(readOnly = true)
-	KeyedPojo find(Class clazz, long id) throws DataAccessException;
+	KeyedPersistable find(Class clazz, long id) throws DataAccessException;
 
 	/**
-	 * 按照给定的实体类型和唯一标识查询实体。通用的查询方法，适用于所有的继承SingleKeyPojo的实体类。
+	 * 按照给定的实体类型和唯一标识查询实体。通用的查询方法，适用于所有的实现KeyedPersistable接口的实体类。
 	 * @param clazz
 	 * @param id
 	 * @return
 	 * @throws org.springframework.dao.DataAccessException
 	 */
 	@Transactional(readOnly = true)
-	KeyedPojo find(Class clazz, Serializable id) throws DataAccessException;
+	KeyedPersistable find(Class clazz, Serializable id) throws DataAccessException;
 
 	// /**
 	// * Find entity from DB by long type id.

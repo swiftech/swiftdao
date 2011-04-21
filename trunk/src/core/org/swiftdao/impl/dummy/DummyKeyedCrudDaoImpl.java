@@ -7,11 +7,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.collections.map.MultiValueMap;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.swiftdao.KeyedCrudDao;
-import org.swiftdao.pojo.KeyedPojo;
+import org.swiftdao.entity.KeyedPersistable;
 
 /**
  * Dummy keyed CRUD DAO implementation, used for unit test.
@@ -21,7 +22,7 @@ import org.swiftdao.pojo.KeyedPojo;
  * @author Yuxing Wang
  * @since 
  */
-public class DummyKeyedCrudDaoImpl<E extends KeyedPojo> implements KeyedCrudDao<E> {
+public class DummyKeyedCrudDaoImpl<E extends KeyedPersistable> implements KeyedCrudDao<E> {
 
 	protected Map<Object, E> table = new MultiValueMap();
 
@@ -56,9 +57,9 @@ public class DummyKeyedCrudDaoImpl<E extends KeyedPojo> implements KeyedCrudDao<
 	public E find(Class clazz, Serializable id) throws DataAccessException {
 		Iterator it = findAll().iterator();
 		while (it.hasNext()) {
-			E pojo = (E) it.next();
-			if (pojo.getClass().equals(clazz) && pojo.getId().equals(id)) {
-				return pojo;
+			E entity = (E) it.next();
+			if (entity.getClass().equals(clazz) && entity.getId().equals(id)) {
+				return entity;
 			}
 		}
 		return null;
@@ -84,8 +85,8 @@ public class DummyKeyedCrudDaoImpl<E extends KeyedPojo> implements KeyedCrudDao<
 	}
 
 	public void create(Collection<E> entities) throws DataAccessException {
-		for (E pojo : entities) {
-			create(pojo);
+		for (E entity : entities) {
+			create(entity);
 		}
 	}
 
@@ -94,8 +95,8 @@ public class DummyKeyedCrudDaoImpl<E extends KeyedPojo> implements KeyedCrudDao<
 	}
 
 	public void update(Collection<E> entities) throws DataAccessException {
-		for (E pojo : entities) {
-			update(pojo);
+		for (E entity : entities) {
+			update(entity);
 		}
 	}
 
@@ -104,8 +105,8 @@ public class DummyKeyedCrudDaoImpl<E extends KeyedPojo> implements KeyedCrudDao<
 	}
 
 	public void createOrUpdate(Collection<E> entities) throws DataAccessException {
-		for (E pojo : entities) {
-			createOrUpdate(pojo);
+		for (E entity : entities) {
+			createOrUpdate(entity);
 		}
 	}
 
@@ -181,9 +182,9 @@ public class DummyKeyedCrudDaoImpl<E extends KeyedPojo> implements KeyedCrudDao<
 		List<E> ret = new ArrayList<E>();
 		Iterator it = findAll().iterator();
 		while (it.hasNext()) {
-			E pojo = (E) it.next();
-			if (pojo.getClass().equals(clazz)) {
-				ret.add(pojo);
+			E entity = (E) it.next();
+			if (entity.getClass().equals(clazz)) {
+				ret.add(entity);
 			}
 		}
 		return ret;

@@ -3,7 +3,8 @@ package org.swiftdao;
 import org.swiftdao.demo.MockDao;
 import org.swiftdao.demo.MockDaoImpl;
 import org.swiftdao.demo.MockSingleKeyEntity;
-import org.swiftdao.pojo.KeyedPojo;
+import org.swiftdao.entity.KeyedPersistable;
+
 import java.io.Serializable;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -162,8 +163,8 @@ public class KeyedCrudDaoTest {
 		Class clazz = null;
 		long id = 0L;
 		MockDao instance = new MockDaoImpl();
-		KeyedPojo expResult = null;
-		KeyedPojo result = instance.find(clazz, id);
+		KeyedPersistable expResult = null;
+		KeyedPersistable result = instance.find(clazz, id);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -178,8 +179,8 @@ public class KeyedCrudDaoTest {
 		Class clazz = null;
 		Serializable id = null;
 		MockDao instance = new MockDaoImpl();
-		KeyedPojo expResult = null;
-		KeyedPojo result = instance.find(clazz, id);
+		KeyedPersistable expResult = null;
+		KeyedPersistable result = instance.find(clazz, id);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");

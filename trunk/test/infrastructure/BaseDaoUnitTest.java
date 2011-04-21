@@ -34,7 +34,7 @@ public abstract class BaseDaoUnitTest extends BaseUnitTest {
 		}
 	}
 
-	protected MockSingleKeyEntity createDefaultPojo(Long id) {
+	protected MockSingleKeyEntity createDefaultEntity(Long id) {
 		MockSingleKeyEntity entity = new MockSingleKeyEntity();
 		id = generateLongEntityID();
 		System.out.println("ID 1: " + id);
@@ -44,14 +44,14 @@ public abstract class BaseDaoUnitTest extends BaseUnitTest {
 		return entity;
 	}
 
-	protected List<MockSingleKeyEntity> createKeyedPojos(int count) {
+	protected List<MockSingleKeyEntity> createKeyedEntities(int count) {
 		List<MockSingleKeyEntity> list = new ArrayList<MockSingleKeyEntity>();
 		for (int i = 0; i < count; i++) {
-			MockSingleKeyEntity pojo = new MockSingleKeyEntity(Calendar.getInstance().getTimeInMillis() + "" + i);
-			pojo.setStrValue("" + i % 2);
-			pojo.setIntValue(i % 2);
-			pojo.setCreationTime(Calendar.getInstance());
-			list.add(pojo);
+			MockSingleKeyEntity entity = new MockSingleKeyEntity(Calendar.getInstance().getTimeInMillis() + "" + i);
+			entity.setStrValue("" + i % 2);
+			entity.setIntValue(i % 2);
+			entity.setCreationTime(Calendar.getInstance());
+			list.add(entity);
 		}
 		return list;
 	}
