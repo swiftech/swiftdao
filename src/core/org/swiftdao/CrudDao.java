@@ -1,6 +1,7 @@
 package org.swiftdao;
 
-import org.swiftdao.pojo.Pojo;
+import org.swiftdao.entity.Persistable;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @version 1.0
  */
 @Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
-public interface CrudDao<E extends Pojo> extends ExecutableDao {
+public interface CrudDao<E extends Persistable> extends ExecutableDao {
 
 	/**
 	 * 持久化一个实体。

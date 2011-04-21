@@ -33,8 +33,8 @@ import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.swiftdao.CrudDao;
+import org.swiftdao.entity.Persistable;
 import org.swiftdao.exception.SwiftDaoException;
-import org.swiftdao.pojo.Pojo;
 import org.swiftdao.util.BeanUtils;
 import org.swiftdao.util.HibernateUtils;
 import org.swiftdao.util.StringUtil;
@@ -54,18 +54,18 @@ import org.swiftdao.util.StringUtil;
  * @author Wang Yuxing
  * @version 1.0
  */
-public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport implements CrudDao<E> {
+public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSupport implements CrudDao<E> {
 
 	protected final Logger log = LogManager.getLogger(HibernateCrudDaoImpl.class);
 	protected int spExecutionResult = 1;
-	protected Class<? extends Pojo> pojoClass;
+	protected Class<? extends Persistable> entityClass;
 
 	public HibernateCrudDaoImpl() {
 		Type type = getClass().getGenericSuperclass();
 		if (type instanceof ParameterizedType) {
-			pojoClass = (Class<E>) ((ParameterizedType) type).getActualTypeArguments()[0];
+			entityClass = (Class<E>) ((ParameterizedType) type).getActualTypeArguments()[0];
 		} else {
-			//throw new IllegalStateException("Not parameterized pojo type");
+			//throw new IllegalStateException("Not parameterized entity type");
 			System.out.println("&&&&&&" + type);
 		}
 	}
@@ -73,8 +73,8 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 	/**
 	 * 获得DAO类对应的实体类型，所有继承者必须实现该方法并给出相应的实体类型。
 	 */
-	protected Class<? extends Pojo> getPojoClass() {
-		return pojoClass;
+	protected Class<? extends Persistable> getEntityClass() {
+		return entityClass;
 	}
 
 	public boolean checkDatabaseAvailable() {
@@ -162,7 +162,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 
 	@SuppressWarnings("unchecked")
 	public List<E> findAll() throws SwiftDaoException {
-		return this.findAll(this.getPojoClass());
+		return this.findAll(this.getEntityClass());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -175,7 +175,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 				if (a == null) {
 					return session.createCriteria(clazz).list();
 				} else {
-					List l = session.createCriteria(clazz).setCacheable(true).list();
+					List<E> l = session.createCriteria(clazz).setCacheable(true).list();
 					if (l == null || l.size() == 0) {
 						l = session.createCriteria(clazz).list();
 					}
@@ -197,7 +197,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 			return null;
 		}
 		StrBuilder buf = new StrBuilder();
-		buf.append("FROM ").append(this.getPojoClass().getSimpleName());
+		buf.append("FROM ").append(this.getEntityClass().getSimpleName());
 		buf.append(" WHERE ").append(paramName).append(" = :condition");
 		List<E> entities = this.getHibernateTemplate().findByNamedParam(buf.toString(), "condition", value);
 		return entities;
@@ -233,7 +233,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 			return this.findAll();
 		}
 		StringBuilder hqlBuf = new StringBuilder("FROM ");
-		hqlBuf.append(this.getPojoClass().getSimpleName());
+		hqlBuf.append(this.getEntityClass().getSimpleName());
 		hqlBuf.append(" WHERE ");
 		if (paramMap != null && paramMap.size() > 0) {
 			Iterator<String> mapKeys = paramMap.keySet().iterator();
@@ -296,7 +296,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 			String extraCondition, Map<String, Object> extraParams,
 			int pageSize, int pageNumber) throws SwiftDaoException {
 		StringBuilder hqlSb = new StringBuilder(" FROM ");
-		hqlSb.append(this.getPojoClass().getSimpleName());// 实体名称
+		hqlSb.append(this.getEntityClass().getSimpleName());// 实体名称
 		if (paramMap != null && paramMap.size() > 0) {
 			// 增加查询条件
 			hqlSb.append(" WHERE ");
@@ -347,11 +347,11 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 			String extraCondition, Map<String, Object> extraParams,
 			String orderParam, boolean isDescending,
 			int pageSize, int pageNumber) throws SwiftDaoException {
-		String[] attributeNames = HibernateUtils.getEntityAttributes(this.getSessionFactory(), this.getPojoClass());
+		String[] attributeNames = HibernateUtils.getEntityAttributes(this.getSessionFactory(), this.getEntityClass());
 		StringBuilder hqlSb = new StringBuilder(" SELECT ");
 		StringUtil.mergeString(attributeNames, ",", hqlSb);
 		hqlSb.append(" FROM ");
-		hqlSb.append(this.getPojoClass().getSimpleName());// 实体名称
+		hqlSb.append(this.getEntityClass().getSimpleName());// 实体名称
 		if (paramMap != null && paramMap.size() > 0) {
 			// 增加查询条件
 			hqlSb.append(" WHERE ");
@@ -405,10 +405,10 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 				}
 				E e = null;
 				try {
-					e = (E) this.getPojoClass().getConstructor().newInstance();
+					e = (E) this.getEntityClass().getConstructor().newInstance();
 				} catch (Exception e1) {
 					e1.printStackTrace();
-					throw new ObjectRetrievalFailureException("初始化实体类" + this.getPojoClass().getName() + "失败", e1);
+					throw new ObjectRetrievalFailureException("初始化实体类" + this.getEntityClass().getName() + "失败", e1);
 				}
 				try {
 					for (int j = 0; j < row.length; j++) {
@@ -455,11 +455,11 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 		if ((paramMap == null || paramMap.isEmpty()) 
 				&& extraCondition == null
 				&& (extraParams == null || extraParams.isEmpty())) {
-			hql = hql + this.getPojoClass().getSimpleName();
+			hql = hql + this.getEntityClass().getSimpleName();
 			it = this.getSession().createQuery(hql).list().iterator();
 		} else {
 			StringBuilder hqlBuf = new StringBuilder(hql);
-			hqlBuf.append(this.getPojoClass().getSimpleName());
+			hqlBuf.append(this.getEntityClass().getSimpleName());
 			hqlBuf.append(" WHERE ");
 			Iterator<String> mapKeys = null;
 			if (paramMap != null && paramMap.size() > 0) {
@@ -507,7 +507,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 			// }
 			it = this.getHibernateTemplate().findByNamedParam(hql, queryParamNames, queryParams).iterator();
 		// } else {
-		// hql = hql + this.getPojoClass().getSimpleName();
+		// hql = hql + this.getEntityClass().getSimpleName();
 		// it = this.getSession().createQuery(hql).list().iterator();
 		}
 		if (it.hasNext()) {
@@ -803,7 +803,7 @@ public class HibernateCrudDaoImpl<E extends Pojo> extends HibernateDaoSupport im
 
 	//TODO
 	public void clearInCache() throws SwiftDaoException {
-		this.getSessionFactory().evict(pojoClass);
+		this.getSessionFactory().evict(entityClass);
 		this.getSessionFactory().evictQueries();
 	}
 

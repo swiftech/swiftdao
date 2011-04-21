@@ -174,7 +174,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 	@Test
 	public void testMerge_null() {
 		System.out.println("testMerge_null");
-		MockSingleKeyEntity entity = createDefaultPojo(longId1);
+		MockSingleKeyEntity entity = createDefaultEntity(longId1);
 		dao.create(entity);
 		dao.update(entity);
 		dao.merge(entity);
@@ -186,8 +186,8 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 	@Test
 	public void testMerge_Collection() {
 		System.out.println("testMerge_Collection");
-		MockSingleKeyEntity entity1 = createDefaultPojo(longId1);
-		MockSingleKeyEntity entity2 = createDefaultPojo(longId2);
+		MockSingleKeyEntity entity1 = createDefaultEntity(longId1);
+		MockSingleKeyEntity entity2 = createDefaultEntity(longId2);
 		Collection<MockSingleKeyEntity> entities = new ArrayList();
 		;
 		entities.add(entity1);

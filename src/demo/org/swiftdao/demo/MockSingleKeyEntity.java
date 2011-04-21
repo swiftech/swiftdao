@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.swiftdao.pojo.KeyedPojo;
+import org.swiftdao.entity.KeyedPersistable;
 
 /**
  * 
@@ -16,7 +16,7 @@ import org.swiftdao.pojo.KeyedPojo;
  */
 @Entity()
 @Table(name = "DEMO_SINGLE_KEY_TABLE")
-public class MockSingleKeyEntity implements KeyedPojo<Long> {
+public class MockSingleKeyEntity implements KeyedPersistable<Long> {
 
 	protected static final long serialVersionUID = 1L;
 	

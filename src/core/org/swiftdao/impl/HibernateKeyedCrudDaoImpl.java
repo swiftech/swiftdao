@@ -11,8 +11,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.swiftdao.KeyedCrudDao;
+import org.swiftdao.entity.KeyedPersistable;
 import org.swiftdao.exception.SwiftDaoException;
-import org.swiftdao.pojo.KeyedPojo;
 
 /**
  * {@link KeyedCrudDao}的Hibernate实现。
@@ -21,7 +21,7 @@ import org.swiftdao.pojo.KeyedPojo;
  * @author Wang Yuxing
  * @version 1.0
  */
-public class HibernateKeyedCrudDaoImpl<E extends KeyedPojo> extends HibernateCrudDaoImpl<E> implements
+public class HibernateKeyedCrudDaoImpl<E extends KeyedPersistable> extends HibernateCrudDaoImpl<E> implements
 		KeyedCrudDao<E> {
 
 	@SuppressWarnings("unchecked")
@@ -31,13 +31,13 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPojo> extends HibernateCru
 
 	@SuppressWarnings("unchecked")
 	public E find(Serializable id) throws SwiftDaoException {
-		Annotation cacheConfiged = getPojoClass().getAnnotation(Cache.class);
+		Annotation cacheConfiged = getEntityClass().getAnnotation(Cache.class);
 		if (cacheConfiged == null) {
-			return (E) super.getHibernateTemplate().get(this.getPojoClass(), id);
+			return (E) super.getHibernateTemplate().get(this.getEntityClass(), id);
 		} else {
 			E entity = null;
 			try {
-				entity = (E) super.getSession().load(this.getPojoClass(), id);
+				entity = (E) super.getSession().load(this.getEntityClass(), id);
 			} catch (Exception e) {
 				if (log.isDebugEnabled()) {
 					log.debug(e.getMessage() + e.getStackTrace());
@@ -58,7 +58,7 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPojo> extends HibernateCru
 		if (keyNames == null || keyValues == null || keyNames.length != keyValues.length) {
 			return null; // 非法参数
 		}
-		DetachedCriteria dc = DetachedCriteria.forClass(this.getPojoClass(), "A");
+		DetachedCriteria dc = DetachedCriteria.forClass(this.getEntityClass(), "A");
 		for (int i = 0; i < keyNames.length; i++) {
 			dc.add(Restrictions.eq(keyNames[i], keyValues[i]));
 		}
@@ -76,8 +76,8 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPojo> extends HibernateCru
 
 	@SuppressWarnings("unchecked")
 	public E findAndLock(Serializable key) throws SwiftDaoException {
-		E pojo = (E) this.getHibernateTemplate().get(this.getPojoClass(), key, LockMode.UPGRADE_NOWAIT);
-		return pojo;
+		E entity = (E) this.getHibernateTemplate().get(this.getEntityClass(), key, LockMode.UPGRADE_NOWAIT);
+		return entity;
 	}
 
 //	@SuppressWarnings("unchecked")
@@ -124,12 +124,12 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPojo> extends HibernateCru
 	}
 
 	public void delete(String[] keyNames, Object[] keyValues) throws SwiftDaoException {
-		E pojo = find(keyNames, keyValues);
-		this.getHibernateTemplate().delete(pojo);
+		E entity = find(keyNames, keyValues);
+		this.getHibernateTemplate().delete(entity);
 	}
 
 	public void delete(Serializable key) throws SwiftDaoException {
-		E pojo = find(key);
-		this.getHibernateTemplate().delete(pojo);
+		E entity = find(key);
+		this.getHibernateTemplate().delete(entity);
 	}
 }
