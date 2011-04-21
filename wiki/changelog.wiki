@@ -1,0 +1,5 @@
+2011-04-21
+
+0.1.1_preview_89
+replace log4j with slf4j.
+change the entity's interface and base class name.
