@@ -20,13 +20,13 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.text.StrBuilder;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.annotations.Cache;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.orm.ObjectRetrievalFailureException;
@@ -56,10 +56,10 @@ import org.swiftdao.util.StringUtil;
  */
 public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSupport implements CrudDao<E> {
 
-	protected final Logger log = LogManager.getLogger(HibernateCrudDaoImpl.class);
-	protected int spExecutionResult = 1;
+	protected final Logger log = LoggerFactory.getLogger(HibernateCrudDaoImpl.class);
 	protected Class<? extends Persistable> entityClass;
-
+	protected int spExecutionResult = 1;
+	
 	public HibernateCrudDaoImpl() {
 		Type type = getClass().getGenericSuperclass();
 		if (type instanceof ParameterizedType) {
@@ -84,6 +84,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 
 	public void create(E entity) throws SwiftDaoException {
 		super.getHibernateTemplate().save(entity);
+		log.info("Created one entity: {}", entity);
 	}
 
 	public void create(Collection<E> entities) throws SwiftDaoException {
@@ -92,12 +93,15 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 			for (E e = null; it.hasNext();) {
 				e = it.next();
 				create(e);
+				log.info("Created one entity: {}", e);
 			}
+			log.info("{} entities created.", entities.size());
 		}
 	}
 
 	public void delete(E entity) throws SwiftDaoException {
 		super.getHibernateTemplate().delete(entity);
+		log.info("Deleted one entity: {}", entity);
 	}
 
 	public void delete(Collection<E> entities) throws SwiftDaoException {
@@ -106,12 +110,15 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 			for (E e = null; it.hasNext();) {
 				e = it.next();
 				delete(e);
+				log.info("Deleted one entity: {}", e);
 			}
+			log.info("{} entities deleted.", entities.size());
 		}
 	}
 
 	public void update(E entity) throws SwiftDaoException {
 		super.getHibernateTemplate().update(entity);
+		log.info("Updated one entity: {}", entity);
 	}
 
 	public void update(Collection<E> entities) throws SwiftDaoException {
@@ -120,12 +127,15 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 			for (E e = null; it.hasNext();) {
 				e = it.next();
 				update(e);
+				log.info("Updated one entity: {}", e);
 			}
+			log.info("{} entities updated.", entities.size());
 		}
 	}
 
 	public void createOrUpdate(E entity) throws SwiftDaoException {
 		super.getHibernateTemplate().saveOrUpdate(entity);
+		log.info("Created or Updated one entity: {}", entity);
 	}
 
 	public void createOrUpdate(Collection<E> entities) throws SwiftDaoException {
@@ -134,12 +144,15 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 			for (E e = null; it.hasNext();) {
 				e = it.next();
 				createOrUpdate(e);
+				log.info("Created or Updated one entity: {}", e);
 			}
+			log.info("{} entities updated.", entities.size());
 		}
 	}
 
 	public void merge(E entity) throws SwiftDaoException {
 		super.getHibernateTemplate().merge(entity);
+		log.info("Merged one entity: {}", entity);
 	}
 
 	public void merge(Collection<E> entities) throws SwiftDaoException {
@@ -148,7 +161,9 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 			for (E e = null; it.hasNext();) {
 				e = it.next();
 				merge(e);
+				log.info("Merged one entity: {}", e);
 			}
+			log.info("{} entities merged.", entities.size());
 		}
 	}
 

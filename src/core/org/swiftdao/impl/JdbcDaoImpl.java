@@ -14,12 +14,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import javax.sql.DataSource;
-import org.apache.commons.collections.CollectionUtils;
 
+import javax.sql.DataSource;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -55,7 +56,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 	protected SimpleJdbcCall simpleJdbcCall;
 
 	public JdbcDaoImpl() {
-		log = LogManager.getLogger(this.getClass().getName());
+		log = LoggerFactory.getLogger(this.getClass().getName());
 	}
 
 	public boolean checkDatabaseAvailable() {
@@ -177,7 +178,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 					}
 				}
 			}
-			// cusor to a map.
+			// Cursor to a map.
 			if (cursorName != null) {
 				ResultSet rs;
 				try {
@@ -272,12 +273,10 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 		return ret;
 	}
 
-	@SuppressWarnings("unchecked")
 	public List executeWithResultset(String spName) throws SwiftDaoException {
 		return executeWithResultset(spName, null);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List executeWithResultset(String spName, Map<String, Object> parameters) throws SwiftDaoException {
 		throw new RuntimeException("Not implemented yet");
 	}

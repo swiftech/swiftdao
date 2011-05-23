@@ -69,7 +69,6 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPersistable> extends Hiber
 		return list.get(0); // 应该只有一个实体对象。
 	}
 
-	@SuppressWarnings("unchecked")
 	public E findAndLock(long id) throws SwiftDaoException {
 		return findAndLock(new Long(id));
 	}
@@ -85,7 +84,6 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPersistable> extends Hiber
 //		return this.find(id);
 //	}
 
-	@SuppressWarnings("unchecked")
 	public E find(Class clazz, long id) throws SwiftDaoException {
 		return find(clazz, new Long(id));
 	}
@@ -121,15 +119,18 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPersistable> extends Hiber
 			throw new EntityNotFoundException("No entity found for deletion: " + id);
 		}
 		super.getHibernateTemplate().delete(entity);
+		log.info("Deleted one entity: {}", entity);
 	}
 
 	public void delete(String[] keyNames, Object[] keyValues) throws SwiftDaoException {
 		E entity = find(keyNames, keyValues);
 		this.getHibernateTemplate().delete(entity);
+		log.info("Deleted one entity: {}", entity);
 	}
 
 	public void delete(Serializable key) throws SwiftDaoException {
 		E entity = find(key);
 		this.getHibernateTemplate().delete(entity);
+		log.info("Deleted one entity: {}", entity);
 	}
 }
