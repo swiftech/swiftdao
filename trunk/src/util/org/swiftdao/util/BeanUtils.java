@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
@@ -17,10 +17,10 @@ import org.springframework.util.ReflectionUtils;
  * @author Wang Yuxing
  */
 public class BeanUtils {
-	protected static final Logger logger = LogManager.getLogger(BeanUtils.class);
-	static {
-		logger.setAdditivity(false);
-	}
+	protected static final Logger logger = LoggerFactory.getLogger(BeanUtils.class);
+//	static {
+//		logger.setAdditivity(false);
+//	}
 
 	// 限制实例化
 	private BeanUtils() {
