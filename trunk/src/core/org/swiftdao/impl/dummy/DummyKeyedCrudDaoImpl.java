@@ -129,6 +129,11 @@ public class DummyKeyedCrudDaoImpl<E extends KeyedPersistable> implements KeyedC
 	public E findByUniqueParam(String uniqueParamName, String value) throws DataAccessException {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
+	
+	@Override
+	public E findByUniqueParams(Map<String, Object> params) throws DataAccessException {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
 	public List<E> findByParam(String paramName, Object value) throws DataAccessException {
 		throw new UnsupportedOperationException("Not supported yet.");
