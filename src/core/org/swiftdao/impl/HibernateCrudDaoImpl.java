@@ -27,6 +27,7 @@ import org.hibernate.Session;
 import org.hibernate.annotations.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.orm.ObjectRetrievalFailureException;
@@ -169,6 +170,16 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 
 	public E findByUniqueParam(String uniqueParamName, String value) throws SwiftDaoException {
 		List<E> result = this.findByParam(uniqueParamName, value);
+		if (result == null || result.isEmpty()) {
+			return null;
+		}
+		return result.get(0);
+	}
+
+	
+	@Override
+	public E findByUniqueParams(Map<String, Object> params) throws DataAccessException {
+		List<E> result = this.findByParams(params);
 		if (result == null || result.isEmpty()) {
 			return null;
 		}

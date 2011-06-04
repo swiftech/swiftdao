@@ -109,7 +109,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	void delete(Collection<E> entities) throws DataAccessException;
 
 	/**
-	 * 按照唯一的（Unique）属性名和属性值，查询得到一个实体对象。
+	 * 按照唯一的（Unique）属性名和属性值对，查询得到一个唯一的实体对象。
 	 * 
 	 * @param uniqueParamName 实体唯一属性名
 	 * @param value 属性值
@@ -118,6 +118,15 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 */
 	@Transactional(readOnly = true)
 	E findByUniqueParam(String uniqueParamName, String value) throws DataAccessException;
+	
+	
+	/**
+	 * 按照多个唯一的（Unique）属性名和属性值对，查询得到一个唯一的实体对象。
+	 * @param params
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	E findByUniqueParams(Map<String, Object> params) throws DataAccessException;
 
 	/**
 	 * 按照指定的属性值查询多个实体对象。
