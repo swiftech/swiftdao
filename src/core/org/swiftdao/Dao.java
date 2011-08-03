@@ -8,6 +8,12 @@ package org.swiftdao;
  * @version 1.0
  */
 public interface Dao {
+	
+	/**
+	 * Get database information.
+	 * @return
+	 */
+	public String getDatabaseInfo();
 
 	/**
 	 * Check whether database available.
