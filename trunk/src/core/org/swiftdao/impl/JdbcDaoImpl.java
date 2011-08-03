@@ -59,6 +59,11 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 		log = LoggerFactory.getLogger(this.getClass().getName());
 	}
 
+	@Override
+	public String getDatabaseInfo() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 	public boolean checkDatabaseAvailable() {
 		DataSource ds = this.getDataSource();
 		String checkSql;

@@ -61,6 +61,9 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	protected Class<? extends Persistable> entityClass;
 	protected int spExecutionResult = 1;
 	
+	/**
+	 * Construct with generic type.
+	 */
 	public HibernateCrudDaoImpl() {
 		Type type = getClass().getGenericSuperclass();
 		if (type instanceof ParameterizedType) {
@@ -76,6 +79,20 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	 */
 	protected Class<? extends Persistable> getEntityClass() {
 		return entityClass;
+	}
+	
+	public String getDatabaseInfo() {
+		StringBuilder buf = new StringBuilder();
+		try {
+			buf.append(this.getSession().connection().getMetaData().getDatabaseProductName()).append(" ");
+			buf.append(this.getSession().connection().getMetaData().getDatabaseProductVersion()).append(" ");
+			buf.append(this.getSession().connection().getMetaData().getDatabaseMajorVersion()).append(" ");
+//			buf.append(this.getSession().connection().getMetaData().getDatabaseMinorVersion());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return "[Unknown]";
+		}
+		return buf.toString();
 	}
 
 	public boolean checkDatabaseAvailable() {

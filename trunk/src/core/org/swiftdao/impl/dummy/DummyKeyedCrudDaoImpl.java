@@ -26,6 +26,11 @@ public class DummyKeyedCrudDaoImpl<E extends KeyedPersistable> implements KeyedC
 
 	protected Map<Object, E> table = new MultiValueMap();
 
+	@Override
+	public String getDatabaseInfo() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 	public boolean checkDatabaseAvailable() {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
