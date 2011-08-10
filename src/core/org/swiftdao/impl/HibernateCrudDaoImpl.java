@@ -83,14 +83,23 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	
 	public String getDatabaseInfo() {
 		StringBuilder buf = new StringBuilder();
+		Connection conn = this.getSession().connection();
 		try {
-			buf.append(this.getSession().connection().getMetaData().getDatabaseProductName()).append(" ");
-			buf.append(this.getSession().connection().getMetaData().getDatabaseProductVersion()).append(" ");
-			buf.append(this.getSession().connection().getMetaData().getDatabaseMajorVersion()).append(" ");
+			buf.append(conn.getMetaData().getDatabaseProductName()).append(" ");
+			buf.append(conn.getMetaData().getDatabaseProductVersion()).append(" ");
+			buf.append(conn.getMetaData().getDatabaseMajorVersion()).append(" ");
 //			buf.append(this.getSession().connection().getMetaData().getDatabaseMinorVersion());
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "[Unknown]";
+		} finally {
+			try {
+				conn.close();
+				conn = null;
+				System.out.println("Connection closed for retrieve database information");
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return buf.toString();
 	}

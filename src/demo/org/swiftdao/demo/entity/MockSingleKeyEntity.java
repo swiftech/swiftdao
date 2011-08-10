@@ -1,4 +1,4 @@
-package org.swiftdao.demo;
+package org.swiftdao.demo.entity;
 
 import java.util.Calendar;
 
@@ -10,7 +10,7 @@ import javax.persistence.Table;
 import org.swiftdao.entity.KeyedPersistable;
 
 /**
- * 
+ * Mock entity with single key. 
  * @author Wang Yuxing
  * 
  */

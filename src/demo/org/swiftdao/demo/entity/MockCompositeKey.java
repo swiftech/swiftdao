@@ -1,4 +1,4 @@
-package org.swiftdao.demo;
+package org.swiftdao.demo.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -7,7 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
- * 
+ * Mock composite key.
  * @author Wang Yuxing
  * 
  */
