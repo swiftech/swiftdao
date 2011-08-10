@@ -3,14 +3,20 @@ package org.swiftdao;
 import java.util.List;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.swiftdao.exception.SwiftDaoException;
+import org.swiftdao.impl.JdbcDaoImpl;
 
 /**
  * 所有基于JDBC的DAO接口的基础接口。
  * 
  * @author Wang Yuxing
  * @version 1.0
+ * @see JdbcDaoImpl
  */
+@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
 public interface JdbcDao extends ExecutableDao{
 	
 	/**

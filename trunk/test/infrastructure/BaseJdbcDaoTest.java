@@ -19,11 +19,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 		"classpath:spring/ac-ut-ds.xml",
 		"classpath:spring/ac-ut-dao.xml",
 		"classpath:spring/ac-ut.xml"})
-public class BaseJdbcDaoUnitTest extends BaseDaoUnitTest {
+public class BaseJdbcDaoTest extends BaseDaoTest {
 
 	MockJdbcDao jdbcDao = null;
 
-	public BaseJdbcDaoUnitTest() {
+	public BaseJdbcDaoTest() {
 //		jdbcDao = (TestJdbcDao) ac.getBean("jdbcDao");
 	}
 

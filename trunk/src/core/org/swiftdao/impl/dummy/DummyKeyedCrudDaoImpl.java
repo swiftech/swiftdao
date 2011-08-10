@@ -16,7 +16,8 @@ import org.swiftdao.entity.KeyedPersistable;
 
 /**
  * Dummy keyed CRUD DAO implementation, used for unit test.
- * To get better test functionality and performance, use HSQL DB instead.
+ * This implementation will never touch any real database, it only manipulate entities in JVM.
+ * To get better test functionality, use H2 DB instead.
  * TODO not implemented all methods for now.
  * @param <E>
  * @author Yuxing Wang

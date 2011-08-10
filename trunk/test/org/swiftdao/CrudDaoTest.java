@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
-import infrastructure.BaseDaoUnitTest;
+import infrastructure.BaseDaoTest;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,18 +21,18 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.swiftdao.demo.MockDao;
-import org.swiftdao.demo.MockSingleKeyEntity;
+import org.swiftdao.demo.MockOrmDao;
+import org.swiftdao.demo.entity.MockSingleKeyEntity;
 
 /**
- * Test CRUD functionality with HSQLDB.
+ * Test CRUD functionality with H2 in-memory database.
  * @author Wang Yuxing
  */
-public class CrudDaoTest extends BaseDaoUnitTest {
+public class CrudDaoTest extends BaseDaoTest {
 
 	private static Long longId1;
 	private static Long longId2;
-	MockDao dao = null;
+
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
@@ -40,6 +40,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
+		
 	}
 
 	@Before
@@ -49,6 +50,28 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 
 	@After
 	public void tearDown() {
+//		super.sleep(1);
+		showConnectionPoolInfo();
+	}
+	
+	@Test
+	public void testSomething() {
+		for (int i = 0; i < 30; i++) {
+			System.out.print("*");
+			mockOrmDao.findByUniqueParam("UT_KEY", "jack" + i);
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testGetDatabaseInfo() {
+		System.out.println("testGetDatabaseInfo()");
+		System.out.println(mockOrmDao.getDatabaseInfo());
+		for (int i = 0; i < 30; i++) {
+			System.out.println(mockOrmDao.getDatabaseInfo());	
+		}
 	}
 
 	/**
@@ -62,7 +85,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		entity.setId(longId1);
 		entity.setKey("key");
 		entity.setStrValue("value");
-		dao.create(entity);
+		mockOrmDao.create(entity);
 	}
 
 	/**
@@ -78,11 +101,11 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		entity1.setId(longId1);
 		entity1.setKey("key");
 		entity1.setStrValue("value");
-//		try {
-//			Thread.sleep(100);
-//		} catch (InterruptedException ex) {
-//			Logger.getLogger(CrudDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-//		}
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException ex) {
+			Logger.getLogger(CrudDaoTest.class.getName()).log(Level.SEVERE, null, ex);
+		}
 		MockSingleKeyEntity entity2 = new MockSingleKeyEntity();
 		longId2 = Calendar.getInstance().getTimeInMillis();
 		System.out.println("ID 2: " + longId2);
@@ -91,7 +114,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		entity2.setStrValue("value");
 		newEntities.add(entity1);
 		newEntities.add(entity2);
-		dao.create(newEntities);
+		mockOrmDao.create(newEntities);
 	}
 
 	/**
@@ -100,9 +123,9 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 	@Test
 	public void testUpdate_null() {
 		System.out.println("testUpdate_null");
-		MockSingleKeyEntity entity = dao.find(longId1);
+		MockSingleKeyEntity entity = mockOrmDao.find(longId1);
 		entity.setStrValue("testUpdate_null");
-		dao.update(entity);
+		mockOrmDao.update(entity);
 	}
 
 	/**
@@ -111,11 +134,11 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 	@Test
 	public void testUpdate_Collection() {
 		System.out.println("update");
-		Collection<MockSingleKeyEntity> entities = dao.findAll();
+		Collection<MockSingleKeyEntity> entities = mockOrmDao.findAll();
 		for (MockSingleKeyEntity en : entities) {
 			en.setStrValue("testUpdate_Collection");
 		}
-		dao.update(entities);
+		mockOrmDao.update(entities);
 	}
 
 	/**
@@ -129,10 +152,10 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		entity.setId(longId1);
 		entity.setKey("key");
 		entity.setStrValue("value");
-		dao.createOrUpdate(entity);
+		mockOrmDao.createOrUpdate(entity);
 		// Update
-		entity = dao.find(longId1);
-		dao.createOrUpdate(entity);
+		entity = mockOrmDao.find(longId1);
+		mockOrmDao.createOrUpdate(entity);
 	}
 
 	/**
@@ -161,11 +184,11 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		entity2.setStrValue("value");
 		entities.add(entity1);
 		entities.add(entity2);
-		dao.createOrUpdate(entities);
+		mockOrmDao.createOrUpdate(entities);
 
 		// Update
-		List ens = dao.findAll();
-		dao.createOrUpdate(ens);
+		List ens = mockOrmDao.findAll();
+		mockOrmDao.createOrUpdate(ens);
 	}
 
 	/**
@@ -175,9 +198,9 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 	public void testMerge_null() {
 		System.out.println("testMerge_null");
 		MockSingleKeyEntity entity = createDefaultEntity(longId1);
-		dao.create(entity);
-		dao.update(entity);
-		dao.merge(entity);
+		mockOrmDao.create(entity);
+		mockOrmDao.update(entity);
+		mockOrmDao.merge(entity);
 	}
 
 	/**
@@ -192,7 +215,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		;
 		entities.add(entity1);
 		entities.add(entity2);
-		dao.merge(entities);
+		mockOrmDao.merge(entities);
 	}
 
 	/**
@@ -203,7 +226,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		System.out.println("findByUniqueParam");
 		String uniqueParamName = "key";
 		String value = "key";
-		MockSingleKeyEntity result = dao.findByUniqueParam(uniqueParamName, value);
+		MockSingleKeyEntity result = mockOrmDao.findByUniqueParam(uniqueParamName, value);
 		assertNotNull(result);
 	}
 
@@ -215,7 +238,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		System.out.println("findByParam");
 		String paramName = "strValue";
 		Object value = "value";
-		List<MockSingleKeyEntity> result = dao.findByParam(paramName, value);
+		List<MockSingleKeyEntity> result = mockOrmDao.findByParam(paramName, value);
 		assertFalse(CollectionUtils.isEmpty(result));
 		for (MockSingleKeyEntity e : result) {
 			System.out.println("#" + e);
@@ -229,12 +252,12 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 	public void testFindByParamPagination_4args() {
 		System.out.println("testFindByParamPagination_4args");
 		String paramName = "";
-		Object value = null;
+		Object value = "";
 		int pageSize = 0;
 		int pageNumber = 0;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findByParamPagination(paramName, value, pageSize, pageNumber);
+		List<MockSingleKeyEntity> result = mockOrmDao.findByParamPagination(paramName, value, pageSize, pageNumber);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -254,7 +277,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		boolean isDescending = false;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findByParamPagination(paramName, value, orderParam, isDescending, pageSize, pageNumber);
+		List<MockSingleKeyEntity> result = mockOrmDao.findByParamPagination(paramName, value, orderParam, isDescending, pageSize, pageNumber);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -269,7 +292,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		Map<String, Object> paramMap = null;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findByParams(paramMap);
+		List<MockSingleKeyEntity> result = mockOrmDao.findByParams(paramMap);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -285,7 +308,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		Map<String, Object> extraParams = null;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findByParams(extraCondition, extraParams);
+		List<MockSingleKeyEntity> result = mockOrmDao.findByParams(extraCondition, extraParams);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -302,7 +325,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		Map<String, Object> extraParams = null;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findByParams(paramMap, extraCondition, extraParams);
+		List<MockSingleKeyEntity> result = mockOrmDao.findByParams(paramMap, extraCondition, extraParams);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -319,7 +342,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		int pageNumber = 0;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findByParamsPagination(paramMap, pageSize, pageNumber);
+		List<MockSingleKeyEntity> result = mockOrmDao.findByParamsPagination(paramMap, pageSize, pageNumber);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -337,7 +360,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		int pageNumber = 0;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findByParamsPagination(condition, params, pageSize, pageNumber);
+		List<MockSingleKeyEntity> result = mockOrmDao.findByParamsPagination(condition, params, pageSize, pageNumber);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -356,7 +379,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		int pageNumber = 0;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findByParamsPagination(paramMap, extraCondition, extraParams, pageSize, pageNumber);
+		List<MockSingleKeyEntity> result = mockOrmDao.findByParamsPagination(paramMap, extraCondition, extraParams, pageSize, pageNumber);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -375,7 +398,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		boolean isDescending = false;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findByParamsPagination(paramMap, orderParam, isDescending, pageSize, pageNumber);
+		List<MockSingleKeyEntity> result = mockOrmDao.findByParamsPagination(paramMap, orderParam, isDescending, pageSize, pageNumber);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -396,7 +419,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		boolean isDescending = false;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findByParamsPagination(paramMap, extraCondition, extraParams, orderParam, isDescending, pageSize, pageNumber);
+		List<MockSingleKeyEntity> result = mockOrmDao.findByParamsPagination(paramMap, extraCondition, extraParams, orderParam, isDescending, pageSize, pageNumber);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -410,7 +433,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		System.out.println("findAll");
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findAll();
+		List<MockSingleKeyEntity> result = mockOrmDao.findAll();
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -425,7 +448,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		Class clazz = null;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findAll(clazz);
+		List<MockSingleKeyEntity> result = mockOrmDao.findAll(clazz);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -440,7 +463,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		Class clazz = null;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findAllOverCache(clazz);
+		List<MockSingleKeyEntity> result = mockOrmDao.findAllOverCache(clazz);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -456,7 +479,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		int pageNumber = 0;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findAllByPagination(pageSize, pageNumber);
+		List<MockSingleKeyEntity> result = mockOrmDao.findAllByPagination(pageSize, pageNumber);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -474,7 +497,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		boolean isDescending = false;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = dao.findAllByPagination(orderParam, isDescending, pageSize, pageNumber);
+		List<MockSingleKeyEntity> result = mockOrmDao.findAllByPagination(orderParam, isDescending, pageSize, pageNumber);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -488,7 +511,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		System.out.println("countAll");
 
 		long expResult = 0L;
-		long result = dao.countAll();
+		long result = mockOrmDao.countAll();
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -504,7 +527,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		Object value = null;
 
 		long expResult = 0L;
-		long result = dao.countByParam(paramName, value);
+		long result = mockOrmDao.countByParam(paramName, value);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -519,7 +542,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		Map<String, Object> paramMap = null;
 
 		long expResult = 0L;
-		long result = dao.countByParams(paramMap);
+		long result = mockOrmDao.countByParams(paramMap);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -536,7 +559,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		Map<String, Object> extraParams = null;
 
 		long expResult = 0L;
-		long result = dao.countByParams(paramMap, extraCondition, extraParams);
+		long result = mockOrmDao.countByParams(paramMap, extraCondition, extraParams);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -551,7 +574,7 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 		String seqName = "";
 
 		long expResult = 0L;
-		long result = dao.getSequence(seqName);
+		long result = mockOrmDao.getSequence(seqName);
 		assertEquals(expResult, result);
 		// TODO review the generated test code and remove the default call to fail.
 		fail("The test case is a prototype.");
@@ -583,12 +606,5 @@ public class CrudDaoTest extends BaseDaoUnitTest {
 //		Collection<SingleKeyEntity> ens = dao.findAll();
 //		TestCase.assertEquals(0, ens.size());
 //	}
-	public MockDao getKeyedDao() {
-		return dao;
-	}
 
-	@Autowired
-	public void setKeyedDao(MockDao keyedDao) {
-		this.dao = keyedDao;
-	}
 }

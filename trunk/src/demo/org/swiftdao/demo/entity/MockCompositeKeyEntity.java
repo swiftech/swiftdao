@@ -1,4 +1,4 @@
-package org.swiftdao.demo;
+package org.swiftdao.demo.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import org.swiftdao.entity.KeyedPersistable;
 
 /**
- * 
+ * Mock entity with composite key.
  * @author Wang Yuxing
  * 
  */
