@@ -92,14 +92,6 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return "[Unknown]";
-		} finally {
-			try {
-				conn.close();
-				conn = null;
-				System.out.println("Connection closed for retrieve database information");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		return buf.toString();
 	}
