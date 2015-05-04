@@ -12,9 +12,9 @@ public class ProxoolStatisticsListener implements StatisticsListenerIF {
 
 	@Override
 	public void statistics(String alias, StatisticsIF statistics) {
-		System.out.println("Pool statistics for :" + alias);
-		System.out.println("Average active time and count: " + statistics.getAverageActiveTime() + " " + statistics.getAverageActiveCount());
-		System.out.println("Served per second and count: " + statistics.getServedPerSecond() + " " + statistics.getServedCount());
+		System.out.println(java.lang.String.format("Pool statistics for :%s", alias));
+		System.out.println(java.lang.String.format("Average active time and count: %s %s", statistics.getAverageActiveTime(), statistics.getAverageActiveCount()));
+		System.out.println(java.lang.String.format("Served per second and count: %s %d", statistics.getServedPerSecond(), statistics.getServedCount()));
 	}
 
 }
