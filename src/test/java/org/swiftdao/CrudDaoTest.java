@@ -36,6 +36,7 @@ public class CrudDaoTest extends BaseDaoTest {
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
+		System.out.printf("ENCRYPTION_PASSWORD = %s%n", System.getenv("ENCRYPTION_PASSWORD"));
 	}
 
 	@AfterClass
