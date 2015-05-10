@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+
 import infrastructure.BaseDaoTest;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import org.swiftdao.demo.entity.MockSingleKeyEntity;
 
 /**
  * Test CRUD functionality with H2 in-memory database.
+ *
  * @author Wang Yuxing
  */
 public class CrudDaoTest extends BaseDaoTest {
@@ -37,11 +39,12 @@ public class CrudDaoTest extends BaseDaoTest {
 	@BeforeClass
 	public static void setUpClass() throws Exception {
 		System.out.printf("ENCRYPTION_PASSWORD = %s%n", System.getenv("ENCRYPTION_PASSWORD"));
+		System.out.printf("ENCRYPTION_PASSWORD = %s%n", System.getProperty("ENCRYPTION_PASSWORD"));
 	}
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
-		
+
 	}
 
 	@Before
@@ -54,7 +57,7 @@ public class CrudDaoTest extends BaseDaoTest {
 //		super.sleep(1);
 		showConnectionPoolInfo();
 	}
-	
+
 	@Test
 	public void testSomething() {
 		for (int i = 0; i < 30; i++) {
@@ -62,16 +65,16 @@ public class CrudDaoTest extends BaseDaoTest {
 			mockOrmDao.findByUniqueParam("UT_KEY", "jack" + i);
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	@Test
 	public void testGetDatabaseInfo() {
 		System.out.println("testGetDatabaseInfo()");
 		System.out.println(mockOrmDao.getDatabaseInfo());
 		for (int i = 0; i < 30; i++) {
-			System.out.println(mockOrmDao.getDatabaseInfo());	
+			System.out.println(mockOrmDao.getDatabaseInfo());
 		}
 	}
 

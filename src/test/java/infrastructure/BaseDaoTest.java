@@ -22,7 +22,7 @@ import org.swiftdao.demo.entity.MockSingleKeyEntity;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring/ac_ds.xml", "classpath:spring/dao_mock.xml", "classpath:spring/ac_ds_encrypt.xml" })
+@ContextConfiguration(locations = {"classpath:conf/ac_ds.xml", "classpath:conf/dao_mock.xml", "classpath:conf/ac_ds_encrypt.xml"})
 public abstract class BaseDaoTest extends BaseDataAccessTest {
 
 	protected List<String> springConfigLocations = new ArrayList<String>();

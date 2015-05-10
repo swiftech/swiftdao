@@ -35,6 +35,7 @@ public abstract class BaseDataAccessTest {
 			SnapshotIF poolSpanShot = ProxoolFacade.getSnapshot("ut");
 			if(poolSpanShot == null) {
 				System.out.println("Failed to get snapshot of Proxool connection pool.");
+				return;
 			}
 			System.out.println("Active Connections: " + poolSpanShot.getActiveConnectionCount());
 			
@@ -44,12 +45,14 @@ public abstract class BaseDataAccessTest {
 //			System.out.println("CONN: " + c.getRequester() + ", " + c.getStatus());
 //		}
 			ConnectionInfoIF[] connInfos = poolSpanShot.getConnectionInfos();
-			for (int i = 0; i < connInfos.length; i++) {
-				System.out.println("CONN: " + poolSpanShot.getConnectionInfos()[i]);
-				
+			if (connInfos != null) {
+				for (int i = 0; i < connInfos.length; i++) {
+					System.out.println("CONN: " + poolSpanShot.getConnectionInfos()[i]);
+
+				}
 			}
-		} catch (ProxoolException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			// JUST IGNORE
 		}
 	}
 

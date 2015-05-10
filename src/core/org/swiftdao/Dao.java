@@ -19,12 +19,12 @@ public interface Dao {
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public String getDatabaseInfo();
+	String getDatabaseInfo();
 
 	/**
 	 * Check whether database available.
 	 * @return
 	 */
 	@Transactional(readOnly=true)
-	public boolean checkDatabaseAvailable();
+	boolean checkDatabaseAvailable();
 }
