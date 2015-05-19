@@ -58,13 +58,13 @@
         <dependency>
             <groupId>aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-            <version>1.5.3</version>
+            <version>1.5.4</version>
         </dependency>
 
         <dependency>
             <groupId>aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.5.3</version>
+            <version>1.5.4</version>
         </dependency>
 
         <dependency>
@@ -208,6 +208,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>test</scope>
         </dependency>
 
 
