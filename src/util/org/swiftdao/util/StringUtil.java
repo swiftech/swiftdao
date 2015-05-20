@@ -1,14 +1,15 @@
 package org.swiftdao.util;
 
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
+
 import java.text.ParseException;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringEscapeUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.RandomUtils;
-import org.apache.commons.lang.time.DateUtils;
 
 import java.util.Calendar;
 
@@ -103,7 +104,7 @@ public class StringUtil {
 	public static String getRandomNumber(int length) {
 		String ret = "";
 		for (int i = 0; i < length; i++) {
-			ret += RandomUtils.nextInt(9);
+			ret += RandomUtils.nextInt(0, 9);
 		}
 		return ret;
 	}
@@ -112,7 +113,7 @@ public class StringUtil {
 	 * 转换用户输入的HTML和Javascript代码
 	 */
 	public static String escapeUserInput(String userInput){
-		return StringEscapeUtils.escapeJavaScript(StringEscapeUtils.escapeHtml(userInput));
+		return StringEscapeUtils.escapeEcmaScript(StringEscapeUtils.escapeHtml4(userInput));
 	}
 	
 	/**
@@ -122,7 +123,7 @@ public class StringUtil {
 	 * @return
 	 */
 	public static boolean isAllSame(String text) {
-		if (org.apache.commons.lang.StringUtils.isEmpty(text)) {
+		if (StringUtils.isEmpty(text)) {
 			return true;
 		}
 		char c = text.charAt(0);
@@ -166,7 +167,7 @@ public class StringUtil {
 			if (StringUtils.isEmpty(id)) {
 				return null;
 			}
-			return DateUtils.parseDate(id, new String[] { "yyyyMMdd" });
+			return DateUtils.parseDate(id, new String[]{"yyyyMMdd"});
 		} catch (ParseException e) {
 			throw new RuntimeException("您的身份证号码不正确。");
 		}

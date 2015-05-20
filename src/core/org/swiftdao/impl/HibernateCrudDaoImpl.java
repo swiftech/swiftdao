@@ -1,26 +1,11 @@
 package org.swiftdao.impl;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ParameterMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.text.StrBuilder;
-import org.hibernate.*;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.StrBuilder;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.ScrollableResults;
+import org.hibernate.Session;
 import org.hibernate.annotations.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +14,6 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.swiftdao.CrudDao;
 import org.swiftdao.entity.Persistable;
@@ -37,6 +21,12 @@ import org.swiftdao.exception.SwiftDaoException;
 import org.swiftdao.util.BeanUtils;
 import org.swiftdao.util.HibernateUtils;
 import org.swiftdao.util.StringUtil;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.sql.*;
+import java.util.*;
 
 /**
  * 基于Hibernate的CRUD DAO基础实现，所有使用Hibernate并支持CRUD操作的DAO都继承该类。<BR>
