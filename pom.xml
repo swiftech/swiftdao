@@ -49,6 +49,13 @@
             <version>1.0.0.Final</version>
         </dependency>
 
+        <!--可能版本过高-->
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.18.1-GA</version>
+        </dependency>
+
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
