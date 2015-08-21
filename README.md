@@ -5,7 +5,9 @@ SwiftDAO is a lightweight generic DAO layer based on Hibernate and Spring, imple
 依赖：
 Hibernate 3.2.x
 Spring 2.5.x or 3.x
-----
+
+
+
 
 使用方法：
 
