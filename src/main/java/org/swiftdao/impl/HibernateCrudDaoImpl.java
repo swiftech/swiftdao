@@ -15,6 +15,7 @@ import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.util.ObjectUtils;
 import org.swiftdao.CrudDao;
 import org.swiftdao.entity.Persistable;
 import org.swiftdao.exception.SwiftDaoException;
@@ -235,16 +236,19 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		return entities;
 	}
 
-	public List<E> findByParamPagination(String paramName, Object value, 
-			int pageSize, int pageNumber) throws SwiftDaoException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
-		paramMap.put(paramName, value);
+	public List<E> findByParamPagination(String paramName, Object value,
+										 int pageSize, int pageNumber) throws SwiftDaoException {
+		Map<String, Object> paramMap = null;
+		if (!StringUtils.isBlank(paramName) && value != null) {
+			paramMap = new HashMap<String, Object>();
+			paramMap.put(paramName, value);
+		}
 		return findByParamsPagination(paramMap, null, null, pageSize, pageNumber);
 	}
 
 	public List<E> findByParamPagination(String paramName, Object value,
-			String orderParam, boolean isDescending,
-			int pageSize, int pageNumber) throws SwiftDaoException {
+										 String orderParam, boolean isDescending,
+										 int pageSize, int pageNumber) throws SwiftDaoException {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put(paramName, value);
 		return findByParamsPagination(paramMap, orderParam, isDescending, pageSize, pageNumber);
@@ -323,7 +327,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		return this.findByParamsPagination(null, condition, params, pageSize, pageNumber);
 	}
 
-	@SuppressWarnings("unchecked")
+
 	public List<E> findByParamsPagination(Map<String, Object> paramMap, 
 			String extraCondition, Map<String, Object> extraParams,
 			int pageSize, int pageNumber) throws SwiftDaoException {
@@ -346,7 +350,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 			hqlSb.append(extraCondition);
 		}
 		// 开始查询
-		Query q = this.getSession().createQuery(hqlSb.toString());
+		Query  q = this.getSession().createQuery(hqlSb.toString());
 		q.setMaxResults(pageSize);
 		q.setFirstResult(pageNumber * pageSize);
 		if (paramMap != null && paramMap.size() > 0) {
