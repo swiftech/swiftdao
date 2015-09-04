@@ -243,7 +243,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 按照指定属性值映射查找多个实例，并按照分页条件分页，返回指定页的实体列表。
 	 * 
 	 * @param paramMap 查询条件，如果需要更灵活的条件，使用extraCondition。
-	 * @param extraCondition 额外的查询条件，跟在paramMap的后面，类似“ OR XX = :xx”的形式，没有则为null。
+	 * @param extraCondition 额外的查询条件，跟在paramMap组成的参数后面，类似“ OR XX = :xx”或者“ WHERE xxx != :xx”的形式，没有则为null。
 	 * @param extraParams 配合extraCondition使用，用于保存extraCondition中的变量。
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
