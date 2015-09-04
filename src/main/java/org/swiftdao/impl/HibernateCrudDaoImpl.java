@@ -292,7 +292,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		// 设置参数名与参数值
 		int paramsSize = ((paramMap == null) ? 0 : paramMap.size()) + ((extraParams == null) ? 0 : extraParams.size());
 		if (log.isDebugEnabled()) {
-			log.debug("Query by : " + hql + " with " + paramsSize + " parameters");
+			log.debug(String.format("Query by : %s with %d parameters", hql, paramsSize));
 		}
 		String[] queryParamNames = new String[paramsSize];
 		Object[] queryParams = new Object[paramsSize];
