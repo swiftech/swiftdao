@@ -27,6 +27,7 @@
     <orderEntry type="library" name="Maven: org.aspectj:aspectjrt:1.5.4" level="project" />
     <orderEntry type="library" name="Maven: org.aspectj:aspectjweaver:1.5.4" level="project" />
     <orderEntry type="library" name="Maven: proxool:proxool:0.9.1" level="project" />
+    <orderEntry type="library" name="Maven: proxool:proxool-cglib:0.9.1" level="project" />
     <orderEntry type="library" name="Maven: com.cloudhopper.proxool:proxool-cglib:0.9.1" level="project" />
     <orderEntry type="library" name="Maven: org.jasypt:jasypt:1.8" level="project" />
     <orderEntry type="library" name="Maven: dom4j:dom4j:1.6.1" level="project" />
