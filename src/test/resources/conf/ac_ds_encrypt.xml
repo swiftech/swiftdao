@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<!-- Not available for now, just for reference here  -->
-	<bean id="environmentVariablesConfiguration"
-		class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
-		<property name="algorithm" value="PBEWithMD5AndDES" />
-		<property name="passwordEnvName" value="ENCRYPTION_PASSWORD" />
-	</bean>
-	
-	<bean id="configurationEncryptor"
-		class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
-		<property name="config" ref="environmentVariablesConfiguration" />
-	</bean>
-	
-	<bean id="propertyConfigurer"
-		class="org.jasypt.spring.properties.EncryptablePropertyPlaceholderConfigurer">
-		<constructor-arg ref="configurationEncryptor" />
-		<property name="locations">
-		<list>
-			<value>classpath:conf/ds_mysql.properties</value>
-		</list>
-		</property>
-	</bean>
+    <!-- Not available for now, just for reference here  -->
+    <bean id="environmentVariablesConfiguration"
+          class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+        <property name="algorithm" value="PBEWithMD5AndDES"/>
+        <property name="passwordEnvName" value="ENCRYPTION_PASSWORD"/>
+    </bean>
+
+    <bean id="configurationEncryptor"
+          class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+        <property name="config" ref="environmentVariablesConfiguration"/>
+    </bean>
+
+    <bean id="propertyConfigurer"
+          class="org.jasypt.spring.properties.EncryptablePropertyPlaceholderConfigurer">
+        <constructor-arg ref="configurationEncryptor"/>
+        <property name="locations">
+            <list>
+                <value>classpath:conf/ds_mysql.properties</value>
+            </list>
+        </property>
+    </bean>
 
 </beans>

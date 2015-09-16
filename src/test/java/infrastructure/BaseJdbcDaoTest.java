@@ -15,10 +15,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring/ac-ut-encrypt.xml",
-		"classpath:spring/ac-ut-ds.xml",
-		"classpath:spring/ac-ut-dao.xml",
-		"classpath:spring/ac-ut.xml"})
+@ContextConfiguration(locations = {"classpath:conf/ac-ut-encrypt.xml",
+		"classpath:conf/ac-ut-ds.xml",
+		"classpath:conf/ac-ut-dao.xml",
+		"classpath:conf/ac-ut.xml"})
 public class BaseJdbcDaoTest extends BaseDaoTest {
 
 	MockJdbcDao jdbcDao = null;

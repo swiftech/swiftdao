@@ -19,6 +19,8 @@ public abstract class BaseDataAccessTest {
 	protected Logger logger = null;
 
 	public BaseDataAccessTest() {
+		System.out.println("PATH=" + System.getenv("PATH"));
+		System.out.println("CLASSPATH=" + System.getenv("CLASSPATH"));
 		logger = LoggerFactory.getLogger(this.getClass());
 	}
 	

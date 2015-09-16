@@ -1,29 +1,15 @@
 package org.swiftdao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
 import infrastructure.BaseDaoTest;
+import org.apache.commons.collections.CollectionUtils;
+import org.junit.*;
+import org.swiftdao.demo.entity.MockSingleKeyEntity;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.swiftdao.demo.MockOrmDao;
-import org.swiftdao.demo.entity.MockSingleKeyEntity;
+import static org.junit.Assert.*;
 
 /**
  * Test CRUD functionality with H2 in-memory database.
@@ -216,7 +202,6 @@ public class CrudDaoTest extends BaseDaoTest {
 		MockSingleKeyEntity entity1 = createDefaultEntity(longId1);
 		MockSingleKeyEntity entity2 = createDefaultEntity(longId2);
 		Collection<MockSingleKeyEntity> entities = new ArrayList();
-		;
 		entities.add(entity1);
 		entities.add(entity2);
 		mockOrmDao.merge(entities);
@@ -273,7 +258,7 @@ public class CrudDaoTest extends BaseDaoTest {
 	@Test
 	public void testFindByParamPagination_6args() {
 		System.out.println("findByParamPagination");
-		String paramName = "";
+		String paramName = "key";
 		Object value = null;
 		int pageSize = 0;
 		int pageNumber = 0;
@@ -464,7 +449,7 @@ public class CrudDaoTest extends BaseDaoTest {
 	@Test
 	public void testFindAllOverCache() {
 		System.out.println("findAllOverCache");
-		Class clazz = null;
+		Class clazz = MockSingleKeyEntity.class;
 
 		List<MockSingleKeyEntity> expResult = null;
 		List<MockSingleKeyEntity> result = mockOrmDao.findAllOverCache(clazz);
@@ -527,7 +512,7 @@ public class CrudDaoTest extends BaseDaoTest {
 	@Test
 	public void testCountByParam() {
 		System.out.println("countByParam");
-		String paramName = "";
+		String paramName = "key";
 		Object value = null;
 
 		long expResult = 0L;
