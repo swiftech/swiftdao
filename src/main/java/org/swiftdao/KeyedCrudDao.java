@@ -3,6 +3,8 @@ package org.swiftdao;
 import java.io.Serializable;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.swiftdao.entity.KeyedPersistable;
 
@@ -13,7 +15,7 @@ import org.swiftdao.entity.KeyedPersistable;
  * @author Wang Yuxing
  * @version 1.0
  */
-@Transactional
+@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
 public interface KeyedCrudDao<E extends KeyedPersistable> extends CrudDao<E> {
 
 	/**

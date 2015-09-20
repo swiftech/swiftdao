@@ -13,6 +13,7 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Repository;
 import org.swiftdao.impl.JdbcDaoImpl;
 import org.swiftdao.pool.ProxoolStatisticsListener;
 
@@ -21,6 +22,7 @@ import org.swiftdao.pool.ProxoolStatisticsListener;
  * @author Yuxing Wang
  * @since 
  */
+@Repository
 public class MockJdbcDaoImpl extends JdbcDaoImpl implements MockJdbcDao{
 
 	public static void main(String[] args) {

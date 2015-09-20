@@ -10,6 +10,7 @@ import org.hibernate.LockMode;
 import org.hibernate.annotations.Cache;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 import org.swiftdao.KeyedCrudDao;
 import org.swiftdao.entity.KeyedPersistable;
 import org.swiftdao.exception.SwiftDaoException;
@@ -21,6 +22,7 @@ import org.swiftdao.exception.SwiftDaoException;
  * @author Wang Yuxing
  * @version 1.0
  */
+@Repository
 public class HibernateKeyedCrudDaoImpl<E extends KeyedPersistable> extends HibernateCrudDaoImpl<E> implements
 		KeyedCrudDao<E> {
 

@@ -1,13 +1,12 @@
 package com.company;
 
-import org.springframework.stereotype.Repository;
 import org.swiftdao.CrudDao;
 import org.swiftdao.entity.BaseKeyedEntity;
 
 /**
+ * 测试没有事务管理的 Dao
  * Created by allen on 15/9/16.
  */
-@Repository
 public interface NoTransactionDao<E extends BaseKeyedEntity> extends CrudDao<E>{
 
 
