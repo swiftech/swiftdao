@@ -2,6 +2,7 @@ package org.swiftdao.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,6 +173,23 @@ public class BeanUtils {
 		}
 		return list;
 	}
+
+	/**
+	 * 获取某个类中的所有静态字段
+	 * @param clazz
+	 * @return
+	 */
+	public static List<Field> getStaticFields(Class clazz) {
+		List<Field> list = new ArrayList<Field>();
+		Field[] fields = clazz.getDeclaredFields();
+		for (Field field : fields) {
+			if(Modifier.isStatic(field.getModifiers())) {
+				list.add(field);
+			}
+		}
+		return list;
+	}
+
 
 	/**
 	 * 按属性名称获得属性的类型。
