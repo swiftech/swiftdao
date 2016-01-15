@@ -2,6 +2,7 @@ package org.swiftdao.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import org.springframework.util.ReflectionUtils;
 
 /**
  * 使用java反射机制操作对象
- * 
+ *
  * @author Wang Yuxing
  */
 public class BeanUtils {
@@ -28,11 +29,11 @@ public class BeanUtils {
 
 	/**
 	 * 循环向上转型，获取对象声明的字段。
-	 * 
-	 * @param object 对象
+	 *
+	 * @param object       对象
 	 * @param propertyName 属性名称
-	 * @throws NoSuchFieldException 没有该字段时抛出
 	 * @return 字段对象
+	 * @throws NoSuchFieldException 没有该字段时抛出
 	 */
 	public static Field getDeclaredField(Object object, String propertyName) throws NoSuchFieldException {
 		return getDeclaredField(object.getClass(), propertyName);
@@ -40,11 +41,11 @@ public class BeanUtils {
 
 	/**
 	 * 循环向上转型，获取对象声明的字段。
-	 * 
-	 * @param clazz 类
+	 *
+	 * @param clazz        类
 	 * @param propertyName 属性名称
-	 * @throws NoSuchFieldException 没有该字段时抛出
 	 * @return 字段对象
+	 * @throws NoSuchFieldException 没有该字段时抛出
 	 */
 	public static Field getDeclaredField(Class clazz, String propertyName) throws NoSuchFieldException {
 		Assert.notNull(clazz);
@@ -61,11 +62,11 @@ public class BeanUtils {
 
 	/**
 	 * 暴力获取对象变量值，忽略private、protected修饰符的限制。
-	 * 
-	 * @param object 对象
+	 *
+	 * @param object       对象
 	 * @param propertyName 属性名称
-	 * @throws NoSuchFieldException 没有该字段时抛出
 	 * @return 属性的值
+	 * @throws NoSuchFieldException 没有该字段时抛出
 	 */
 	public static Object forceGetProperty(Object object, String propertyName) throws NoSuchFieldException {
 		Assert.notNull(object);
@@ -89,10 +90,10 @@ public class BeanUtils {
 
 	/**
 	 * 暴力设置对象变量值，忽略private、protected修饰符的限制。
-	 * 
-	 * @param object 对象
+	 *
+	 * @param object       对象
 	 * @param propertyName 属性名称
-	 * @param newValue 属性值
+	 * @param newValue     属性值
 	 * @throws NoSuchFieldException 没有该字段时抛出
 	 */
 	public static void forceSetProperty(Object object, String propertyName, Object newValue)
@@ -113,12 +114,12 @@ public class BeanUtils {
 
 	/**
 	 * 暴力调用对象函数，忽略private、protected修饰符的限制。
-	 * 
-	 * @param object 对象
+	 *
+	 * @param object     对象
 	 * @param methodName 方法名
-	 * @param params 方法参数列表
-	 * @throws NoSuchMethodException 没有该方法时抛出
+	 * @param params     方法参数列表
 	 * @return 调用方法后的返回值
+	 * @throws NoSuchMethodException 没有该方法时抛出
 	 */
 	public static Object invokePrivateMethod(Object object, String methodName, Object... params)
 			throws NoSuchMethodException {
@@ -157,8 +158,8 @@ public class BeanUtils {
 
 	/**
 	 * 按类型取得字段列表。
-	 * 
-	 * @param object 对象
+	 *
+	 * @param object       对象
 	 * @param propertyType 字段类型
 	 * @return 字段列表
 	 */
@@ -174,9 +175,45 @@ public class BeanUtils {
 	}
 
 	/**
+	 * 获取某个类中的所有静态字段
+	 *
+	 * @param clazz
+	 * @return
+	 */
+	public static List<Field> getStaticFields(Class clazz) {
+		List<Field> list = new ArrayList<Field>();
+		Field[] fields = clazz.getDeclaredFields();
+		for (Field field : fields) {
+			if (Modifier.isStatic(field.getModifiers())) {
+				list.add(field);
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * 获取某个类中的指定类型静态字段
+	 *
+	 * @param clazz
+	 * @param propertyType
+	 * @return
+	 */
+	public static List<Field> getStaticFieldsByType(Class clazz, Class propertyType) {
+		List<Field> list = new ArrayList<Field>();
+		Field[] fields = clazz.getDeclaredFields();
+		for (Field field : fields) {
+			if (Modifier.isStatic(field.getModifiers()) && field.getType().isAssignableFrom(propertyType)) {
+				list.add(field);
+			}
+		}
+		return list;
+	}
+
+
+	/**
 	 * 按属性名称获得属性的类型。
-	 * 
-	 * @param clazz 对象
+	 *
+	 * @param clazz        对象
 	 * @param propertyName 属性名称
 	 * @return 属性类型
 	 * @throws NoSuchFieldException 没有该Field时抛出
@@ -187,8 +224,8 @@ public class BeanUtils {
 
 	/**
 	 * 获得field的getter函数名称。
-	 * 
-	 * @param clazz 对象
+	 *
+	 * @param clazz     对象
 	 * @param fieldName 属性名称
 	 * @return 函数名称
 	 * @throws NoSuchFieldException 没有该Field时抛出
