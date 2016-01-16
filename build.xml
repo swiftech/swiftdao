@@ -1,4 +1,10 @@
-<project name="SwiftDao" default="after_deploy" basedir=".">
+<project name="SwiftDao" default="after_deploy" basedir="."
+		 xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<artifact:dependencies filesetId="dependency.fileset" useScope="runtime">
+		<pom file="pom.xml"/>
+	</artifact:dependencies>
+
 	<!-- using environment settings -->
 	<property environment="env"/>
 	
@@ -26,22 +32,22 @@
 	<target name="compile">
 		<echo message="Can I build? ${canbuild}"/>
 		
-		<antcall target="doCompile" inheritAll="yes">
-			<param name="dir_src" value="${dir.src}/util"/>
-		</antcall>
+		<!--<antcall target="doCompile" inheritAll="yes">-->
+			<!--<param name="dir_src" value="${dir.src}/util"/>-->
+		<!--</antcall>-->
 		
 		<antcall target="doCompile" inheritAll="yes">
-			<param name="dir_src" value="${dir.src}/core"/>
+			<param name="dir_src" value="${dir.src.main}/java"/>
 		</antcall>
 		
-		<antcall target="doCompile" inheritAll="yes">
-			<param name="dir_src" value="${dir.src}/demo"/>
-		</antcall>
+		<!--<antcall target="doCompile" inheritAll="yes">-->
+			<!--<param name="dir_src" value="${dir.src}/demo"/>-->
+		<!--</antcall>-->
 	</target>
 	
 	<target name="unit_test">
 		<copy todir="${dir.bin.java}" >
-			<fileset dir="${dir.src}/demo">
+			<fileset dir="${dir.src.test}/resources">
 				<include name="**/*.xml"/>
 				<include name="**/*.properties"/>
 			</fileset>
@@ -54,10 +60,18 @@
 	
 	<target name="before_deploy" depends="after_review">
 		<antcall target="doJavadoc" inheritAll="yes">
-			<param name="dir_src" value="${dir.src}/core"/>
+			<param name="dir_src" value="${dir.src.main}/java"/>
 			<param name="include_packages" value="org.swiftdao.*"/>
 		</antcall>	
 	</target>
 
+	<target name="after_deploy">
+		<echo message="Call 'before_deploy'"/>
+		<antcall target="before_deploy"/>
+
+		<echo message="Call 'deploy'"/>
+		<antcall target="deploy"/>
+		<buildnumber file="build_version.properties"/>
+	</target>
 
 </project>
