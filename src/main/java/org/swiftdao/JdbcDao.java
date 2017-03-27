@@ -32,7 +32,7 @@ public interface JdbcDao extends ExecutableDao{
 	 * @param sql 批量更新语句，变量值用”?“表示，如”UPDATE SET NAME=? WHERE ID = ?“。
 	 * @param parameters
 	 * @return
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	int[] batchUpdate(String sql, List<List<Object>> parameters) throws SwiftDaoException;
 

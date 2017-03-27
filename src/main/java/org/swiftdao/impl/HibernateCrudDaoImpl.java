@@ -30,7 +30,7 @@ import java.util.*;
  * 基于Hibernate的CRUD DAO基础实现，所有使用Hibernate并支持CRUD操作的DAO都继承该类。<BR>
  * 所有方法都必须声明为抛出统一的SwiftDaoException异常，以便于做统一的异常处理。<BR>
  * 可用的异常类如下：
- * <p/>
+ *
  * <pre>
  * SwiftDaoException
  *    EntityNotFoundException
@@ -466,8 +466,8 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		return pagedList;
 	}
 
-	public List<E> findAllByPagination(int pageSize, int PageNumber) throws SwiftDaoException {
-		return findByParamPagination("", "", pageSize, PageNumber);
+	public List<E> findAllByPagination(int pageSize, int pageNumber) throws SwiftDaoException {
+		return findByParamPagination("", "", pageSize, pageNumber);
 	}
 
 	@SuppressWarnings("unchecked")

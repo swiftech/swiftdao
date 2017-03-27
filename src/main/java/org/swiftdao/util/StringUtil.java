@@ -2,26 +2,19 @@ package org.swiftdao.util;
 
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
-
-import java.util.Calendar;
-
 /**
  * @author Wang Yuxing
- * 
+ *
  */
 public class StringUtil {
 
 	/**
 	 * 解析一个带 token 分隔符的字符串，这个方法的效率比直接调用String的split()方法快大约1倍。
-	 * 
+	 *
 	 * @param tokenedStr
 	 * @param token
 	 * @return String[]
@@ -44,7 +37,7 @@ public class StringUtil {
 
 	/**
 	 * 把字符串数组组合成一个以指定分隔符分隔的字符串。
-	 * 
+	 *
 	 * @param strs 字符串数组
 	 * @param seperator 分隔符
 	 * @return
@@ -57,10 +50,9 @@ public class StringUtil {
 
 	/**
 	 * 把字符串数组组合成一个以指定分隔符分隔的字符串，并追加到给定的<code>StringBuilder</code>
-	 * 
+	 *
 	 * @param strs 字符串数组
 	 * @param seperator 分隔符
-	 * @return
 	 */
 	public static void mergeString(String[] strs, String seperator, StringBuilder sb) {
 		for (int i = 0; i < strs.length; i++) {
@@ -73,7 +65,7 @@ public class StringUtil {
 
 	/**
 	 * 产生UUID。
-	 * 
+	 *
 	 * @return
 	 */
 	public static String generateUUID() {
@@ -97,7 +89,7 @@ public class StringUtil {
 
 	/**
 	 * 返回指定长度的随机的数字字符串。
-	 * 
+	 *
 	 * @param length
 	 * @return
 	 */
@@ -108,32 +100,14 @@ public class StringUtil {
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * 转换用户输入的HTML和Javascript代码
 	 */
 	public static String escapeUserInput(String userInput){
 		return StringEscapeUtils.escapeEcmaScript(StringEscapeUtils.escapeHtml4(userInput));
 	}
-	
-	/**
-	 * 是否都是相同的字符。
-	 * 
-	 * @param text
-	 * @return
-	 */
-	public static boolean isAllSame(String text) {
-		if (StringUtils.isEmpty(text)) {
-			return true;
-		}
-		char c = text.charAt(0);
-		for (char cur : text.toCharArray()) {
-			if (c != cur) {
-				return false;
-			}
-		}
-		return true;
-	}
+
 
 	/**
 	 * 是否是降序或者升序
@@ -155,75 +129,6 @@ public class StringUtil {
 		return true;
 	}
 
-	/**
-	 * 从身份证号码中取出生日，
-	 * 
-	 * @param identity
-	 * @return
-	 */
-	public static Date getBirthdayFromIdentity(String identity) {
-		try {
-			String id = getBirthdayFromIdentityAsString(identity);
-			if (StringUtils.isEmpty(id)) {
-				return null;
-			}
-			return DateUtils.parseDate(id, new String[]{"yyyyMMdd"});
-		} catch (ParseException e) {
-			throw new RuntimeException("您的身份证号码不正确。");
-		}
-	}
 
-	/**
-	 * 返回格式为"yyyyMMdd"的日期字符串
-	 * 
-	 * @param identity
-	 * @return
-	 */
-	public static String getBirthdayFromIdentityAsString(String identity) {
-		if (StringUtils.isEmpty(identity)) {
-			return StringUtils.EMPTY;
-		}
-		if (identity.length() == 15) {
-			String time = StringUtils.leftPad(identity.substring(6, 12), 8, "19");
-			return time;
-		} else if (identity.length() == 18) {
-			String time = identity.substring(6, 14);
-			return time;
-		}
-		return StringUtils.EMPTY;
-	}
 
-	/**
-	 * 检查字符串数组中是否有空的字符串。
-	 * @param strs
-	 * @return
-	 */
-	public static boolean isEmpty(String... strs){
-		for(String s:strs){
-			if(StringUtils.isEmpty(s)){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * 根据身份证判断是否成年
-	 * @param birthDateStr
-	 * @return
-	 */
-	public static boolean identityIslegal(Date birthDateStr) {
-		boolean flag = false;
-
-		Calendar birth = Calendar.getInstance();
-		birth.add(Calendar.YEAR, -18);
-		Calendar birthIdentity = Calendar.getInstance();
-		birthIdentity.setTime(birthDateStr);
-		if (birth.after(birthIdentity)) {
-			flag = true;
-		} else {
-			flag = false;
-		}
-		return flag;
-	}
 }

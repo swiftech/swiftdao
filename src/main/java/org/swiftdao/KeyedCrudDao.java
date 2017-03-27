@@ -23,7 +23,7 @@ public interface KeyedCrudDao<E extends KeyedPersistable> extends CrudDao<E> {
 	 * 
 	 * @param id
 	 * @return
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	E find(long id) throws DataAccessException;
@@ -32,7 +32,7 @@ public interface KeyedCrudDao<E extends KeyedPersistable> extends CrudDao<E> {
 	 * 按照实体类型和实体唯一标识查询实体。
 	 * @param id
 	 * @return
-	 * @throws org.springframework.dao.DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	E find(Serializable id) throws DataAccessException;
@@ -43,7 +43,7 @@ public interface KeyedCrudDao<E extends KeyedPersistable> extends CrudDao<E> {
 	 * @param keyNames
 	 * @param keyValues
 	 * @return
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	E find(String[] keyNames, Object[] keyValues) throws DataAccessException;
@@ -53,7 +53,7 @@ public interface KeyedCrudDao<E extends KeyedPersistable> extends CrudDao<E> {
 	 * 
 	 * @param id
 	 * @return
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	E findAndLock(long id) throws DataAccessException;
@@ -62,7 +62,7 @@ public interface KeyedCrudDao<E extends KeyedPersistable> extends CrudDao<E> {
 	 * 按照实体类型和实体唯一标识查询实体，并锁定该实体对象，直到事务结束。
 	 * @param id
 	 * @return
-	 * @throws org.springframework.dao.DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	E findAndLock(Serializable id) throws DataAccessException;
@@ -72,7 +72,7 @@ public interface KeyedCrudDao<E extends KeyedPersistable> extends CrudDao<E> {
 	 * @param clazz
 	 * @param id
 	 * @return
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	KeyedPersistable find(Class clazz, long id) throws DataAccessException;
@@ -82,7 +82,7 @@ public interface KeyedCrudDao<E extends KeyedPersistable> extends CrudDao<E> {
 	 * @param clazz
 	 * @param id
 	 * @return
-	 * @throws org.springframework.dao.DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	KeyedPersistable find(Class clazz, Serializable id) throws DataAccessException;
@@ -106,7 +106,7 @@ public interface KeyedCrudDao<E extends KeyedPersistable> extends CrudDao<E> {
 	 * 删除实体主键id标识的实体。
 	 *
 	 * @param id
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void delete(long id) throws DataAccessException;
 
@@ -114,7 +114,7 @@ public interface KeyedCrudDao<E extends KeyedPersistable> extends CrudDao<E> {
 	 * 通过复合主键类的实例来删除实体对象。
 	 *
 	 * @param key
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void delete(Serializable key) throws DataAccessException;
 
@@ -123,7 +123,7 @@ public interface KeyedCrudDao<E extends KeyedPersistable> extends CrudDao<E> {
 	 *
 	 * @param keyNames 主键各个字段名
 	 * @param keyValues 主键各个字段值
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void delete(String[] keyNames, Object[] keyValues) throws DataAccessException;
 

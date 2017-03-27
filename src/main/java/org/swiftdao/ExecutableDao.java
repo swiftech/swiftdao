@@ -18,7 +18,7 @@ public interface ExecutableDao extends Dao {
 	 * 执行无参数和返回值的存储过程。
 	 * 
 	 * @param spName 存储过程名。
-	 * @throws SwiftDaoException	
+	 * @throws SwiftDaoException 数据访问异常
 	 */
 	void execute(String spName) throws SwiftDaoException;
 
@@ -27,7 +27,7 @@ public interface ExecutableDao extends Dao {
 	 * 
 	 * @param spName 存储过程名。
 	 * @param parameters 存储过程参数。
-	 * @throws SwiftDaoException
+	 * @throws SwiftDaoException 数据访问异常
 	 */
 	void execute(String spName, Map<String, Object> parameters) throws SwiftDaoException;
 
@@ -38,7 +38,7 @@ public interface ExecutableDao extends Dao {
 	 * @param outParams
 	 * @param cursorName
 	 * @return
-	 * @throws SwiftDaoException
+	 * @throws SwiftDaoException 数据访问异常
 	 */
 	Map<String, Object> executeWithResult(String spName, Map<String, Object> parameters,
 			Map<String, Integer> outParams, String cursorName) throws SwiftDaoException;
@@ -51,7 +51,7 @@ public interface ExecutableDao extends Dao {
 	 * @param outParams
 	 * @param cursorName
 	 * @return
-	 * @throws SwiftDaoException
+	 * @throws SwiftDaoException 数据访问异常
 	 */
 	Map<String, Object> executeWithResult(Connection conn, String spName, Map<String, Object> parameters,
 			Map<String, Integer> outParams, String cursorName) throws SwiftDaoException;
@@ -61,7 +61,7 @@ public interface ExecutableDao extends Dao {
 	 * 
 	 * @param spName
 	 * @return
-	 * @throws SwiftDaoException
+	 * @throws SwiftDaoException 数据访问异常
 	 */
 	List executeWithResultset(String spName) throws SwiftDaoException;
 
@@ -71,7 +71,7 @@ public interface ExecutableDao extends Dao {
 	 * @param spName
 	 * @param parameters
 	 * @return
-	 * @throws SwiftDaoException
+	 * @throws SwiftDaoException 数据访问异常
 	 */
 	List executeWithResultset(String spName, Map<String, Object> parameters) throws SwiftDaoException;
 

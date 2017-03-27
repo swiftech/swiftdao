@@ -32,7 +32,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 持久化一个实体。
 	 * 
 	 * @param entity 处于临时状态的实体。
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void create(E entity) throws DataAccessException;
 
@@ -40,7 +40,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 持久化多个实体。
 	 * 
 	 * @param entities 处于临时状态的实体的集合。
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void create(Collection<E> entities) throws DataAccessException;
 
@@ -48,7 +48,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 更新实体。
 	 * 
 	 * @param entity 处于持久化状态的实体。
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void update(E entity) throws DataAccessException;
 
@@ -56,7 +56,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 更新多个实体。
 	 * 
 	 * @param entities 处于持久化状态的实体的集合。
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void update(Collection<E> entities) throws DataAccessException;
 
@@ -64,7 +64,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 持久化或者更新实体。
 	 * 
 	 * @param entity 处于临时或者持久化状态的实体。
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void createOrUpdate(E entity) throws DataAccessException;
 
@@ -72,7 +72,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 持久化或者更新多个实体。
 	 * 
 	 * @param entities 处于临时或者持久化状态的实体的集合。
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void createOrUpdate(Collection<E> entities) throws DataAccessException;
 
@@ -80,7 +80,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 更新处于游离状态的实体，更新后实体对象仍然处于游离状态。
 	 * 
 	 * @param entity 处于游离状态的实体。
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void merge(E entity) throws DataAccessException;
 
@@ -88,7 +88,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 保存处于游离状态的多个实体，更新后实体对象仍然处于游离状态。
 	 * 
 	 * @param entities 处于游离状态的实体的集合。
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void merge(Collection<E> entities) throws DataAccessException;
 
@@ -96,7 +96,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 删除一个持久化的实体。
 	 * 
 	 * @param entity 处于持久化状态的实体。
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void delete(E entity) throws DataAccessException;
 
@@ -104,7 +104,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 删除多个持久化的实体。
 	 * 
 	 * @param entities 处于持久化状态的实体的集合。
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	void delete(Collection<E> entities) throws DataAccessException;
 
@@ -114,7 +114,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param uniqueParamName 实体唯一属性名
 	 * @param value 属性值
 	 * @return 持久化实体
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	E findByUniqueParam(String uniqueParamName, String value) throws DataAccessException;
@@ -124,6 +124,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 按照多个唯一的（Unique）属性名和属性值对，查询得到一个唯一的实体对象。
 	 * @param params
 	 * @return
+     * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	E findByUniqueParams(Map<String, Object> params) throws DataAccessException;
@@ -134,7 +135,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param paramName 实体属性名。
 	 * @param value 对应实体属性名的属性值。
 	 * @return 持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParam(String paramName, Object value) throws DataAccessException;
@@ -147,7 +148,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @return 持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParamPagination(String paramName, Object value, int pageSize, int pageNumber)
@@ -163,7 +164,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @return 指定页的持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParamPagination(String paramName, Object value, String orderParam,
@@ -174,7 +175,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 
 	 * @param paramMap 实体类属性名和属性值的映射。
 	 * @return 持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParams(Map<String, Object> paramMap) throws DataAccessException;
@@ -190,7 +191,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param extraCondition 包含形如":param"的条件表达式
 	 * @param extraParams 条件表达式中的参数值
 	 * @return 持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParams(String extraCondition, Map<String, Object> extraParams) throws DataAccessException;
@@ -209,7 +210,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param extraCondition 额外的查询条件，跟在paramMap的后面，类似“ OR XX = :xx”的形式，没有则为null。
 	 * @param extraParams 配合extraCondition使用，用于保存extraCondition中的变量。
 	 * @return 持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParams(Map<String, Object> paramMap, String extraCondition, Map<String, Object> extraParams) throws DataAccessException;
@@ -220,7 +221,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @return 指定页的持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParamsPagination(Map<String, Object> paramMap, int pageSize, int pageNumber)
@@ -233,7 +234,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @return 指定页的持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParamsPagination(String condition, Map<String, Object> params, int pageSize, int pageNumber)
@@ -248,7 +249,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @return 指定页的持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParamsPagination(Map<String, Object> paramMap, String extraCondition,
@@ -262,7 +263,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @return  指定页的持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParamsPagination(Map<String, Object> paramMap, String orderParam, boolean isDescending,
@@ -278,7 +279,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @return 指定页的持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findByParamsPagination(Map<String, Object> paramMap, String extraCondition,
@@ -289,7 +290,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 按照泛型的实体类型查询得到所有持久化实体。
 	 * 如果实体类被设置为缓存的，则该方法首先从缓存中获取。
 	 * @return 所有持久化实体的集合(TBD consider to be collection in the future)
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findAll() throws DataAccessException;
@@ -300,7 +301,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 
 	 * @param clazz
 	 * @return 所有持久化实体的集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findAll(Class clazz) throws DataAccessException;
@@ -310,7 +311,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 
 	 * @param clazz
 	 * @return 所有持久化实体的集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	List<E> findAllOverCache(Class clazz) throws DataAccessException;
 
@@ -320,7 +321,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param pageSize 每页大小
 	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @return 指定页的持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findAllByPagination(int pageSize, int pageNumber) throws DataAccessException;
@@ -333,7 +334,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param pageSize 每页大小。
 	 * @param pageNumber 查询的页码，0表示第一页。
 	 * @return 指定页的持久化实体集合
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	List<E> findAllByPagination(String orderParam, boolean isDescending, int pageSize, int pageNumber)
@@ -343,7 +344,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 统计所有持久化实体对象的数量。
 	 * 
 	 * @return 所有持久化实体对象的数量
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	long countAll() throws DataAccessException;
@@ -354,7 +355,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param paramName
 	 * @param value
 	 * @return 持久化实体的数量
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	long countByParam(String paramName, Object value) throws DataAccessException;
@@ -364,7 +365,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 
 	 * @param paramMap 查询条件参数
 	 * @return 符合条件的持久化实体的数量
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	long countByParams(Map<String, Object> paramMap) throws DataAccessException;
@@ -375,7 +376,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * @param extraCondition 额外查询条件，跟在paramMap的后面，类似“ OR XX = :xx”的形式，没有则为null。
 	 * @param extraParams 配合extraCondition使用，用于保存extraCondition中的变量。
 	 * @return 符合条件的持久化实体的数量
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
 	long countByParams(Map<String, Object> paramMap, String extraCondition, Map<String, Object> extraParams) throws DataAccessException;
@@ -384,7 +385,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 获得指定Sequence的值(仅用于Oracle)
 	 * @param seqName
 	 * @return
-	 * @throws DataAccessException
+	 * @throws DataAccessException 数据访问异常
 	 */
 	long getSequence(String seqName) throws DataAccessException;
 }
