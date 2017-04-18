@@ -39,7 +39,7 @@ public class MockJdbcDaoImpl extends JdbcDaoImpl implements MockJdbcDao{
 	public MockJdbcDaoImpl() {
 		ConfigurableListableBeanFactory beanFactory = new DefaultListableBeanFactory();
 		XmlBeanDefinitionReader defReader = new XmlBeanDefinitionReader((DefaultListableBeanFactory)beanFactory);
-		defReader.loadBeanDefinitions(new ClassPathResource("conf/ac_ds.xml"));
+		defReader.loadBeanDefinitions(new ClassPathResource("conf/ac_ut_ds.xml"));
 		
 		PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
 		cfg.setLocation(new ClassPathResource("conf/ds_h2.properties"));
