@@ -39,12 +39,12 @@ public class StringUtil {
 	 * 把字符串数组组合成一个以指定分隔符分隔的字符串。
 	 *
 	 * @param strs 字符串数组
-	 * @param seperator 分隔符
+	 * @param separator 分隔符
 	 * @return
 	 */
-	public static String mergeString(String[] strs, String seperator) {
+	public static String mergeString(String[] strs, String separator) {
 		StringBuilder sb = new StringBuilder();
-		mergeString(strs, seperator, sb);
+		mergeString(strs, separator, sb);
 		return sb.toString();
 	}
 
@@ -52,12 +52,12 @@ public class StringUtil {
 	 * 把字符串数组组合成一个以指定分隔符分隔的字符串，并追加到给定的<code>StringBuilder</code>
 	 *
 	 * @param strs 字符串数组
-	 * @param seperator 分隔符
+	 * @param separator 分隔符
 	 */
-	public static void mergeString(String[] strs, String seperator, StringBuilder sb) {
+	public static void mergeString(String[] strs, String separator, StringBuilder sb) {
 		for (int i = 0; i < strs.length; i++) {
 			if (i != 0) {
-				sb.append(seperator);
+				sb.append(separator);
 			}
 			sb.append(strs[i]);
 		}

@@ -2,6 +2,7 @@ package org.swiftdao.impl;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -64,7 +65,7 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPersistable> extends Hiber
 		for (int i = 0; i < keyNames.length; i++) {
 			dc.add(Restrictions.eq(keyNames[i], keyValues[i]));
 		}
-		List<E> list = this.getHibernateTemplate().findByCriteria(dc);
+		List<E> list = (List<E>) this.getHibernateTemplate().findByCriteria(dc);
 		if (list == null || list.isEmpty()) {
 			throw new EntityNotFoundException("没有找到满足复合主键条件的实体");
 		}
@@ -102,7 +103,7 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPersistable> extends Hiber
 				entity = (E) super.getSession().load(clazz, id);
 			} catch (Exception e) {
 				if (log.isDebugEnabled()) {
-					log.debug(e.getMessage() + e.getStackTrace());
+					log.debug(e.getMessage() + Arrays.toString(e.getStackTrace()));
 				}
 				return null;
 			}

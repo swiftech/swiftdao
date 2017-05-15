@@ -122,8 +122,8 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	
 	/**
 	 * 按照多个唯一的（Unique）属性名和属性值对，查询得到一个唯一的实体对象。
-	 * @param params
-	 * @return
+	 * @param params 多个参数值
+	 * @return 持久化实体
      * @throws DataAccessException 数据访问异常
 	 */
 	@Transactional(readOnly = true)
@@ -299,7 +299,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	 * 按照指定实体类型查询得到所有持久化实体。
 	 * 如果实体类被设置为缓存的，则该方法首先从缓存中获取。
 	 * 
-	 * @param clazz
+	 * @param clazz 实体类类型
 	 * @return 所有持久化实体的集合
 	 * @throws DataAccessException 数据访问异常
 	 */
@@ -309,7 +309,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	/**
 	 * 忽略实体类的缓存配置，直接查询所有持久化实体。
 	 * 
-	 * @param clazz
+	 * @param clazz 实体类类型
 	 * @return 所有持久化实体的集合
 	 * @throws DataAccessException 数据访问异常
 	 */
@@ -352,8 +352,8 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 	/**
 	 * 按条件统计持久化实体对象的数量。
 	 * 
-	 * @param paramName
-	 * @param value
+	 * @param paramName 属性名
+	 * @param value 属性值
 	 * @return 持久化实体的数量
 	 * @throws DataAccessException 数据访问异常
 	 */
@@ -383,8 +383,8 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 
 	/**
 	 * 获得指定Sequence的值(仅用于Oracle)
-	 * @param seqName
-	 * @return
+	 * @param seqName Sequence名称
+	 * @return Sequence值
 	 * @throws DataAccessException 数据访问异常
 	 */
 	long getSequence(String seqName) throws DataAccessException;

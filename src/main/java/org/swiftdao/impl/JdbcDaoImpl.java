@@ -1,22 +1,5 @@
 package org.swiftdao.impl;
 
-import java.io.UnsupportedEncodingException;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
-import javax.sql.DataSource;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -24,13 +7,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
-import org.springframework.jdbc.core.simple.SimpleJdbcDaoSupport;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.swiftdao.JdbcDao;
 import org.swiftdao.exception.SwiftDaoException;
+
+import javax.sql.DataSource;
+import java.io.UnsupportedEncodingException;
+import java.sql.*;
+import java.util.*;
 
 /**
  * 基于JDBC的DAO基础实现，提供了一些用于JDBC操作的常用方法。<BR>
@@ -45,7 +33,7 @@ import org.swiftdao.exception.SwiftDaoException;
  * @author Wang Yuxing
  * @version 1.0
  */
-public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDao {
+public abstract class JdbcDaoImpl extends JdbcDaoSupport implements JdbcDao {
 
 	protected Logger log = null;
 	protected static final String DEFAULT_DB_ENCODING = "ISO-8859-1";
@@ -68,13 +56,12 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 		DataSource ds = this.getDataSource();
 		String checkSql;
 		checkSql = "select * from system_tables";
-		List result = this.getSimpleJdbcTemplate().queryForList(checkSql);
+		List result = this.getJdbcTemplate().queryForList(checkSql);
 		if (CollectionUtils.isEmpty(result)) {
 			return false;
 		}
-		for (Iterator it = result.iterator(); it.hasNext();) {
-			Object object = (Object) it.next();
-			System.out.println(object);
+		for (Object o : result) {
+			System.out.println(o);
 		}
 		return true;
 	}
@@ -104,7 +91,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 
 	public void execute(String spName) throws SwiftDaoException {
 		// this.execute(spName, null);
-		this.getSimpleJdbcTemplate().update("call " + spName + "()");
+		this.getJdbcTemplate().update("call " + spName + "()");
 	}
 
 	public void execute(String spName, Map<String, Object> parameters) throws SwiftDaoException {
@@ -145,7 +132,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 		sb.append(") }");
 
 		String sql = sb.toString();
-		Map<String, Object> ret = new TreeMap<String, Object>();
+		Map<String, Object> ret = new TreeMap<>();
 		try {
 			cmt = conn.prepareCall(sql);
 			if (parameters != null && parameters.size() > 0) {
@@ -193,9 +180,9 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 					return ret;
 				}
 				if (rs != null) {
-					List<Map> data = new ArrayList<Map>();
+					List<Map> data = new ArrayList<>();
 					while (rs.next()) {
-						Map<String, Object> row = new HashMap<String, Object>();
+						Map<String, Object> row = new HashMap<>();
 						int n = rs.getMetaData().getColumnCount();
 						for (int i = 0; i < n; i++) {
 							row.put(rs.getMetaData().getColumnName(i + 1), rs.getObject(i + 1));
@@ -227,7 +214,7 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 		if (spName == null) {
 			throw new IllegalArgumentException("Invalid stored procedure name");
 		}
-		Map<String, Object> ret = new TreeMap<String, Object>();
+		Map<String, Object> ret;
 		if (simpleJdbcCall == null || !spName.equals(simpleJdbcCall.getProcedureName())) {
 			simpleJdbcCall = new SimpleJdbcCall(this.getDataSource()).withProcedureName(spName).withoutProcedureColumnMetaDataAccess();
 		}
@@ -254,11 +241,11 @@ public abstract class JdbcDaoImpl extends SimpleJdbcDaoSupport implements JdbcDa
 		}
 
 		Map<String, Object> listByCursor = null;
-		simpleJdbcCall.returningResultSet("prCursor", new ParameterizedRowMapper<Map<String, Object>>() {
+		simpleJdbcCall.returningResultSet("prCursor", new RowMapper<Map<String, Object>>() {
 
 			public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {
 				log.debug("Map Rows: " + rs.getFetchSize());
-				Map<String, Object> list = new HashMap<String, Object>();
+				Map<String, Object> list = new HashMap<>();
 				while (rs.next()) {
 					int n = rs.getMetaData().getColumnCount();
 					for (int i = 0; i < n; i++) {

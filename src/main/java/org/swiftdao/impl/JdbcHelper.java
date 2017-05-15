@@ -4,7 +4,6 @@ import java.util.Date;
 
 /**
  * @author Wang Yuxing
- * 
  */
 public class JdbcHelper {
 

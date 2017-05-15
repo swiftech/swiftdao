@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 /**
  * @author Wang Yuxing
- * 
  */
 public class DebugUtils {
 
@@ -16,7 +15,7 @@ public class DebugUtils {
 			Iterator it = map.keySet().iterator();
 			StringBuilder sb = new StringBuilder();
 			sb.append("\r\n{");
-			for (; it.hasNext();) {
+			for (; it.hasNext(); ) {
 				Object key = it.next();
 				sb.append("\r\n(").append(key).append("=").append(map.get(key)).append(")");
 			}

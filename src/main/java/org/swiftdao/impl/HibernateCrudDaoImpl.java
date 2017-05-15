@@ -11,8 +11,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.orm.ObjectRetrievalFailureException;
-import org.springframework.orm.hibernate3.HibernateCallback;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.springframework.orm.hibernate4.HibernateCallback;
+import org.springframework.orm.hibernate4.support.HibernateDaoSupport;
 import org.swiftdao.CrudDao;
 import org.swiftdao.entity.Persistable;
 import org.swiftdao.exception.SwiftDaoException;
@@ -75,6 +75,10 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		return entityClass;
 	}
 
+	protected Session getSession() {
+		return this.getHibernateTemplate().getSessionFactory().getCurrentSession();
+	}
+
 	public String getDatabaseInfo() {
 		StringBuilder buf = new StringBuilder();
 		Connection conn = this.getSession().connection();
@@ -102,9 +106,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 
 	public void create(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
-			Iterator<E> it = entities.iterator();
-			for (E e = null; it.hasNext(); ) {
-				e = it.next();
+			for (E e : entities) {
 				create(e);
 				log.info("Created one entity: {}", e);
 			}
@@ -119,9 +121,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 
 	public void delete(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
-			Iterator<E> it = entities.iterator();
-			for (E e = null; it.hasNext(); ) {
-				e = it.next();
+			for (E e : entities) {
 				delete(e);
 				log.info("Deleted one entity: {}", e);
 			}
@@ -136,9 +136,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 
 	public void update(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
-			Iterator<E> it = entities.iterator();
-			for (E e = null; it.hasNext(); ) {
-				e = it.next();
+			for (E e : entities) {
 				update(e);
 				log.info("Updated one entity: {}", e);
 			}
@@ -153,9 +151,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 
 	public void createOrUpdate(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
-			Iterator<E> it = entities.iterator();
-			for (E e = null; it.hasNext(); ) {
-				e = it.next();
+			for (E e : entities) {
 				createOrUpdate(e);
 				log.info("Created or Updated one entity: {}", e);
 			}
@@ -170,9 +166,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 
 	public void merge(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
-			Iterator<E> it = entities.iterator();
-			for (E e = null; it.hasNext(); ) {
-				e = it.next();
+			for (E e : entities) {
 				merge(e);
 				log.info("Merged one entity: {}", e);
 			}
@@ -198,17 +192,14 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		return result.get(0);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<E> findAll() throws SwiftDaoException {
 		return this.findAll(this.getEntityClass());
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<E> findAll(final Class clazz) throws SwiftDaoException {
-		List<E> entities = new ArrayList<E>();
-		entities = (List<E>) super.getHibernateTemplate().execute(new HibernateCallback() {
+		List<E> entities = (List<E>) super.getHibernateTemplate().execute(new HibernateCallback() {
 
-			public Object doInHibernate(Session session) throws HibernateException, SQLException {
+			public Object doInHibernate(Session session) throws HibernateException {
 				Annotation a = clazz.getAnnotation(Cache.class);
 				if (a == null) {
 					return session.createCriteria(clazz).list();
@@ -238,7 +229,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		StrBuilder buf = new StrBuilder();
 		buf.append("FROM ").append(this.getEntityClass().getSimpleName());
 		buf.append(" WHERE ").append(paramName).append(" = :condition");
-		List<E> entities = this.getHibernateTemplate().findByNamedParam(buf.toString(), "condition", value);
+		List<E> entities = (List<E>) this.getHibernateTemplate().findByNamedParam(buf.toString(), "condition", value);
 		return entities;
 	}
 
@@ -246,7 +237,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 										 int pageSize, int pageNumber) throws SwiftDaoException {
 		Map<String, Object> paramMap = null;
 		if (!StringUtils.isBlank(paramName) && value != null) {
-			paramMap = new HashMap<String, Object>();
+			paramMap = new HashMap<>();
 			paramMap.put(paramName, value);
 		}
 		return findByParamsPagination(paramMap, null, null, pageSize, pageNumber);
@@ -255,7 +246,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	public List<E> findByParamPagination(String paramName, Object value,
 										 String orderParam, boolean isDescending,
 										 int pageSize, int pageNumber) throws SwiftDaoException {
-		Map<String, Object> paramMap = new HashMap<String, Object>();
+		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put(paramName, value);
 		return findByParamsPagination(paramMap, orderParam, isDescending, pageSize, pageNumber);
 	}
@@ -319,7 +310,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 				queryParams[i] = extraParams.get(curKey);
 			}
 		}
-		List<E> entities = this.getHibernateTemplate().findByNamedParam(hql, queryParamNames, queryParams);
+		List<E> entities = (List<E>) this.getHibernateTemplate().findByNamedParam(hql, queryParamNames, queryParams);
 		return entities;
 	}
 
@@ -436,10 +427,10 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 				q.setParameter(key, extraParams.get(key));
 			}
 		}
-		List<E> pagedList = new ArrayList<E>();
+		List<E> pagedList = new ArrayList<>();
 		ScrollableResults entities = q.scroll();
 		// 按照分页条件取一页的实体返回
-		if (entities.first() == true) {
+		if (entities.first()) {
 			entities.scroll(pageSize * pageNumber);
 			for (int i = 0; i < pageSize; i++, entities.scroll(1)) {
 				Object[] row = entities.get();
@@ -470,7 +461,6 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		return findByParamPagination("", "", pageSize, pageNumber);
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<E> findAllByPagination(String orderParam, boolean isDescending,
 									   int pageSize, int pageNumber) throws SwiftDaoException {
 		return this.findByParamsPagination(null, orderParam, isDescending, pageSize, pageNumber);
@@ -481,7 +471,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	}
 
 	public long countByParam(String paramName, Object value) throws SwiftDaoException {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		params.put(paramName, value);
 		return this.countByParams(params);
 	}
@@ -549,7 +539,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 			// log.debug(" " + queryParamNames[j]);
 			// log.debug(" " + queryParams[j]);
 			// }
-			it = this.getHibernateTemplate().findByNamedParam(hql, queryParamNames, queryParams).iterator();
+			it = (Iterator<Long>) this.getHibernateTemplate().findByNamedParam(hql, queryParamNames, queryParams).iterator();
 			// } else {
 			// hql = hql + this.getEntityClass().getSimpleName();
 			// it = this.getSession().createQuery(hql).list().iterator();
@@ -668,7 +658,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	public Map<String, Object> executeWithResult(String spName, Map<String, Object> parameters)
 			throws SwiftDaoException {
 		String sql = concatSpSql(spName, parameters);
-		Map<String, Object> ret = new HashMap<String, Object>();
+		Map<String, Object> ret = new HashMap<>();
 		try {
 			CallableStatement cs = this.getSession().connection().prepareCall(sql);
 			ParameterMetaData pmd = cs.getParameterMetaData();
@@ -737,7 +727,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 
 		String sql = buf.toString();
 		log.debug("执行：" + sql);
-		Map<String, Object> ret = new TreeMap<String, Object>();
+		Map<String, Object> ret = new TreeMap<>();
 		try {
 			cmt = conn.prepareCall(sql);
 			// 输入参数
@@ -795,9 +785,9 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 					return ret;
 				}
 				if (rs != null) {
-					List<Map> data = new ArrayList<Map>();
+					List<Map> data = new ArrayList<>();
 					while (rs.next()) {
-						Map<String, Object> row = new HashMap<String, Object>();
+						Map<String, Object> row = new HashMap<>();
 						int n = rs.getMetaData().getColumnCount();
 						for (int i = 0; i < n; i++) {
 							row.put(rs.getMetaData().getColumnName(i + 1), rs.getObject(i + 1));

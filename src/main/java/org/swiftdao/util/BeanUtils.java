@@ -164,7 +164,7 @@ public class BeanUtils {
 	 * @return 字段列表
 	 */
 	public static List<Field> getFieldsByType(Object object, Class propertyType) {
-		List<Field> list = new ArrayList<Field>();
+		List<Field> list = new ArrayList<>();
 		Field[] fields = object.getClass().getDeclaredFields();
 		for (Field field : fields) {
 			if (field.getType().isAssignableFrom(propertyType)) {
@@ -181,7 +181,7 @@ public class BeanUtils {
 	 * @return
 	 */
 	public static List<Field> getStaticFields(Class clazz) {
-		List<Field> list = new ArrayList<Field>();
+		List<Field> list = new ArrayList<>();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
 			if (Modifier.isStatic(field.getModifiers())) {
@@ -199,7 +199,7 @@ public class BeanUtils {
 	 * @return
 	 */
 	public static List<Field> getStaticFieldsByType(Class clazz, Class propertyType) {
-		List<Field> list = new ArrayList<Field>();
+		List<Field> list = new ArrayList<>();
 		Field[] fields = clazz.getDeclaredFields();
 		for (Field field : fields) {
 			if (Modifier.isStatic(field.getModifiers()) && field.getType().isAssignableFrom(propertyType)) {
