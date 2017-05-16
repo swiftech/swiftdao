@@ -21,13 +21,13 @@ import org.swiftdao.demo.entity.MockSingleKeyEntity;
  * @author Wang Yuxing
  * 
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {
-		"classpath:conf/ac_ds.xml",
-		"classpath:conf/dao_mock.xml"})
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = {
+//		"classpath:conf/ac_ds_ut.xml",
+//		"classpath:conf/dao_mock.xml"})
 public abstract class BaseDaoTest extends BaseDataAccessTest {
 
-	protected List<String> springConfigLocations = new ArrayList<String>();
+	protected List<String> springConfigLocations = new ArrayList<>();
 	protected static ApplicationContext beanFactory = null;
 	protected MockOrmDao mockOrmDao = null;
 	protected MockJdbcDao mockJdbcDao = null;
@@ -63,7 +63,7 @@ public abstract class BaseDaoTest extends BaseDataAccessTest {
 	 * @return
 	 */
 	protected List<MockSingleKeyEntity> createKeyedEntities(int count) {
-		List<MockSingleKeyEntity> list = new ArrayList<MockSingleKeyEntity>();
+		List<MockSingleKeyEntity> list = new ArrayList<>();
 		for (int i = 0; i < count; i++) {
 			MockSingleKeyEntity entity = new MockSingleKeyEntity(generateLongEntityID() + "" + i);
 			entity.setStrValue("" + i % 2);

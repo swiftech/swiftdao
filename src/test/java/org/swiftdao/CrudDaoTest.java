@@ -3,6 +3,9 @@ package org.swiftdao;
 import infrastructure.BaseDaoTest;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.swiftdao.demo.entity.MockSingleKeyEntity;
 
 import java.util.*;
@@ -16,6 +19,10 @@ import static org.junit.Assert.*;
  *
  * @author Wang Yuxing
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {
+		"classpath:conf/ac_ds_ut.xml",
+		"classpath:conf/dao_mock.xml"})
 public class CrudDaoTest extends BaseDaoTest {
 
 	private static Long longId1;
@@ -42,6 +49,11 @@ public class CrudDaoTest extends BaseDaoTest {
 	public void tearDown() {
 //		super.sleep(1);
 		showConnectionPoolInfo();
+	}
+
+	@Test
+	public void testDatabaseAvailable() {
+		mockOrmDao.checkDatabaseAvailable();
 	}
 
 	@Test
@@ -84,7 +96,7 @@ public class CrudDaoTest extends BaseDaoTest {
 	@Test
 	public void testCreate_Collection() {
 		System.out.println("testCreate_Collection");
-		Collection<MockSingleKeyEntity> newEntities = new ArrayList<MockSingleKeyEntity>();
+		Collection<MockSingleKeyEntity> newEntities = new ArrayList<>();
 		MockSingleKeyEntity entity1 = new MockSingleKeyEntity();
 		longId1 = Calendar.getInstance().getTimeInMillis();
 		System.out.println("ID 1: " + longId1);

@@ -78,7 +78,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	}
 
 	protected Session getSession() {
-		return this.getHibernateTemplate().getSessionFactory().getCurrentSession();
+		return getSessionFactory().getCurrentSession();
 	}
 
     protected Connection getConnection() throws SQLException {

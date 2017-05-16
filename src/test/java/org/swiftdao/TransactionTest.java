@@ -14,6 +14,7 @@ public class TransactionTest extends BaseDaoTest {
 	private static Long longId2;
 
 	@Autowired
+	private
 	NoTransactionDao noTransactionDao; // 这个 DAO 所属的 package 未配置事务处理
 
 	@BeforeClass

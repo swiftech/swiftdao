@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:conf/ac-ut-encrypt.xml",
-		"classpath:conf/ac-ut-ds.xml",
+		"classpath:conf/ac_ds_ut.xml",
 		"classpath:conf/ac-ut-dao.xml",
 		"classpath:conf/ac-ut.xml"})
 public class BaseJdbcDaoTest extends BaseDaoTest {

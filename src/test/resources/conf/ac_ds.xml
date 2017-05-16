@@ -41,7 +41,7 @@ xsi:schemaLocation="
 	 -->
 	 
 	<!-- Hibernate Session Factory -->
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="packagesToScan">
 			<list>
@@ -64,6 +64,7 @@ xsi:schemaLocation="
 	<bean id="jdbcTrxManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
+
 	<tx:advice id="jdbcTrxAdvice" transaction-manager="jdbcTrxManager">
 		<tx:attributes>
 			<tx:method name="find*" read-only="true" propagation="REQUIRED" isolation="DEFAULT" />
@@ -72,7 +73,7 @@ xsi:schemaLocation="
 	</tx:advice>
 	
 	
-	<bean id="hibernateTrxManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+	<bean id="hibernateTrxManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
 	

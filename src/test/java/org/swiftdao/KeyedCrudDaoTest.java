@@ -160,7 +160,7 @@ public class KeyedCrudDaoTest {
 	@Test
 	public void testFind_Class_long() {
 		System.out.println("find");
-		Class clazz = null;
+		Class clazz = MockSingleKeyEntity.class;
 		long id = 0L;
 		MockOrmDao instance = new MockOrmDaoImpl();
 		KeyedPersistable expResult = null;

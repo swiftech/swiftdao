@@ -13,4 +13,9 @@ public class MockOrmDaoImpl extends HibernateKeyedCrudDaoImpl<MockSingleKeyEntit
 
 
 	// For test, no new method is required
+
+	@Override
+	public boolean checkDatabaseAvailable() {
+		return false;
+	}
 }
