@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrBuilder;
 import org.hibernate.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
+import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,11 +81,17 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		return this.getHibernateTemplate().getSessionFactory().getCurrentSession();
 	}
 
+    protected Connection getConnection() throws SQLException {
+        SessionFactoryImplementor sessionFactoryImplementor = (SessionFactoryImplementor) getSessionFactory();
+        ConnectionProvider connectionProvider = sessionFactoryImplementor.getConnectionProvider();
+        return connectionProvider.getConnection();
+    }
+
 	public String getDatabaseInfo() {
 		StringBuilder buf = new StringBuilder();
-		Connection conn = this.getSession().connection();
 		try {
-			buf.append(conn.getMetaData().getDatabaseProductName()).append(" ");
+            Connection conn = this.getConnection();
+            buf.append(conn.getMetaData().getDatabaseProductName()).append(" ");
 			buf.append(conn.getMetaData().getDatabaseProductVersion()).append(" ");
 			buf.append(conn.getMetaData().getDatabaseMajorVersion()).append(" ");
 //			buf.append(this.getSession().connection().getMetaData().getDatabaseMinorVersion());
@@ -568,9 +576,9 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	 */
 	@SuppressWarnings("deprecation")
 	protected int executeUpdateSqlStatement(String sql) {
-		Session session = this.getHibernateTemplate().getSessionFactory().getCurrentSession();
+//		Session session = this.getHibernateTemplate().getSessionFactory().getCurrentSession();
 		try {
-			PreparedStatement ps = session.connection().prepareStatement(sql);
+			PreparedStatement ps = getConnection().prepareStatement(sql);
 			int result = ps.executeUpdate();
 			return result;
 		} catch (Exception e) {
@@ -582,11 +590,10 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	/*
 	 * TODO
 	 */
-	@SuppressWarnings("deprecation")
 	protected Object executeQuerySqlStatement(String sql, int i) {
-		Session session = this.getHibernateTemplate().getSessionFactory().getCurrentSession();
+//		Session session = this.getHibernateTemplate().getSessionFactory().getCurrentSession();
 		try {
-			PreparedStatement ps = session.connection().prepareStatement(sql);
+			PreparedStatement ps = this.getConnection().prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			Object result = null;
 			if (rs.next()) {
@@ -625,7 +632,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	public void execute(String spName, Map<String, Object> parameters) throws SwiftDaoException {
 		String sql = concatSpSql(spName, parameters);
 		try {
-			CallableStatement cstmt = this.getSession().connection().prepareCall(sql);
+			CallableStatement cstmt = this.getConnection().prepareCall(sql);
 			cstmt.execute();
 		} catch (Throwable e) {
 			throw new DataAccessResourceFailureException("执行存储过程" + spName + "失败", e);
@@ -635,7 +642,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	public void execute(String spName) throws SwiftDaoException {
 		String sql = "{call " + spName + " ()}";
 		try {
-			CallableStatement cstmt = this.getSession().connection().prepareCall(sql);
+			CallableStatement cstmt = this.getConnection().prepareCall(sql);
 			cstmt.execute();
 		} catch (Throwable e) {
 			throw new DataAccessResourceFailureException("执行存储过程" + spName + "失败", e);
@@ -660,7 +667,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		String sql = concatSpSql(spName, parameters);
 		Map<String, Object> ret = new HashMap<>();
 		try {
-			CallableStatement cs = this.getSession().connection().prepareCall(sql);
+			CallableStatement cs = this.getConnection().prepareCall(sql);
 			ParameterMetaData pmd = cs.getParameterMetaData();
 			int pcount = pmd.getParameterCount();
 			for (int i = 0; i < pcount; i++) {
@@ -712,7 +719,6 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		}
 
 		CallableStatement cmt = null;
-		Connection conn = this.getSession().connection();
 		int pCount = ((parameters == null) ? 0 : parameters.size()) + ((outParams == null) ? 0 : outParams.size());
 		StringBuilder buf = new StringBuilder(40);
 
@@ -729,6 +735,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		log.debug("执行：" + sql);
 		Map<String, Object> ret = new TreeMap<>();
 		try {
+            Connection conn = this.getConnection();
 			cmt = conn.prepareCall(sql);
 			// 输入参数
 			if (parameters != null && parameters.size() > 0) {
@@ -820,9 +827,9 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	public long getSequence(String seqName) throws SwiftDaoException {
 		StringBuilder buf = new StringBuilder();
 		buf.append("select ").append(seqName).append(".nextval from dual");
-		Connection con = this.getSession().connection();
 		try {
-			PreparedStatement ps = con.prepareStatement(buf.toString());
+            Connection con = this.getConnection();;
+            PreparedStatement ps = con.prepareStatement(buf.toString());
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
 				return rs.getLong(1);

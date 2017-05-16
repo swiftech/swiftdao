@@ -17,7 +17,7 @@ import org.swiftdao.entity.KeyedPersistable;
 public class MockCompositeKeyEntity implements KeyedPersistable<MockCompositeKey> {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	private MockCompositeKey id;
 	

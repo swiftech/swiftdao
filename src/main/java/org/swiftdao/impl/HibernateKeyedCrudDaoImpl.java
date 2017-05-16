@@ -43,7 +43,7 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPersistable> extends Hiber
 				entity = (E) super.getSession().load(this.getEntityClass(), id);
 			} catch (Exception e) {
 				if (log.isDebugEnabled()) {
-					log.debug(e.getMessage() + e.getStackTrace());
+					log.debug(e.getMessage() + Arrays.toString(e.getStackTrace()));
 				}
 				return null;
 			}

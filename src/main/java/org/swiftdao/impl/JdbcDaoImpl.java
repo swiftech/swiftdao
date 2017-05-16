@@ -43,7 +43,7 @@ public abstract class JdbcDaoImpl extends JdbcDaoSupport implements JdbcDao {
 //	protected static DataSource dataSource = null;
 	protected SimpleJdbcCall simpleJdbcCall;
 
-	public JdbcDaoImpl() {
+	protected JdbcDaoImpl() {
 		log = LoggerFactory.getLogger(this.getClass().getName());
 	}
 
