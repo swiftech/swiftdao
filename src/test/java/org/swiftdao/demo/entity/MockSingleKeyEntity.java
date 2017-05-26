@@ -17,8 +17,6 @@ import org.swiftdao.entity.KeyedPersistable;
 @Entity()
 @Table(name = "DEMO_SINGLE_KEY_TABLE")
 public class MockSingleKeyEntity implements KeyedPersistable<Long> {
-
-	protected static final long serialVersionUID = 1L;
 	
 	@Id()
 	@Column(name = "UT_ID")
@@ -84,4 +82,14 @@ public class MockSingleKeyEntity implements KeyedPersistable<Long> {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+    @Override
+    public String toString() {
+        return "MockSingleKeyEntity{" +
+                "id=" + id +
+                ", key='" + key + '\'' +
+                ", strValue='" + strValue + '\'' +
+                ", intValue=" + intValue +
+                '}';
+    }
 }

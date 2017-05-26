@@ -1,29 +1,42 @@
 package org.swiftdao;
 
-import org.swiftdao.demo.MockOrmDao;
-import org.swiftdao.demo.MockOrmDaoImpl;
+import infrastructure.BaseDaoTest;
+import org.apache.commons.lang3.ArrayUtils;
+import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.swiftdao.demo.entity.MockSingleKeyEntity;
 import org.swiftdao.entity.KeyedPersistable;
 
-import java.io.Serializable;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  *
  * @author Wang Yuxing
  */
-public class KeyedCrudDaoTest {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {
+		"classpath:conf/ac_ds_ut.xml",
+		"classpath:conf/dao_mock.xml",
+        "classpath:conf/ac_tx_hibernate.xml"})
+public class KeyedCrudDaoTest extends BaseDaoTest {
+
+    private ThreadLocal<Long> longId = new ThreadLocal<>();
+
+    private ThreadLocal<String> key = new ThreadLocal<>();
+
+    private ThreadLocal<String> value = new ThreadLocal<>();
 
     public KeyedCrudDaoTest() {
     }
 
 	@BeforeClass
 	public static void setUpClass() throws Exception {
+
 	}
 
 	@AfterClass
@@ -32,10 +45,27 @@ public class KeyedCrudDaoTest {
 
     @Before
     public void setUp() {
+        MockSingleKeyEntity entity = createDefaultEntity();
+        mockOrmDao.create(entity);
+        longId.set(entity.getId());
+        key.set(entity.getKey());
+        value.set(entity.getStrValue());
     }
 
     @After
     public void tearDown() {
+
+    }
+
+    @Test
+    public void testFindAll() {
+        List<MockSingleKeyEntity> all = mockOrmDao.findAll();
+        Assert.assertTrue(all.size() > 0);
+        System.out.println("总数：" + all.size());
+        for (MockSingleKeyEntity mockSingleKeyEntity : all) {
+            System.out.println("    " + mockSingleKeyEntity.toString());
+        }
+
     }
 
 	/**
@@ -44,11 +74,9 @@ public class KeyedCrudDaoTest {
 	@Test
 	public void testDelete_long() {
 		System.out.println("delete");
-		long id = 0L;
-		MockOrmDao instance = new MockOrmDaoImpl();
-		instance.delete(id);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+//		long id = 1L;
+//		MockOrmDao instance = new MockOrmDaoImpl();
+		mockOrmDao.delete(longId.get());
 	}
 
 	/**
@@ -57,11 +85,8 @@ public class KeyedCrudDaoTest {
 	@Test
 	public void testDelete_Serializable() {
 		System.out.println("delete");
-		Serializable key = null;
-		MockOrmDao instance = new MockOrmDaoImpl();
-		instance.delete(key);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+//		Serializable key = null;
+        mockOrmDao.delete(longId.get());
 	}
 
 	/**
@@ -70,13 +95,11 @@ public class KeyedCrudDaoTest {
 	@Test
 	public void testDelete_StringArr_ObjectArr() {
 		System.out.println("delete");
-		String[] keyNames = null;
-		Object[] keyValues = null;
-		MockOrmDao instance = new MockOrmDaoImpl();
-		instance.delete(keyNames, keyValues);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
-	}
+        String[] keyNames = new String[]{"key", "strValue"};
+        Object[] keyValues = new String[]{key.get(), value.get()};
+        System.out.println(ArrayUtils.toString(keyValues));
+        mockOrmDao.delete(keyNames, keyValues);
+    }
 
 	/**
 	 * Test of find method, of class MockDao.
@@ -84,13 +107,8 @@ public class KeyedCrudDaoTest {
 	@Test
 	public void testFind_long() {
 		System.out.println("find");
-		long id = 0L;
-		MockOrmDao instance = new MockOrmDaoImpl();
-		MockSingleKeyEntity expResult = null;
-		MockSingleKeyEntity result = instance.find(id);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		MockSingleKeyEntity result = mockOrmDao.find(longId.get());
+		Assert.assertNotNull(result);
 	}
 
 	/**
@@ -99,13 +117,8 @@ public class KeyedCrudDaoTest {
 	@Test
 	public void testFind_Serializable() {
 		System.out.println("find");
-		Serializable id = null;
-		MockOrmDao instance = new MockOrmDaoImpl();
-		MockSingleKeyEntity expResult = null;
-		MockSingleKeyEntity result = instance.find(id);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		MockSingleKeyEntity result = mockOrmDao.find(longId.get());
+		assertNotNull(result);
 	}
 
 	/**
@@ -116,12 +129,9 @@ public class KeyedCrudDaoTest {
 		System.out.println("find");
 		String[] keyNames = null;
 		Object[] keyValues = null;
-		MockOrmDao instance = new MockOrmDaoImpl();
 		MockSingleKeyEntity expResult = null;
-		MockSingleKeyEntity result = instance.find(keyNames, keyValues);
+		MockSingleKeyEntity result = mockOrmDao.find(keyNames, keyValues);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -131,12 +141,9 @@ public class KeyedCrudDaoTest {
 	public void testFindAndLock_long() {
 		System.out.println("findAndLock");
 		long id = 0L;
-		MockOrmDao instance = new MockOrmDaoImpl();
 		MockSingleKeyEntity expResult = null;
-		MockSingleKeyEntity result = instance.findAndLock(id);
+		MockSingleKeyEntity result = mockOrmDao.findAndLock(id);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -145,13 +152,8 @@ public class KeyedCrudDaoTest {
 	@Test
 	public void testFindAndLock_Serializable() {
 		System.out.println("findAndLock");
-		Serializable id = null;
-		MockOrmDao instance = new MockOrmDaoImpl();
-		MockSingleKeyEntity expResult = null;
-		MockSingleKeyEntity result = instance.findAndLock(id);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		MockSingleKeyEntity result = mockOrmDao.findAndLock(longId.get());
+		assertNotNull(result);
 	}
 
 	/**
@@ -161,13 +163,8 @@ public class KeyedCrudDaoTest {
 	public void testFind_Class_long() {
 		System.out.println("find");
 		Class clazz = MockSingleKeyEntity.class;
-		long id = 0L;
-		MockOrmDao instance = new MockOrmDaoImpl();
-		KeyedPersistable expResult = null;
-		KeyedPersistable result = instance.find(clazz, id);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		KeyedPersistable result = mockOrmDao.find(clazz, longId.get());
+        assertNotNull(result);
 	}
 
 	/**
@@ -176,14 +173,9 @@ public class KeyedCrudDaoTest {
 	@Test
 	public void testFind_Class_Serializable() {
 		System.out.println("find");
-		Class clazz = null;
-		Serializable id = null;
-		MockOrmDao instance = new MockOrmDaoImpl();
-		KeyedPersistable expResult = null;
-		KeyedPersistable result = instance.find(clazz, id);
-		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
+		Class clazz = MockSingleKeyEntity.class;
+		KeyedPersistable result = mockOrmDao.find(clazz, longId.get());
+		assertNotNull(result);
 	}
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.LockMode;
 import org.hibernate.annotations.Cache;
 import org.hibernate.criterion.DetachedCriteria;
@@ -34,13 +35,16 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPersistable> extends Hiber
 
 	@SuppressWarnings("unchecked")
 	public E find(Serializable id) throws SwiftDaoException {
-		Annotation cacheConfiged = getEntityClass().getAnnotation(Cache.class);
+        if (id == null || StringUtils.isBlank(id.toString())) {
+            throw new IllegalArgumentException();
+        }
+        Annotation cacheConfiged = getEntityClass().getAnnotation(Cache.class);
 		if (cacheConfiged == null) {
 			return (E) super.getHibernateTemplate().get(this.getEntityClass(), id);
 		} else {
 			E entity = null;
 			try {
-				entity = (E) super.getSession().load(this.getEntityClass(), id);
+				entity = (E) super.getHibernateTemplate().load(this.getEntityClass(), id);
 			} catch (Exception e) {
 				if (log.isDebugEnabled()) {
 					log.debug(e.getMessage() + Arrays.toString(e.getStackTrace()));
@@ -67,7 +71,7 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPersistable> extends Hiber
 		}
 		List<E> list = (List<E>) this.getHibernateTemplate().findByCriteria(dc);
 		if (list == null || list.isEmpty()) {
-			throw new EntityNotFoundException("没有找到满足复合主键条件的实体");
+			throw new EntityNotFoundException("没有找到任何满足复合主键条件的实体");
 		}
 		return list.get(0); // 应该只有一个实体对象。
 	}
@@ -100,7 +104,7 @@ public class HibernateKeyedCrudDaoImpl<E extends KeyedPersistable> extends Hiber
 		} else {
 			E entity = null;
 			try {
-				entity = (E) super.getSession().load(clazz, id);
+				entity = (E) super.getHibernateTemplate().load(clazz, id);
 			} catch (Exception e) {
 				if (log.isDebugEnabled()) {
 					log.debug(e.getMessage() + Arrays.toString(e.getStackTrace()));

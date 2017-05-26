@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-		"classpath:conf/ac_ds_ut.xml",
+		"classpath:conf/ac_ds.xml",
 		"classpath:conf/dao_mock.xml"})
 public class CrudDaoTest extends BaseDaoTest {
 
@@ -126,6 +126,7 @@ public class CrudDaoTest extends BaseDaoTest {
 	public void testUpdate_null() {
 		System.out.println("testUpdate_null");
 		MockSingleKeyEntity entity = mockOrmDao.find(longId1);
+		Assert.assertNotNull("不存在的实体： " + longId1, entity);
 		entity.setStrValue("testUpdate_null");
 		mockOrmDao.update(entity);
 	}
@@ -157,6 +158,7 @@ public class CrudDaoTest extends BaseDaoTest {
 		mockOrmDao.createOrUpdate(entity);
 		// Update
 		entity = mockOrmDao.find(longId1);
+		Assert.assertNotNull(entity);
 		mockOrmDao.createOrUpdate(entity);
 	}
 
@@ -420,10 +422,11 @@ public class CrudDaoTest extends BaseDaoTest {
 		boolean isDescending = false;
 
 		List<MockSingleKeyEntity> expResult = null;
-		List<MockSingleKeyEntity> result = mockOrmDao.findByParamsPagination(paramMap, extraCondition, extraParams, orderParam, isDescending, pageSize, pageNumber);
+		List<MockSingleKeyEntity> result = mockOrmDao.findByParamsPagination(
+		        paramMap, extraCondition,
+                extraParams, orderParam,
+                isDescending, pageSize, pageNumber);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -446,7 +449,7 @@ public class CrudDaoTest extends BaseDaoTest {
 	@Test
 	public void testFindAll_Class() {
 		System.out.println("findAll");
-		Class clazz = null;
+		Class clazz = MockSingleKeyEntity.class;
 
 		List<MockSingleKeyEntity> expResult = null;
 		List<MockSingleKeyEntity> result = mockOrmDao.findAll(clazz);
@@ -525,7 +528,7 @@ public class CrudDaoTest extends BaseDaoTest {
 	public void testCountByParam() {
 		System.out.println("countByParam");
 		String paramName = "key";
-		Object value = null;
+		Object value = "ag4wbdegsdhjerg";
 
 		long expResult = 0L;
 		long result = mockOrmDao.countByParam(paramName, value);

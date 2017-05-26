@@ -8,6 +8,8 @@ xsi:schemaLocation="
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
 
+    <!--此配置逐渐废弃-->
+
 	<!-- Pooled Data Source for all database, properties in ds_xx.properties -->
 	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
 		<property name="driver" value="${datasource.driver}"/>
@@ -61,9 +63,8 @@ xsi:schemaLocation="
 
 
 	<!-- Transaction Manager -->
-	<bean id="jdbcTrxManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource"/>
-	</bean>
+
+    <tx:annotation-driven transaction-manager="hibernateTrxManager"/>
 
 	<tx:advice id="jdbcTrxAdvice" transaction-manager="jdbcTrxManager">
 		<tx:attributes>
@@ -84,12 +85,17 @@ xsi:schemaLocation="
 		</tx:attributes>
 	</tx:advice>
 
-	<aop:config>
-		<aop:pointcut id="jdbcDaoPointcut" expression="execution(* org.swiftdao.*Dao.*(..))" />
-		<aop:advisor advice-ref="jdbcTrxAdvice" pointcut-ref="jdbcDaoPointcut" />
-	</aop:config>
+    <!-- JDBC transaction manager -->
+    <bean id="jdbcTrxManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
-	<!--<aop:config>-->
+    <aop:config>
+        <aop:pointcut id="jdbcDaoPointcut" expression="execution(* org.swiftdao.*Dao.*(..))" />
+        <aop:advisor advice-ref="jdbcTrxAdvice" pointcut-ref="jdbcDaoPointcut" />
+    </aop:config>
+
+    <!--<aop:config>-->
 		<!--<aop:pointcut id="jdbcDaoPointcut2" expression="execution(* com.company.*Dao.*(..))" />-->
 		<!--<aop:advisor advice-ref="jdbcTrxAdvice" pointcut-ref="jdbcDaoPointcut2" />-->
 	<!--</aop:config>-->

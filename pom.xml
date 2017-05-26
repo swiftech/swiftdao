@@ -130,11 +130,10 @@
 
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.1.Final</version>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
         </dependency>
 
-        <!--可能版本过高-->
         <dependency>
             <groupId>javassist</groupId>
             <artifactId>javassist</artifactId>

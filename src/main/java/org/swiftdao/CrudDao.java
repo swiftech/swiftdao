@@ -372,7 +372,7 @@ public interface CrudDao<E extends Persistable> extends ExecutableDao {
 
 	/**
 	 * 按给定的限制条件统计实体对象的数量。
-	 * @param paramMap 查询条件参数
+	 * @param paramMap 查询条件参数，为空表示没有参数；其中的参数值不能为空
 	 * @param extraCondition 额外查询条件，跟在paramMap的后面，类似“ OR XX = :xx”的形式，没有则为null。
 	 * @param extraParams 配合extraCondition使用，用于保存extraCondition中的变量。
 	 * @return 符合条件的持久化实体的数量

@@ -42,20 +42,32 @@ public abstract class BaseDaoTest extends BaseDataAccessTest {
 
 	}
 
+    /**
+     * 创建一个指定ID的模拟entity
+     * @return
+     */
+    protected MockSingleKeyEntity createDefaultEntity(Long id) {
+        MockSingleKeyEntity entity = new MockSingleKeyEntity();
+        System.out.println("ID 1: " + id);
+        entity.setId(id);
+        entity.setKey("the_value_of_key");
+        entity.setStrValue("the_value_of_value");
+        return entity;
+    }
+
 	/**
-	 * 创建一个指定ID的模拟entity
-	 * @param id
+	 * 创建一个随机 ID 的模拟entity
 	 * @return
 	 */
-	protected MockSingleKeyEntity createDefaultEntity(Long id) {
+	protected MockSingleKeyEntity createDefaultEntity() {
 		MockSingleKeyEntity entity = new MockSingleKeyEntity();
-		id = generateLongEntityID();
-		System.out.println("ID 1: " + id);
-		entity.setId(id);
-		entity.setKey("key");
-		entity.setStrValue("value");
-		return entity;
+		Long id = generateLongEntityID();
+		return createDefaultEntity(id);
 	}
+
+//	protected void deleteDefaultEntity(Long id) {
+//
+//    }
 
 	/**
 	 * 创建指定数量count的，ID为当前时间值的模拟entity
