@@ -22,7 +22,7 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(locations = {
 		"classpath:conf/ac_ds_ut.xml",
 		"classpath:conf/dao_mock.xml",
-        "classpath:conf/ac_tx_hibernate.xml"})
+        "classpath:conf/ac_trx_hibernate.xml"})
 public class KeyedCrudDaoTest extends BaseDaoTest {
 
     private ThreadLocal<Long> longId = new ThreadLocal<>();

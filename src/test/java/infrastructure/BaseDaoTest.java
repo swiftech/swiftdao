@@ -1,19 +1,16 @@
 package infrastructure;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import org.junit.runner.RunWith;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.swiftdao.demo.MockJdbcDao;
 import org.swiftdao.demo.MockOrmDao;
 import org.swiftdao.demo.entity.MockSingleKeyEntity;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * 所有测试DAO的单元测试类。
@@ -60,7 +57,6 @@ public abstract class BaseDaoTest extends BaseDataAccessTest {
 	 * @return
 	 */
 	protected MockSingleKeyEntity createDefaultEntity() {
-		MockSingleKeyEntity entity = new MockSingleKeyEntity();
 		Long id = generateLongEntityID();
 		return createDefaultEntity(id);
 	}

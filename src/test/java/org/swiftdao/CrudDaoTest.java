@@ -1,6 +1,7 @@
 package org.swiftdao;
 
 import infrastructure.BaseDaoTest;
+import infrastructure.IdUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.*;
 import org.junit.runner.RunWith;
@@ -42,7 +43,7 @@ public class CrudDaoTest extends BaseDaoTest {
 
 	@Before
 	public void setUp() {
-		// 
+		//
 	}
 
 	@After
@@ -80,8 +81,8 @@ public class CrudDaoTest extends BaseDaoTest {
 	 * Test of create method, of class MockDao.
 	 */
 	@Test
-	public void testCreate_null() {
-		System.out.println("testCreate_null");
+	public void testCreate() {
+		System.out.println("testCreate");
 		MockSingleKeyEntity entity = new MockSingleKeyEntity();
 		longId1 = Calendar.getInstance().getTimeInMillis();
 		entity.setId(longId1);
@@ -97,39 +98,36 @@ public class CrudDaoTest extends BaseDaoTest {
 	public void testCreate_Collection() {
 		System.out.println("testCreate_Collection");
 		Collection<MockSingleKeyEntity> newEntities = new ArrayList<>();
-		MockSingleKeyEntity entity1 = new MockSingleKeyEntity();
-		longId1 = Calendar.getInstance().getTimeInMillis();
-		System.out.println("ID 1: " + longId1);
-		entity1.setId(longId1);
-		entity1.setKey("key");
-		entity1.setStrValue("value");
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException ex) {
-			Logger.getLogger(CrudDaoTest.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		MockSingleKeyEntity entity2 = new MockSingleKeyEntity();
-		longId2 = Calendar.getInstance().getTimeInMillis();
-		System.out.println("ID 2: " + longId2);
-		entity2.setId(longId2);
-		entity2.setKey("key");
-		entity2.setStrValue("value");
-		newEntities.add(entity1);
-		newEntities.add(entity2);
+
+        MockSingleKeyEntity entity1 = super.createDefaultEntity(IdUtils.createIdByTimeAndRandom());
+        MockSingleKeyEntity entity2 = super.createDefaultEntity(IdUtils.createIdByTimeAndRandom());
+        newEntities.add(entity1);
+        newEntities.add(entity2);
 		mockOrmDao.create(newEntities);
-	}
+
+        long count = mockOrmDao.countAll();
+        Assert.assertEquals(2, count);
+    }
 
 	/**
 	 * Test of update method, of class MockDao.
 	 */
 	@Test
-	public void testUpdate_null() {
-		System.out.println("testUpdate_null");
-		MockSingleKeyEntity entity = mockOrmDao.find(longId1);
-		Assert.assertNotNull("不存在的实体： " + longId1, entity);
-		entity.setStrValue("testUpdate_null");
-		mockOrmDao.update(entity);
-	}
+    public void testUpdate() {
+        System.out.println("testUpdate");
+        long id = IdUtils.createIdByTimeAndRandom();
+        MockSingleKeyEntity newEntity = super.createDefaultEntity(id);
+        mockOrmDao.create(newEntity);
+
+        MockSingleKeyEntity entityUpdate = mockOrmDao.find(id);
+        Assert.assertNotNull("不存在的实体： " + id, entityUpdate);
+        entityUpdate.setStrValue("testUpdate");
+        mockOrmDao.update(entityUpdate);
+
+        MockSingleKeyEntity entityAssert = mockOrmDao.find(id);
+        Assert.assertNotNull(entityAssert);
+        Assert.assertEquals("testUpdate", entityAssert.getStrValue());
+    }
 
 	/**
 	 * Test of update method, of class MockDao.
@@ -147,20 +145,21 @@ public class CrudDaoTest extends BaseDaoTest {
 	/**
 	 * Test of createOrUpdate method, of class MockDao.
 	 */
-	@Test
-	public void testCreateOrUpdate_null() {
-		System.out.println("createOrUpdate");
-		MockSingleKeyEntity entity = new MockSingleKeyEntity();
-		longId1 = Calendar.getInstance().getTimeInMillis();
-		entity.setId(longId1);
-		entity.setKey("key");
-		entity.setStrValue("value");
-		mockOrmDao.createOrUpdate(entity);
-		// Update
-		entity = mockOrmDao.find(longId1);
-		Assert.assertNotNull(entity);
-		mockOrmDao.createOrUpdate(entity);
-	}
+    @Test
+    public void testCreateOrUpdate() {
+        System.out.println("testCreateOrUpdate");
+        long id = IdUtils.createIdByTimeAndRandom();
+        MockSingleKeyEntity newEntity = super.createDefaultEntity(id);
+        mockOrmDao.createOrUpdate(newEntity);
+        // Update
+        MockSingleKeyEntity entityUpdate = mockOrmDao.find(id);
+        Assert.assertNotNull(entityUpdate);
+        entityUpdate.setStrValue("testCreateOrUpdate");
+        mockOrmDao.createOrUpdate(entityUpdate);
+
+        MockSingleKeyEntity entityAssert = mockOrmDao.find(id);
+        Assert.assertEquals("testCreateOrUpdate", entityAssert.getStrValue());
+    }
 
 	/**
 	 * Test of createOrUpdate method, of class MockDao.
@@ -199,9 +198,9 @@ public class CrudDaoTest extends BaseDaoTest {
 	 * Test of merge method, of class MockDao.
 	 */
 	@Test
-	public void testMerge_null() {
-		System.out.println("testMerge_null");
-		MockSingleKeyEntity entity = createDefaultEntity(longId1);
+	public void testMerge() {
+		System.out.println("testMerge");
+		MockSingleKeyEntity entity = createDefaultEntity(IdUtils.createIdByTimeAndRandom());
 		mockOrmDao.create(entity);
 		mockOrmDao.update(entity);
 		mockOrmDao.merge(entity);
