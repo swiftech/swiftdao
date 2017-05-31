@@ -80,7 +80,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 
     /**
      * @return
-     * @deprecated user getHibernateTemplate
+     * @deprecated use getHibernateTemplate
      */
     protected Session getSession() {
         Session currentSession = null;
@@ -253,6 +253,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		StrBuilder buf = new StrBuilder();
 		buf.append("FROM ").append(this.getEntityClass().getSimpleName());
 		buf.append(" WHERE ").append(paramName).append(" = :condition");
+        log.debug("Query by " + buf.toString());
 		List<E> entities = (List<E>) this.getHibernateTemplate().findByNamedParam(buf.toString(), "condition", value);
 		return entities;
 	}
@@ -371,6 +372,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 			hqlSb.append(extraCondition);
 		}
 		// 开始查询
+        log.debug("Query by " + hqlSb.toString());
 		Query q = this.getSession().createQuery(hqlSb.toString());
 		q.setMaxResults(pageSize);
 		q.setFirstResult(pageNumber * pageSize);
@@ -434,6 +436,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 				hqlSb.append(" ASC"); // 升序
 			}
 		}
+        log.debug("Query by " + hqlSb.toString());
 		Query q = this.getSession().createQuery(hqlSb.toString());
 		if (paramMap != null && paramMap.size() > 0) {
 			// 查询条件设值
@@ -696,6 +699,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		String sql = concatSpSql(spName, parameters);
 		Map<String, Object> ret = new HashMap<>();
 		try {
+            log.debug("执行 " + sql);
 			CallableStatement cs = this.getConnection().prepareCall(sql);
 			ParameterMetaData pmd = cs.getParameterMetaData();
 			int pcount = pmd.getParameterCount();
