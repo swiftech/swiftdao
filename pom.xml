@@ -6,7 +6,7 @@
 
     <groupId>com.github.swiftech</groupId>
     <artifactId>swiftdao</artifactId>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>0.2.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
 	<parent>
@@ -132,12 +132,6 @@
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>1.0.0.Final</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.12.1.GA</version>
         </dependency>
 
         <dependency>
