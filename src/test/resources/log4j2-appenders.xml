@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Appenders>
+    <Properties>
+        <Property name="log_file_name">swiftdao</Property>
+    </Properties>
+
+    <Console name="Console" target="SYSTEM_OUT">
+        <PatternLayout pattern="%d{HH:mm:ss} %5p %24.20c{1}:%4L - %m%n"/>
+    </Console>
+
+    <File name="fileAppender" fileName="logs/${log_file_name}.log">
+        <PatternLayout>
+            <Pattern>%d{MM-dd HH:mm:ss} %5p %c{1}:%L - %m%n</Pattern>
+        </PatternLayout>
+    </File>
+
+</Appenders>

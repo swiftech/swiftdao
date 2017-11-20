@@ -1,9 +1,5 @@
 package infrastructure;
 
-import org.logicalcobwebs.proxool.ConnectionInfoIF;
-import org.logicalcobwebs.proxool.ProxoolException;
-import org.logicalcobwebs.proxool.ProxoolFacade;
-import org.logicalcobwebs.proxool.admin.SnapshotIF;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,9 +27,10 @@ public abstract class BaseDataAccessTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void showConnectionPoolInfo() {
-		try {
+        /**
+         try {
 			SnapshotIF poolSpanShot = ProxoolFacade.getSnapshot("ut");
 			if(poolSpanShot == null) {
 				System.out.println("Failed to get snapshot of Proxool connection pool.");
@@ -56,6 +53,8 @@ public abstract class BaseDataAccessTest {
 		} catch (Exception e) {
 			// JUST IGNORE
 		}
+         **/
 	}
+
 
 }

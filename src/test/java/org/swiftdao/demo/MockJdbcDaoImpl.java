@@ -1,13 +1,5 @@
 package org.swiftdao.demo;
 
-import java.sql.SQLException;
-
-import javax.sql.DataSource;
-
-import org.logicalcobwebs.proxool.ProxoolException;
-import org.logicalcobwebs.proxool.ProxoolFacade;
-import org.logicalcobwebs.proxool.admin.SnapshotIF;
-import org.logicalcobwebs.proxool.admin.StatisticsListenerIF;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -15,7 +7,9 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
 import org.swiftdao.impl.JdbcDaoImpl;
-import org.swiftdao.pool.ProxoolStatisticsListener;
+
+import javax.sql.DataSource;
+import java.sql.SQLException;
 
 /**
  * Used to test database connection.
@@ -54,16 +48,16 @@ public class MockJdbcDaoImpl extends JdbcDaoImpl implements MockJdbcDao{
 			e1.printStackTrace();
 		}
 
-
-		try {
-			SnapshotIF snapshot = ProxoolFacade.getSnapshot("ut");
-			System.out.println("Active connection: " + snapshot.getActiveConnectionCount());
-			
-			StatisticsListenerIF myStatisticsListener = new ProxoolStatisticsListener();
-			ProxoolFacade.addStatisticsListener("ut", myStatisticsListener);
-		} catch (ProxoolException e) {
-			e.printStackTrace();
-		}
+// Proxool 输出信息
+//		try {
+//			SnapshotIF snapshot = ProxoolFacade.getSnapshot("ut");
+//			System.out.println("Active connection: " + snapshot.getActiveConnectionCount());
+//
+//			StatisticsListenerIF myStatisticsListener = new ProxoolStatisticsListener();
+//			ProxoolFacade.addStatisticsListener("ut", myStatisticsListener);
+//		} catch (ProxoolException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 

@@ -53,8 +53,8 @@
 
 
     <properties>
-        <spring.version>4.3.8.RELEASE</spring.version>
-        <hibernate.version>4.3.10.Final</hibernate.version>
+        <spring.version>4.3.12.RELEASE</spring.version>
+        <hibernate.version>4.3.11.Final</hibernate.version>
     </properties>
 
     <profiles>
@@ -153,16 +153,23 @@
 		</dependency>
 
         <dependency>
-            <groupId>com.cloudhopper.proxool</groupId>
-            <artifactId>proxool</artifactId>
-            <version>0.9.1</version>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+            <version>0.9.5.2</version>
+            <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.cloudhopper.proxool</groupId>
-            <artifactId>proxool-cglib</artifactId>
-            <version>0.9.1</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.cloudhopper.proxool</groupId>-->
+            <!--<artifactId>proxool</artifactId>-->
+            <!--<version>0.9.1</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>com.cloudhopper.proxool</groupId>-->
+            <!--<artifactId>proxool-cglib</artifactId>-->
+            <!--<version>0.9.1</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.jasypt</groupId>
@@ -191,19 +198,41 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.19</version>
+            <version>1.7.25</version>
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>slf4j-log4j12</artifactId>-->
+            <!--<version>1.7.25</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>log4j</groupId>-->
+            <!--<artifactId>log4j</artifactId>-->
+            <!--<version>1.2.17</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.9.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.19</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.9.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.9.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

@@ -1,9 +1,10 @@
 package org.swiftdao.util;
 
+import org.slf4j.Logger;
+
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 
 /**
  * @author Wang Yuxing

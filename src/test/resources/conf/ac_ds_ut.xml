@@ -8,18 +8,30 @@
 		</property>
 	</bean>
 
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${datasource.driver}"/>
+        <property name="jdbcUrl" value="${datasource.url}"/>
+        <property name="user" value="${datasource.username}"/>
+        <property name="password" value="${datasource.password}"/>
+        <property name="initialPoolSize" value="3"/>
+        <property name="maxPoolSize" value="20"/>
+        <property name="minPoolSize" value="5"/>
+        <property name="dataSourceName" value="ut"/>
+    </bean>
+
+
 	<!-- Pooled Data Source -->
-	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
-		<property name="driver" value="${datasource.driver}"/>
-		<property name="driverUrl" value="${datasource.url}"/>
-		<property name="user" value="${datasource.username}"/>
-		<property name="password" value="${datasource.password}"/>
-		<property name="alias" value="ut"/>
-		<property name="maximumConnectionCount" value="80"/>
-		<property name="minimumConnectionCount" value="20"/>
-		<property name="jmx" value="true"/>
-		<property name="statistics" value="1m,15m,1d"/>
-	</bean>
+	<!--<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">-->
+		<!--<property name="driver" value="${datasource.driver}"/>-->
+		<!--<property name="driverUrl" value="${datasource.url}"/>-->
+		<!--<property name="user" value="${datasource.username}"/>-->
+		<!--<property name="password" value="${datasource.password}"/>-->
+		<!--<property name="alias" value="ut"/>-->
+		<!--<property name="maximumConnectionCount" value="80"/>-->
+		<!--<property name="minimumConnectionCount" value="20"/>-->
+		<!--<property name="jmx" value="true"/>-->
+		<!--<property name="statistics" value="1m,15m,1d"/>-->
+	<!--</bean>-->
 	
 	 
 	<!-- Hibernate Session Factory -->
