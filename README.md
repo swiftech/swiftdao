@@ -2,60 +2,57 @@ SwiftDAO是一个轻量级的，基于Hibernate框架的泛型DAO层。如果您
 
 SwiftDAO is a lightweight generic DAO layer based on Hibernate and Spring, implemented many basic CRUD operations.
 
-支持：
+#### 支持：
 
-v 0.2-SNAPSHOT
+###### v0.2.x-SNAPSHOT
 * JDK 1.7+
 * Spring 4.3.x
 * Hibernate 4.3.x
 
-
-v 0.1.2
+###### v0.1.2
 * JDK 1.6+
 * Hibernate 3.6.x
 * Spring 3.2.x
 
 
+#### 使用方法：
 
-
-使用方法：
-
-  * 1. 创建实体类：
-  实现org.swiftdao.entity.KeyedPersistable接口（接口泛型为主键类型），并使用annotation方式做映射。
+###### 1. 创建实体类：  
+  实现 org.swiftdao.entity.KeyedPersistable 接口（接口泛型为主键类型），并使用annotation方式做映射。
   例如：
-{{{
-@Entity()
-@Table(name = "USER")
-public class User implements KeyedPersistable<Long>{
+	```java
+	@Entity()
+	@Table(name = "USER")
+	public class User implements KeyedPersistable<Long>{
 
-	@Id()
-	@Column(name = "USER_ID")
-	protected Long id;
+		@Id()
+		@Column(name = "USER_ID")
+		protected Long id;
 
-	@Column(name = "USER_NAME", length = 32, nullable = false)
-	protected String name;
-	......
-	// Getter and Setter
-}
-}}}
+		@Column(name = "USER_NAME", length = 32, nullable = false)
+		protected String name;
+		......
+		// Getter and Setter
+	}
+	```
 
-  * 2. 创建DAO接口以及接口的实现类：
-  DAO接口，继承org.swiftdao.KeyedCrudDao接口：
-{{{
-public interface UserDao extends KeyedCrudDao<User> {
+###### 2. 创建DAO接口以及接口的实现类：  
+  DAO接口，继承 org.swiftdao.KeyedCrudDao 接口：
+  ```java
+  public interface UserDao extends KeyedCrudDao<User> {
 
-}
-}}}
+  }
+  ```
   DAO接口实现类，继承org.swiftdao.impl.HibernateKeyedCrudDaoImpl类：
-{{{
-public class UserDaoImpl extends HibernateKeyedCrudDaoImpl<User> implements UserDao {
+  ```java
+  public class UserDaoImpl extends HibernateKeyedCrudDaoImpl<User> implements UserDao {
 
-}
-}}}
+  }
+  ```
 
-  * 3. 这时你的DAO就已经拥有基本的CRUD功能了，可以直接使用了。如果有更加复杂的持久层的操作则可以在这个子DAO接口中实现。
+###### 3. 这时你的DAO就已经拥有基本的CRUD功能了，可以直接使用了。如果有更加复杂的持久层的操作则可以在这个子DAO接口中实现。  
   以下为SwiftDAO已经实现的CRUD方法集：
-{{{
+  ```java
 	// 持久化一个实体。
 	void create(E entity) throws DataAccessException;
 
@@ -188,9 +185,4 @@ public class UserDaoImpl extends HibernateKeyedCrudDaoImpl<User> implements User
 
 	// 获得指定Sequence的值(仅用于Oracle)
 	long getSequence(String seqName) throws DataAccessException;
-
-
-
-
-}}}
-
+```
