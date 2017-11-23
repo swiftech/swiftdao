@@ -14,30 +14,29 @@ SwiftDAO is a lightweight generic DAO layer based on Hibernate and Spring, imple
 * Hibernate 3.6.x
 * Spring 3.2.x
 
-
 #### 使用方法：
 
 ###### 1. 创建实体类：  
-  实现 org.swiftdao.entity.KeyedPersistable 接口（接口泛型为主键类型），并使用annotation方式做映射。
-  例如：
-	```java
-	@Entity()
-	@Table(name = "USER")
-	public class User implements KeyedPersistable<Long>{
+  实现 org.swiftdao.entity.KeyedPersistable 接口（接口泛型为主键类型），并使用 annotation 方式做映射。
+  例如：  
+```java
+@Entity()
+@Table(name = "USER")
+public class User implements KeyedPersistable<Long>{
 
-		@Id()
-		@Column(name = "USER_ID")
-		protected Long id;
+	@Id()
+	@Column(name = "USER_ID")
+	protected Long id;
 
-		@Column(name = "USER_NAME", length = 32, nullable = false)
-		protected String name;
-		......
-		// Getter and Setter
-	}
-	```
+	@Column(name = "USER_NAME", length = 32, nullable = false)
+	protected String name;
+	......
+	// Getter and Setter
+}
+```
 
 ###### 2. 创建DAO接口以及接口的实现类：  
-  DAO接口，继承 org.swiftdao.KeyedCrudDao 接口：
+  DAO接口，继承 org.swiftdao.KeyedCrudDao 接口：  
   ```java
   public interface UserDao extends KeyedCrudDao<User> {
 
