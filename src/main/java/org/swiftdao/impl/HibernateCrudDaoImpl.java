@@ -31,7 +31,7 @@ import java.util.*;
 
 /**
  * 基于Hibernate的CRUD DAO基础实现，所有使用Hibernate并支持CRUD操作的DAO都继承该类。<BR>
- * 所有方法都必须声明为抛出统一的SwiftDaoException异常，以便于做统一的异常处理。<BR>
+ * 所有方法都必须声明为抛出统一的 SwiftDaoException 异常，以便于做统一的异常处理。<BR>
  * 可用的异常类如下：
  *
  * <pre>
@@ -121,76 +121,76 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 
 	public void create(E entity) throws SwiftDaoException {
 		super.getHibernateTemplate().save(entity);
-		log.info("Created one entity: {}", entity);
+		log.debug("Created one entity: {}", entity);
 	}
 
 	public void create(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
 			for (E e : entities) {
 				create(e);
-				log.info("Created one entity: {}", e);
+				log.debug("Created one entity: {}", e);
 			}
-			log.info("{} entities created.", entities.size());
+			log.debug("{} entities created.", entities.size());
 		}
 	}
 
 	public void delete(E entity) throws SwiftDaoException {
         super.getHibernateTemplate().delete(entity);
-		log.info("Deleted one entity: {}", entity);
+		log.debug("Deleted one entity: {}", entity);
 	}
 
 	public void delete(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
 			for (E e : entities) {
 				delete(e);
-				log.info("Deleted one entity: {}", e);
+				log.debug("Deleted one entity: {}", e);
 			}
-			log.info("{} entities deleted.", entities.size());
+			log.debug("{} entities deleted.", entities.size());
 		}
 	}
 
 	public void update(E entity) throws SwiftDaoException {
         super.getHibernateTemplate().update(entity);
-		log.info("Updated one entity: {}", entity);
+		log.debug("Updated one entity: {}", entity);
 	}
 
 	public void update(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
 			for (E e : entities) {
 				update(e);
-				log.info("Updated one entity: {}", e);
+				log.debug("Updated one entity: {}", e);
 			}
-			log.info("{} entities updated.", entities.size());
+			log.debug("{} entities updated.", entities.size());
 		}
 	}
 
 	public void createOrUpdate(E entity) throws SwiftDaoException {
         super.getHibernateTemplate().saveOrUpdate(entity);
-		log.info("Created or Updated one entity: {}", entity);
+		log.debug("Created or Updated one entity: {}", entity);
 	}
 
 	public void createOrUpdate(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
 			for (E e : entities) {
 				createOrUpdate(e);
-				log.info("Created or Updated one entity: {}", e);
+				log.debug("Created or Updated one entity: {}", e);
 			}
-			log.info("{} entities updated.", entities.size());
+			log.debug("{} entities updated.", entities.size());
 		}
 	}
 
 	public void merge(E entity) throws SwiftDaoException {
         super.getHibernateTemplate().merge(entity);
-		log.info("Merged one entity: {}", entity);
+		log.debug("Merged one entity: {}", entity);
 	}
 
 	public void merge(Collection<E> entities) throws SwiftDaoException {
 		if (entities != null && entities.size() > 0) {
 			for (E e : entities) {
 				merge(e);
-				log.info("Merged one entity: {}", e);
+				log.debug("Merged one entity: {}", e);
 			}
-			log.info("{} entities merged.", entities.size());
+			log.debug("{} entities merged.", entities.size());
 		}
 	}
 
@@ -476,7 +476,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 						BeanUtils.forceSetProperty(e, attributeNames[j], row[j]);
 					}
 				} catch (NoSuchFieldException e1) {
-					log.info("set attributes error", e1);
+					log.warn("set attributes error", e1);
 				}
 				pagedList.add(e);
 			}
@@ -606,7 +606,6 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 	/*
 	 * TODO
 	 */
-	@SuppressWarnings("deprecation")
 	protected int executeUpdateSqlStatement(String sql) {
 //		Session session = this.getHibernateTemplate().getSessionFactory().getCurrentSession();
 		try {
