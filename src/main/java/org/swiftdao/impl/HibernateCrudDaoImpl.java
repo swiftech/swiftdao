@@ -59,10 +59,13 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 		Type type = getClass().getGenericSuperclass();
 		if (type instanceof ParameterizedType) {
 			entityClass = (Class<E>) ((ParameterizedType) type).getActualTypeArguments()[0];
+			if (entityClass == null) {
+			    throw new RuntimeException("Entity class is not assigned to this DAO implementation");
+            }
 		}
 		else {
 			//throw new IllegalStateException("Not parameterized entity type");
-			System.out.println("&&&&&&" + type);
+			System.out.println("Not parameterized entity type: " + type);
 		}
 	}
 
