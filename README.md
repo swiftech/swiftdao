@@ -1,11 +1,12 @@
+SwiftDAO is a lightweight generic DAO layer based on Hibernate and Spring, implemented many basic CRUD operations.
+
 SwiftDAO是一个轻量级的，基于Hibernate框架的泛型DAO层。如果您使用 Hibernate 和 Spring 框架做开发，想要快速为项目添加DAO层但又不想在这上面花太多时间，那么SwiftDAO实现了常见的CRUD操作，利用它可以省去很多简单重复代码的编写。
 使用SwiftDAO必须对Hibernate和Spring框架相当熟悉并且理解数据库基本概念。
 
-SwiftDAO is a lightweight generic DAO layer based on Hibernate and Spring, implemented many basic CRUD operations.
 
 #### 支持：
 
-###### v0.2.x-SNAPSHOT
+###### v0.2.x
 * JDK 1.7+
 * Spring 4.3.x
 * Hibernate 4.3.x
