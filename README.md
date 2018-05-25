@@ -6,15 +6,33 @@ SwiftDAO是一个轻量级的，基于Hibernate框架的泛型DAO层。如果您
 
 #### 支持：
 
-###### v0.2.x
+###### v0.2.3
 * JDK 1.7+
 * Spring 4.3.x
 * Hibernate 4.3.x
+```xml
+<dependency>
+	<groupId>com.github.swiftech</groupId>
+	<artifactId>swiftdao</artifactId>
+	<version>0.2.3</version>
+</dependency>
+```
 
-###### v0.1.2
+
+###### v0.1.2 (no maintained)
 * JDK 1.6+
 * Hibernate 3.6.x
 * Spring 3.2.x
+```xml
+<dependency>
+	<groupId>com.github.swiftech</groupId>
+	<artifactId>swiftdao</artifactId>
+	<version>0.1.2-SNAPSHOT</version>
+</dependency>
+```
+
+
+
 
 #### 使用方法：
 
