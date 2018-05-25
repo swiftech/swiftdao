@@ -18,7 +18,7 @@ import org.swiftdao.entity.KeyedPersistable;
 import org.swiftdao.exception.SwiftDaoException;
 
 /**
- * {@link KeyedCrudDao}的Hibernate实现。
+ * {@link KeyedCrudDao}的 Hibernate 实现。
  * 
  * @param <E>
  * @author Wang Yuxing

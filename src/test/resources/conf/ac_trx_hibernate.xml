@@ -14,7 +14,7 @@
     <!-- Transaction Manager -->
     <tx:annotation-driven transaction-manager="hibernateTrxManager"/>
 
-    <bean id="hibernateTrxManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+    <bean id="hibernateTrxManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 </beans>

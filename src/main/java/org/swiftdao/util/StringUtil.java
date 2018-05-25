@@ -64,7 +64,7 @@ public class StringUtil {
 	}
 
 	/**
-	 * 产生UUID。
+	 * 随机产生UUID。
 	 *
 	 * @return
 	 */
@@ -73,6 +73,11 @@ public class StringUtil {
 		return uuid.toString().toUpperCase();
 	}
 
+    /**
+     * 随机产生全为数字的UUID
+     * TODO
+     * @return
+     */
 	public static String generateDigitalUUID() {
 		UUID uuid = UUID.randomUUID();
 		// System.out.println(uuid.toString());

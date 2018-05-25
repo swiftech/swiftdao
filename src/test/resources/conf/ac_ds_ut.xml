@@ -18,24 +18,9 @@
         <property name="minPoolSize" value="5"/>
         <property name="dataSourceName" value="ut"/>
     </bean>
-
-
-	<!-- Pooled Data Source -->
-	<!--<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">-->
-		<!--<property name="driver" value="${datasource.driver}"/>-->
-		<!--<property name="driverUrl" value="${datasource.url}"/>-->
-		<!--<property name="user" value="${datasource.username}"/>-->
-		<!--<property name="password" value="${datasource.password}"/>-->
-		<!--<property name="alias" value="ut"/>-->
-		<!--<property name="maximumConnectionCount" value="80"/>-->
-		<!--<property name="minimumConnectionCount" value="20"/>-->
-		<!--<property name="jmx" value="true"/>-->
-		<!--<property name="statistics" value="1m,15m,1d"/>-->
-	<!--</bean>-->
-	
 	 
 	<!-- Hibernate Session Factory -->
-	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="packagesToScan">
 			<list>
@@ -44,7 +29,7 @@
 		</property>
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.${dataSource.dbType}Dialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">create</prop>
 				<prop key="hibernate.generate_statistics">false</prop>

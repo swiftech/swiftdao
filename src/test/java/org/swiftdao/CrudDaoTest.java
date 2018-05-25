@@ -22,8 +22,9 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-		"classpath:conf/ac_ds.xml",
-		"classpath:conf/dao_mock.xml"})
+		"classpath:conf/ac_ds_ut.xml",
+		"classpath:conf/dao_mock.xml",
+        "classpath:conf/ac_trx_hibernate.xml"})
 public class CrudDaoTest extends BaseDaoTest {
 
 	private static Long longId1;
@@ -66,15 +67,12 @@ public class CrudDaoTest extends BaseDaoTest {
 	}
 
 	/**
-	 *
+	 * 获取数据库信息
 	 */
 	@Test
 	public void testGetDatabaseInfo() {
 		System.out.println("testGetDatabaseInfo()");
 		System.out.println(mockOrmDao.getDatabaseInfo());
-		for (int i = 0; i < 30; i++) {
-			System.out.println(mockOrmDao.getDatabaseInfo());
-		}
 	}
 
 	/**
@@ -227,7 +225,7 @@ public class CrudDaoTest extends BaseDaoTest {
 	public void testFindByUniqueParam() {
 		System.out.println("findByUniqueParam");
 		String uniqueParamName = "key";
-		String value = "key";
+		String value = "";
 		MockSingleKeyEntity result = mockOrmDao.findByUniqueParam(uniqueParamName, value);
 		assertNotNull(result);
 	}
@@ -258,11 +256,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		int pageSize = 0;
 		int pageNumber = 0;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findByParamPagination(paramName, value, pageSize, pageNumber);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -278,11 +274,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		String orderParam = "";
 		boolean isDescending = false;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findByParamPagination(paramName, value, orderParam, isDescending, pageSize, pageNumber);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -293,11 +287,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		System.out.println("findByParams");
 		Map<String, Object> paramMap = null;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findByParams(paramMap);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -309,11 +301,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		String extraCondition = "";
 		Map<String, Object> extraParams = null;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findByParams(extraCondition, extraParams);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -326,11 +316,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		String extraCondition = "";
 		Map<String, Object> extraParams = null;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findByParams(paramMap, extraCondition, extraParams);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -343,11 +331,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		int pageSize = 0;
 		int pageNumber = 0;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findByParamsPagination(paramMap, pageSize, pageNumber);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -361,11 +347,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		int pageSize = 0;
 		int pageNumber = 0;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findByParamsPagination(condition, params, pageSize, pageNumber);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -380,11 +364,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		int pageSize = 0;
 		int pageNumber = 0;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findByParamsPagination(paramMap, extraCondition, extraParams, pageSize, pageNumber);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -399,11 +381,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		String orderParam = "";
 		boolean isDescending = false;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findByParamsPagination(paramMap, orderParam, isDescending, pageSize, pageNumber);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -420,7 +400,7 @@ public class CrudDaoTest extends BaseDaoTest {
 		String orderParam = "";
 		boolean isDescending = false;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findByParamsPagination(
 		        paramMap, extraCondition,
                 extraParams, orderParam,
@@ -435,11 +415,9 @@ public class CrudDaoTest extends BaseDaoTest {
 	public void testFindAll_0args() {
 		System.out.println("findAll");
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findAll();
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -450,11 +428,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		System.out.println("findAll");
 		Class clazz = MockSingleKeyEntity.class;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findAll(clazz);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -465,11 +441,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		System.out.println("findAllOverCache");
 		Class clazz = MockSingleKeyEntity.class;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findAllOverCache(clazz);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -481,11 +455,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		int pageSize = 0;
 		int pageNumber = 0;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findAllByPagination(pageSize, pageNumber);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -499,11 +471,9 @@ public class CrudDaoTest extends BaseDaoTest {
 		String orderParam = "";
 		boolean isDescending = false;
 
-		List<MockSingleKeyEntity> expResult = null;
+		List<MockSingleKeyEntity> expResult = Collections.emptyList();
 		List<MockSingleKeyEntity> result = mockOrmDao.findAllByPagination(orderParam, isDescending, pageSize, pageNumber);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -516,8 +486,6 @@ public class CrudDaoTest extends BaseDaoTest {
 		long expResult = 0L;
 		long result = mockOrmDao.countAll();
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -532,8 +500,6 @@ public class CrudDaoTest extends BaseDaoTest {
 		long expResult = 0L;
 		long result = mockOrmDao.countByParam(paramName, value);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -547,8 +513,6 @@ public class CrudDaoTest extends BaseDaoTest {
 		long expResult = 0L;
 		long result = mockOrmDao.countByParams(paramMap);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -564,8 +528,6 @@ public class CrudDaoTest extends BaseDaoTest {
 		long expResult = 0L;
 		long result = mockOrmDao.countByParams(paramMap, extraCondition, extraParams);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 	/**
@@ -579,8 +541,6 @@ public class CrudDaoTest extends BaseDaoTest {
 		long expResult = 0L;
 		long result = mockOrmDao.getSequence(seqName);
 		assertEquals(expResult, result);
-		// TODO review the generated test code and remove the default call to fail.
-		fail("The test case is a prototype.");
 	}
 
 //	/**
