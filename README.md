@@ -187,3 +187,8 @@ public class User implements KeyedPersistable<Long>{
 	// 获得指定Sequence的值(仅用于Oracle)
 	long getSequence(String seqName) throws DataAccessException;
 ```
+
+
+#### 更新记录
+* 0.2.4
+	* 修复了 find**Pagination() 方法查询一对多和多对多实体类的错误

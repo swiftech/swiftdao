@@ -409,7 +409,7 @@ public class HibernateCrudDaoImpl<E extends Persistable> extends HibernateDaoSup
 										  String extraCondition, Map<String, Object> extraParams,
 										  String orderParam, boolean isDescending,
 										  int pageSize, int pageNumber) throws SwiftDaoException {
-		String[] attributeNames = HibernateUtils.getEntityAttributes(this.getSessionFactory(), this.getEntityClass());
+		String[] attributeNames = HibernateUtils.getEntityAttributesNoCollections(this.getSessionFactory(), this.getEntityClass());
 		StringBuilder hqlSb = new StringBuilder(" SELECT ");
 		StringUtil.mergeString(attributeNames, ",", hqlSb);
 		hqlSb.append(" FROM ");
