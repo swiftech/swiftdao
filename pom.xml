@@ -53,7 +53,7 @@
 
 
     <properties>
-        <spring.version>4.3.12.RELEASE</spring.version>
+        <spring.version>5.2.21.RELEASE</spring.version>
         <hibernate.version>4.3.11.Final</hibernate.version>
     </properties>
 
